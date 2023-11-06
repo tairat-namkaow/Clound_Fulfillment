@@ -1,42 +1,10 @@
 <?php
-session_start();
+require_once('connections/mysqli.php');
 
-// Username is root
-//$user = 'root';
-//$password = '';
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "fulfillment_db";
-
-// Server is localhost with
-// port number 3306
-//$servername='localhost:3306';
-$conn = new mysqli(
-  $servername,
-  $username,
-  $password,
-  $dbname
-);
-
-// Checking for connections
-if ($conn->connect_error) {
-  die("Connection failed: " . $conn->connect_error);
-}
-
-// Handle form submission
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-  $orderID = $_POST['Order_ID'];
-  $startDate = $_POST['Order_Date'];
-  $endDate = $_POST['Order_Date'];
-
-  // SQL query to fetch orders based on order ID and date range
-  $sql = "SELECT * FROM order WHERE Order_Date BETWEEN $startDate AND $endDate";
-  $resultorder = $conn->query($sql);
-}
-//$sqlorder = "SELECT * FROM order WHERE Order_ID = (SELECT Order_Id FROM fulfillment_db WHERE Tel LIKE '$strKeyword' LIMIT 1)";
-//$queryorder = $mysqli->query($sqlorder);
-
+$sql_order = "SELECT * FROM order_detail inner join shop on order_detail.Shop_ID = shop.Shop_ID
+  where shop.Shop_Email = '" . $_SESSION['Shop_Email'] . "' ";
+$query_order = mysqli_query($Connection, $sql_order);
+#$result_order = mysqli_fetch_array($query_order);
 ?>
 
 <!DOCTYPE html>
@@ -47,7 +15,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="pagetitle">
       <br>
       <h1>Order History</h1>
-      <div><?php $resultorder['Order_Date']; ?></div>
       <br>
     </div><!-- End Page Title -->
 
@@ -97,28 +64,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
               </thead>
               <tbody>
                 <?php
-                while($resultorder = mysqli_fetch_array($queryorder,MYSQLI_ASSOC))
-                {
+                while ($result_order = mysqli_fetch_array($query_order, MYSQLI_ASSOC)) {
                 ?>
                   <tr>
                     <th scope="row">1</th>
-                    <td><?php echo $resultorder['orderID']; ?></td>
-                    <td><?php echo $resultorder['orderID']; ?></td>
-                    <td><?php echo $resultorder['orderID']; ?></td>
+                    <td><?php echo $result_order['Order_ID']; ?></td>
                     <td><input type="button" class="btn btn-danger" value="Detail" onclick="deleteRow(this)" /></td>
                   </tr>
                   <tr>
                     <th scope="row">2</th>
-                    <td><?php echo $resultorder['orderID']; ?></td>
-                    <td><?php echo $resultorder['orderID']; ?></td>
-                    <td><?php echo $resultorder['orderID']; ?></td>
+                    <td><?php echo $result_order['orderID']; ?></td>
+                    <td><?php echo $result_order['orderID']; ?></td>
+                    <td><?php echo $result_order['orderID']; ?></td>
                     <td><input type="button" class="btn btn-danger" value="Detail" onclick="deleteRow(this)" /></td>
                   </tr>
                   <tr>
                     <th scope="row">3</th>
-                    <td><?php echo $resultorder['orderID']; ?></td>
-                    <td><?php echo $resultorder['orderID']; ?></td>
-                    <td><?php echo $resultorder['orderID']; ?></td>
+                    <td><?php echo $result_order['orderID']; ?></td>
+                    <td><?php echo $result_order['orderID']; ?></td>
+                    <td><?php echo $result_order['orderID']; ?></td>
                     <td><input type="button" class="btn btn-danger" value="Detail" onclick="deleteRow(this)" /></td>
                   </tr>
                 <?php

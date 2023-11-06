@@ -26,4 +26,6 @@
     $query_Shop = mysqli_query($Connection,$sql_Shop);
     $result_Shop = mysqli_fetch_array($query_Shop);
   }
+
+
 ?>

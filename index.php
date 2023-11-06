@@ -63,7 +63,7 @@ $result_Shop = mysqli_fetch_array($query_Shop);
                         <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
                                 <a class="nav-link" href="create_order.php">Create Order</a>
-                                <a class="nav-link" href="layout-sidenav-light.html">Order History</a>
+                                <a class="nav-link" href="order_history.php">Order History</a>
                             </nav>
                         </div>
                         <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
