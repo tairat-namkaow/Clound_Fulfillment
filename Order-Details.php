@@ -1,9 +1,12 @@
 <?php
 require_once('connections/mysqli.php');
 
-$sql_shop = "SELECT * FROM Shop WHERE Shop_email = '" . $_SESSION['Shop_email'] . "'";
-$query_shop = mysqli_query($Connection, $sql_shop);
-$result_shop = mysqli_fetch_array($query_shop);
+$sql_OrderDetail = "SELECT * FROM `detail` 
+inner join product on detail.Product_id = product.Product_id
+inner join shop on product.Shop_id = shop.Shop_id
+WHERE Shop_name = '" . $_SESSION['Shop_name'] . "'";
+$query_OrderDetail = mysqli_query($Connection, $sql_OrderDetail);
+$result_OrderDetail = mysqli_fetch_array($query_OrderDetail);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -173,10 +176,10 @@ $result_shop = mysqli_fetch_array($query_shop);
                                     <body>
 
                                         <div class="card">
-                                            <div class="card-body">Order-ID:<?php echo $result_shop[2]; ?> </div>
-                                            <div class="card-body">Order-Date:<?php echo $result_shop[2]; ?></div>
-                                            <div class="card-body">Shop-ID:<?php echo $result_shop[2]; ?></div>
-                                            <div class="card-body">Address:<?php echo $result_shop[2]; ?></div>
+                                            <div class="card-body">Order-ID:  <?php echo $result_OrderDetail[2]; ?> </div>
+                                            <div class="card-body">Order-Date:  <?php echo $result_OrderDetail[3]; ?></div>
+                                            <div class="card-body">Shop-Name:  <?php echo $result_OrderDetail[15]; ?></div>
+                                            <div class="card-body">Address:  <?php echo $result_shop[2]; ?></div>
 
 
 
@@ -211,6 +214,9 @@ $result_shop = mysqli_fetch_array($query_shop);
 
                                             <body>
 
+
+                                            
+
                                                 <table>
                                                     <table class="table mx-auto" style="margin-top: 20px; width: auto;">
                                                         <tr>
@@ -219,11 +225,39 @@ $result_shop = mysqli_fetch_array($query_shop);
                                                             <td>Quantity</td>
                                                         </tr>
 
-                                                        <tr>
-                                                            <td class="border-right"><?php echo $result_shop[2]; ?></td>
-                                                            <td class="border-right"><?php echo $result_shop[2]; ?></td>
-                                                            <td><?php echo $result_shop[2]; ?></td>
-                                                        </tr>
+
+
+<?php
+$sql_ProductID = "SELECT * FROM `detail`
+inner join product on detail.Product_id = product.Product_id
+inner join shop on product.Shop_id = shop.Shop_id
+WHERE Shop_name = '" . mysqli_real_escape_string($Connection, $_SESSION['Shop_name']) . "'";
+$query_ProductID = mysqli_query($Connection, $sql_ProductID);
+
+// ดึงข้อมูลทั้งหมดมาเก็บใน array
+$products = [];
+while ($result_ProductID = mysqli_fetch_assoc($query_ProductID)) {
+    $products[] = $result_ProductID;
+}
+?>
+
+<tr>
+    <td class="border-right">
+        <?php foreach ($products as $product) { 
+            echo htmlspecialchars($product['Product_id']) . "<br>"; 
+        }?>
+    </td>
+    <td class="border-right">
+        <?php foreach ($products as $product) { 
+            echo htmlspecialchars($product['Product_name']) . "<br>"; 
+        }?>
+    </td>
+    <td>
+        <?php foreach ($products as $product) { 
+            echo htmlspecialchars($product['Detail_quantity']) . "<br>"; 
+        }?>
+    </td>
+</tr>
 
                                                     </table>
 
