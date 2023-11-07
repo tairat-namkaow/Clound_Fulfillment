@@ -110,7 +110,7 @@ $result_shop = mysqli_fetch_array($query_shop);
                 </div>
                 <div class="sb-sidenav-footer">
                     <div class="small">Logged in as:</div>
-                    <?php echo $result_Shop[3]; ?>
+                    <?php echo $result_shop[3]; ?>
                 </div>
             </nav>
         </div>
