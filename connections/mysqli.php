@@ -22,9 +22,9 @@
 
   // เลือกข้อมูลผู้ใช้งาน
   if ($_SESSION != NULL) {
-    $sql_Shop = "SELECT * FROM Shop WHERE Shop_Email = '".$_SESSION['Shop_Email']."'";
-    $query_Shop = mysqli_query($Connection,$sql_Shop);
-    $result_Shop = mysqli_fetch_array($query_Shop);
+    $sql_shop = "SELECT * FROM Shop WHERE Shop_email = '".$_SESSION['Shop_email']."'";
+    $query_shop = mysqli_query($Connection,$sql_shop);
+    $result_shop = mysqli_fetch_array($query_shop);
   }
 
 

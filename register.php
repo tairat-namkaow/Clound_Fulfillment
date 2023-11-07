@@ -7,29 +7,26 @@ if ($_SESSION != NULL) {
 }
 
 $check_submit = "";
-$Firstname = "";
-$Lastname = "";
-$Shop_Password = "";
-$Shop_Email = "";
+$Shop_name = "";
+$Shop_password = "";
+$Shop_email = "";
 
 if (isset($_POST["submit"])) {
-    $sql = "SELECT * FROM shop WHERE Shop_Email = '" . trim($_POST['Shop_Email']) . "'";
+    $sql = "SELECT * FROM shop WHERE Shop_email = '" . trim($_POST['Shop_email']) . "'";
     $query = mysqli_query($Connection, $sql);
     $result = mysqli_fetch_array($query, MYSQLI_ASSOC);
 
-    $Firstname = $_POST["Firstname"];
-    $Lastname = $_POST["Lastname"];
-    $Shop_Password = $_POST["Shop_Password"];
-    $Shop_Email = $_POST["Shop_Email"];
+    $Shop_name = $_POST["Shop_name"];
+    $Shop_password = $_POST["Shop_password"];
+    $Shop_email = $_POST["Shop_email"];
 
     if ($result) {
         $check_submit = '<div class="alert alert-danger" role="alert">';
         $check_submit .= '<span><i class="bi bi-info-circle"></i> Email นี้ถูกใช้แล้วกรุณาใช้ Email อื่น</span>';
         $check_submit .= '</div>';
     } else {
-        $sql = "INSERT INTO shop (Firstname,Lastname,Shop_Password,Shop_Email) 
-                VALUES ('" . $_POST["Firstname"] . "','" . ($_POST["Lastname"]) . "',
-                '" . $_POST["Shop_Password"] . "','" . $_POST["Shop_Email"] . "')";
+        $sql = "INSERT INTO shop (Shop_password,Shop_email,Shop_name) 
+                VALUES ('" . $_POST["Shop_password"] . "','" . $_POST["Shop_email"] . "','" . $_POST["Shop_name"] . "')";
         $query = mysqli_query($Connection, $sql);
 
         header("location:login.php?register=success");
@@ -65,21 +62,17 @@ if (isset($_POST["submit"])) {
                                 <div class="card-body">
 
                                     <form method="post">
+                                    <div class="mb-3">
+                                            <label class="form-label">Shop name</label>
+                                            <input type="text" class="form-control" name="Shop_name" value="<?php echo $Shop_name; ?>" placeholder="Enter Shop name" required />
+                                        </div>
                                         <div class="mb-3">
                                             <label class="form-label">Email</label>
-                                            <input type="text" class="form-control" name="Shop_Email" value="<?php echo $Shop_Email; ?>" placeholder="Enter Email" required />
-                                        </div>
-                                        <div class="mb-3">
-                                            <label class="form-label">ชื่อ</label>
-                                            <input type="text" class="form-control" name="Firstname" value="<?php echo $Firstname; ?>" placeholder="Enter Name" required />
-                                        </div>
-                                        <div class="mb-3">
-                                            <label class="form-label">นามสกุล</label>
-                                            <input type="text" class="form-control" name="Lastname" value="<?php echo $Lastname; ?>" placeholder="Enter lastname" required />
+                                            <input type="text" class="form-control" name="Shop_email" value="<?php echo $Shop_email; ?>" placeholder="Enter Email" required />
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label">รหัสผ่าน</label>
-                                            <input type="password" class="form-control" name="Shop_Password" placeholder="Enter Password" required />
+                                            <input type="password" class="form-control" name="Shop_password" placeholder="Enter Password" required />
                                         </div>
                                         <div class="mb-3">
                                         <button type="submit" class="btn btn-success" name="submit">สมัครสมาชิก</button>

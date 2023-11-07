@@ -7,24 +7,23 @@ if ($_SESSION != NULL) {
 }
 
 $check_submit = "";
-$Shop_Email = "";
+$Shop_email = "";
 
 if (isset($_POST["submit"])) {
-  $sql = "SELECT * FROM shop WHERE Shop_Email = '".mysqli_real_escape_string($Connection,$_POST['Shop_Email'])."' and Shop_Password = '"
-        .mysqli_real_escape_string($Connection,$_POST['Shop_Password'])."'";
+  $sql = "SELECT * FROM shop WHERE Shop_email = '".mysqli_real_escape_string($Connection,$_POST['Shop_email'])."' and Shop_password = '"
+        .mysqli_real_escape_string($Connection,$_POST['Shop_password'])."'";
   $query = mysqli_query($Connection,$sql);
   $result = mysqli_fetch_array($query,MYSQLI_ASSOC);
 
   if (!$result) {
-    $Shop_Email = $_POST['Shop_Email'];
+    $Shop_email = $_POST['Shop_email'];
     $check_submit = '<div class="alert alert-danger" role="alert">';
     $check_submit .= '<span><i class="bi bi-info-circle"></i> ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง กรุณาตรวจสอบใหม่อีกครั้ง</span>';
     $check_submit .= '</div>';
   }else{
     session_start();
-    $_SESSION["Shop_Email"] = $result["Shop_Email"];
-    $_SESSION["Shop_Firstname"] = $result["Shop_Firstname"];
-    $_SESSION["Shop_Lastname"] = $result["Shop_Lastname"];
+    $_SESSION["Shop_email"] = $result["Shop_email"];
+    $_SESSION["Shop_name"] = $result["Shop_name"];
 
     if ($_SESSION["user_level"] == 'admin') {
       header("location:admin/index.php");
@@ -64,11 +63,11 @@ if (isset($_POST["submit"])) {
             <form method="post">
               <div class="mb-3">
                 <label class="form-label">ชื่อผู้ใช้</label>
-                <input type="text" class="form-control" name="Shop_Email" value="<?php echo $Shop_Email;?>" placeholder="Enter Email" required/>
+                <input type="text" class="form-control" name="Shop_email" value="<?php echo $Shop_email;?>" placeholder="Enter Email" required/>
               </div>
               <div class="mb-3">
                 <label class="form-label">รหัสผ่าน</label>
-                <input type="password" class="form-control" name="Shop_Password" placeholder="Enter Password" required/>
+                <input type="password" class="form-control" name="Shop_password" placeholder="Enter Password" required/>
               </div>
               <button type="submit" class="btn btn-success" name="submit">เข้าสู่ระบบ</button>
               <a class="btn btn-warning" href="register.php" role="button">สมัครสมาชิก</a>
