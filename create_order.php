@@ -40,7 +40,7 @@ $result_Shop = mysqli_fetch_array($query_Shop);
                 <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
 
-                    <li><a class="dropdown-item"><?php echo $result_Shop[2]; ?></a></li>
+                    <li><a class="dropdown-item"><?php echo $result_shop[3]; ?></a></li>
                     <li>
                         <hr class="dropdown-divider" />
                     </li>
@@ -110,7 +110,7 @@ $result_Shop = mysqli_fetch_array($query_Shop);
                 </div>
                 <div class="sb-sidenav-footer">
                     <div class="small">Logged in as:</div>
-                    <?php echo $result_Shop[1] . " " . $result_Shop[3]; ?>
+                    <?php echo $result_shop[3]; ?>
                 </div>
             </nav>
         </div>
@@ -128,7 +128,7 @@ $result_Shop = mysqli_fetch_array($query_Shop);
                                         <label for="inputPassword6" class="col-form-label">Shop Name</label>
                                     </div>
                                     <div class="col-auto">
-                                        <input type="text" class="form-control form-control-sm" value="<?php echo $result_Shop[5]; ?>" placeholder="Enter Email" readonly required />
+                                        <input type="text" class="form-control form-control-sm" value="<?php echo $result_shop[3]; ?>" placeholder="Enter Email" readonly required />
                                     </div>
                                 </td>
                                 <td>

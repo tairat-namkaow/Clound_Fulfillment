@@ -2,7 +2,7 @@
 require_once('connections/mysqli.php');
 
 $sql_order = "SELECT * FROM order_detail inner join shop on order_detail.Shop_ID = shop.Shop_ID
-  where shop.Shop_Email = '" . $_SESSION['Shop_Email'] . "' ";
+  where shop.Shop_email = '" . $_SESSION['Shop_email'] . "' ";
 $query_order = mysqli_query($Connection, $sql_order);
 #$result_order = mysqli_fetch_array($query_order);
 ?>

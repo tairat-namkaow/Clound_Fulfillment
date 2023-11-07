@@ -64,6 +64,7 @@ $result_shop = mysqli_fetch_array($query_shop);
                             <nav class="sb-sidenav-menu-nested nav">
                                 <a class="nav-link" href="create_order.php">Create Order</a>
                                 <a class="nav-link" href="order_history.php">Order History</a>
+                                <a class="nav-link" href="Order-Details.php">Order Details</a>
                             </nav>
                         </div>
                         <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
