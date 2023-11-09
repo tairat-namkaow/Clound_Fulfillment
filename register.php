@@ -62,7 +62,7 @@ if (isset($_POST["submit"])) {
                                 <div class="card-body">
 
                                     <form method="post">
-                                    <div class="mb-3">
+                                        <div class="mb-3">
                                             <label class="form-label">Shop name</label>
                                             <input type="text" class="form-control" name="Shop_name" value="<?php echo $Shop_name; ?>" placeholder="Enter Shop name" required />
                                         </div>
@@ -75,21 +75,23 @@ if (isset($_POST["submit"])) {
                                             <input type="password" class="form-control" name="Shop_password" placeholder="Enter Password" required />
                                         </div>
                                         <div class="mb-3">
-                                        <button type="submit" class="btn btn-success" name="submit">สมัครสมาชิก</button>
+                                            <button type="submit" class="btn btn-success" name="submit">สมัครสมาชิก</button>
+                                    </form>
 
-                                        </div>
-                                        <div class="card-footer text-center py-3">
-                                            <div class="small"><a href="login.php">Have an account? Go to login</a></div>
-                                        </div>
+                                </div>
+                                <div class="card-footer text-center py-3">
+                                    <div class="small"><a href="login.php">Have an account? Go to login</a></div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div>
             </main>
         </div>
-        
+
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="js/scripts.js"></script>
 </body>
+
 </html>

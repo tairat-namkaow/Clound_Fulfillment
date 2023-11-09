@@ -1,10 +1,26 @@
 <?php
 require_once('connections/mysqli.php');
 
-$sql_Shop = "SELECT * FROM Shop WHERE Shop_Email = '" . $_SESSION['Shop_Email'] . "'";
-$query_Shop = mysqli_query($Connection, $sql_Shop);
-$result_Shop = mysqli_fetch_array($query_Shop);
+$sql_order = "SELECT max(Order_id) as Order_id, Order_status FROM order_main";
+$query_order = mysqli_query($Connection, $sql_order);
+$result_order = mysqli_fetch_array($query_order);
+$Order_id = $result_order['Order_id'];
 
+if (isset($_POST["submit_order"])) {
+
+    $sql_insert_detail = "INSERT INTO detail (Product_id,Order_id,Detail_quantity) 
+                VALUES ('" . $_POST["Product_id"] . "',$Order_id ,'" . $_POST["Detail_quantity"] . "')";
+    $query = mysqli_query($Connection, $sql_insert_detail);
+}
+
+if (isset($_POST["submit_status"])) {
+    
+    $sql_update_order = "UPDATE order_main SET Order_status = 'confirm' WHERE Order_id = $Order_id";
+    $query_update_order = mysqli_query($Connection, $sql_update_order);
+
+    $sql_insert_order = "INSERT INTO `order_main` (`Order_id`, `Order_status`) VALUES (NULL, 'pending');";
+    $query_insert_order = mysqli_query($Connection, $sql_insert_order);
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -28,12 +44,7 @@ $result_Shop = mysqli_fetch_array($query_Shop);
         <!-- Sidebar Toggle-->
         <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
         <!-- Navbar Search-->
-        <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
-            <div class="input-group">
-                <input class="form-control" type="text" placeholder="Search for..." aria-label="Search for..." aria-describedby="btnNavbarSearch" />
-                <button class="btn btn-primary" id="btnNavbarSearch" type="button"><i class="fas fa-search"></i></button>
-            </div>
-        </form>
+        <div class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0"></div>
         <!-- Navbar-->
         <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
             <li class="nav-item dropdown">
@@ -71,32 +82,6 @@ $result_Shop = mysqli_fetch_array($query_Shop);
                             Pages
                             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
-                        <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
-                            <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
-                                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseAuth" aria-expanded="false" aria-controls="pagesCollapseAuth">
-                                    Authentication
-                                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                                </a>
-                                <div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
-                                    <nav class="sb-sidenav-menu-nested nav">
-                                        <a class="nav-link" href="login.html">Login</a>
-                                        <a class="nav-link" href="register.html">Register</a>
-                                        <a class="nav-link" href="password.html">Forgot Password</a>
-                                    </nav>
-                                </div>
-                                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseError" aria-expanded="false" aria-controls="pagesCollapseError">
-                                    Error
-                                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                                </a>
-                                <div class="collapse" id="pagesCollapseError" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
-                                    <nav class="sb-sidenav-menu-nested nav">
-                                        <a class="nav-link" href="401.html">401 Page</a>
-                                        <a class="nav-link" href="404.html">404 Page</a>
-                                        <a class="nav-link" href="500.html">500 Page</a>
-                                    </nav>
-                                </div>
-                            </nav>
-                        </div>
                         <div class="sb-sidenav-menu-heading">Addons</div>
                         <a class="nav-link" href="charts.html">
                             <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
@@ -110,7 +95,7 @@ $result_Shop = mysqli_fetch_array($query_Shop);
                 </div>
                 <div class="sb-sidenav-footer">
                     <div class="small">Logged in as:</div>
-                    <?php echo $result_shop[3]; ?>
+                    <?php echo $result_shop[3] ?>
                 </div>
             </nav>
         </div>
@@ -136,59 +121,88 @@ $result_Shop = mysqli_fetch_array($query_Shop);
                                         <label for="inputPassword6" class="col-form-label">Address</label>
                                     </div>
                                     <div class="col-auto">
-                                        <input type="text" class="form-control form-control-sm" value="" placeholder="Enter Address" required />
+                                        <input type="text" class="form-control form-control-sm" placeholder="Enter Address" required />
                                     </div>
                                 </td>
                             </tr>
-
-                            <div class="card">
-                                <h5 class="card-header">Detail</h5>
-                                <div class="card-body">
-
-                                    <div class="input-group mb-3">
-                                        <span class="input-group-text" id="inputGroup-sizing-default">Product Name</span>
-                                        <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
-                                    </div>
-                                    <div class="input-group mb-3">
-                                        <span class="input-group-text" id="inputGroup-sizing-default">Quantity</span>
-                                        <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
-                                    </div>
-
-                                    <label class="mb-3">
-                                        <button type="submit" class="btn btn-success" name="submit">Add</button>
-                                    </label>
-
-                                </div>
-                            </div>
-
-                            <div class="card">
-                                <h5 class="card-header">Featured</h5>
-                                <div class="card-body">
-                                    <h5 class="card-title">Special title treatment</h5>
-                                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                                    <a href="#" class="btn btn-primary">Go somewhere</a>
-                                </div>
-                            </div>
-
-                            <div class="d-flex justify-content-center">
-                                <table>
-                                    <tr>
-                                        <td>
-                                            <div>
-                                                <button type="submit" class="btn btn-success" name="submit">Confirm</button>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div>
-                                                <button type="submit" class="btn btn-danger" name="submit">Cancel</button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
-
-
                         </div>
+
+                        <div class="card">
+                            <h5 class="card-header">Detail</h5>
+                            <div class="card-body">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="inputGroup-sizing-default">Product Name</span>
+
+                                    <select name="Product_id" type="text" required class="form-control">
+                                        <?php
+                                        $sql_detail = "SELECT * FROM `product` 
+                                            inner join shop on product.Shop_id = shop.Shop_id
+                                            where shop.Shop_email = '" . $_SESSION['Shop_email'] . "'";
+                                        $query_detail = mysqli_query($Connection, $sql_detail);
+                                        while ($result_detail = mysqli_fetch_array($query_detail)) {
+                                        ?>
+                                            <option value="<?= $result_detail['Product_id'] ?>"><?= $result_detail['Product_name'] ?></option>
+                                        <?php } ?>
+                                    </select>
+
+                                </div>
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="inputGroup-sizing-default">Quantity</span>
+
+                                    <input type="text" class="form-control" name="Detail_quantity" placeholder="Enter quantity" required />
+                                </div>
+
+                                <label class="mb-3">
+                                    <button type="submit" class="btn btn-success" name="submit_order">Add</button>
+                                </label>
+
+                            </div>
+                        </div>
+                    </form>
+                    <br>
+
+                    <form method="post">
+                        <h5 class="card-header" style="text-align: center;">รายการสินค้า</h5>
+
+                        <div class="card-body" style="height: 300px;">
+                            <table class="table" table id="datatablesSimple" style="table-layout: fixed;">
+                                <colgroup>
+                                    <col style="width: 5%;">
+                                    <col style="width: 25%;">
+                                    <col style="width: 25%;">
+                                </colgroup>
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Detail id</th>
+                                        <th>ชื่อสินค้า</th>
+                                        <th>จำนวน</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    $sql_detail = "SELECT * FROM detail
+                                INNER JOIN product ON product.Product_id = detail.Product_id
+                                INNER JOIN order_main ON order_main.Order_id = detail.Order_id
+                                INNER JOIN shop ON shop.Shop_id = product.Shop_id
+                                WHERE order_main.Order_id = $Order_id AND shop.Shop_email = '" . $_SESSION['Shop_email'] . "'";
+                                    $query_detail = mysqli_query($Connection, $sql_detail);
+
+                                    while ($row = mysqli_fetch_array($query_detail)) :
+                                    ?>
+                                        <tr>
+                                            <td><?php echo $row['Detail_id']; ?></td>
+                                            <td class="name">
+                                                <?php echo $row['Product_name']; ?>
+                                            </td>
+                                            <td><?php echo $row['Detail_quantity']; ?></td>
+                                        </tr>
+                                    <?php endwhile ?>
+                                </tbody>
+                            </table>
+
+                            <button type="submit" class="btn btn-success" name="submit_status">Confirm</button>
+                        </div>
+                    </form>
                 </div>
             </main>
         </div>
