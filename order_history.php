@@ -193,26 +193,31 @@ $result_OrderMain = mysqli_fetch_array($query_OrderMain);
                             </tr>
                           </thead>
                           <tbody>
-                          <?php
-                                    if (isset($_POST["Search"])) {
+                            <?php
+                            if (isset($_POST["Search"])) {
 
-                                      $sql_orderD = "SELECT * FROM `detail` WHERE Detail_date < '$StartDate' AND Detail_date > '$EndDate';";
-                                      $query_orderD = mysqli_query($Connection, $sql_orderD);
-                                    }
-                                    while ($row = mysqli_fetch_array($query_orderD)) :
-                                    ?>
-                                        <tr>
-                                            <td><?php echo $row['Order_id']; ?></td>
-                                            <td class="name">
-                                                <?php echo $row['Detail_date']; ?>
-                                            </td>
-                                            <td><?php echo $row['order_status']; ?></td>
-                                            <td><a href="Order-Details.php?orderId=<?php echo $row['Order_id']; ?>" style="background-color: #6D6D6D; color: white;" class="btn btn-primary">Detail </a></td>
-                                        </tr>
-                                    <?php endwhile ?>
+                              $sql_orderD = "SELECT * FROM `detail` WHERE Detail_date < '$StartDate' AND Detail_date > '$EndDate';";
+                              $query_orderD = mysqli_query($Connection, $sql_orderD);
+                           
+
+                            while ($row = mysqli_fetch_assoc($query_orderD)) {
+                              // Process each row of data
+                              $row['Order_id'];
+                              $row['Detail_date'];
+                              $row['order_status'];
+                            }
+                            ?>
+                              <tr>
+                                <th scope="row" class="narrow-column"><?php echo $row['Order_id']; ?></th>
+                                <td><?php echo $row['Detail_date']; ?></td>
+                                <td><?php echo $row['order_status']; ?></td>
+                                <td><a href="Order-Details.php?orderId=<?php echo $row['Order_id']; ?>" style="background-color: #6D6D6D; color: white;" class="btn btn-primary">Detail </a></td>
+                              </tr>
+                            <?php
+                            }
+                            ?>
                           </tbody>
                         </table>
                         <br>
                         <!-- End Table with stripped rows -->
                         
-                                    
