@@ -1,10 +1,17 @@
 <?php
 require_once('connections/mysqli.php');
 
+
+$Order_ID = "";
+$StartDate = "";
+$EndDate = "";
+
+
 $sql_OrderMain = "SELECT * FROM `order_main` 
 inner join detail on order_main.Order_id = detail.Order_id";
 $query_OrderMain = mysqli_query($Connection, $sql_OrderMain);
 $result_OrderMain = mysqli_fetch_array($query_OrderMain);
+
 ?>
 
 <!DOCTYPE html>
@@ -152,20 +159,20 @@ $result_OrderMain = mysqli_fetch_array($query_OrderMain);
                           <div class="row mb-3">
                             <label for="inputText" class="col-sm-2 col-form-label">Order ID</label>
                             <div class="col-sm-2">
-                              <input type="text" id="Order_ID" name="Order_ID" placeholder="Input your Order ID" class="form-control">
+                              <input type="text" id="Order_ID" name="Order_ID" value="<?php echo $Order_ID; ?>" placeholder="Input your Order ID" class="form-control">
                             </div>
 
                           </div>
                           <div class="row mb-3">
                             <label for="inputText" class="col-sm-2 col-form-label">Start Date : </label>
                             <div class="col-sm-6">
-                              <input type="date" id="StartDate" name="StartDate" placeholder="dd-mm-yy" class="form-control">
+                              <input type="date" id="StartDate" name="StartDate" value="<?php echo $StartDate; ?>" placeholder="yyyy-mm-dd" class="form-control">
                             </div>
 
                             <div class="row mb-3">
                               <label for="inputText" class="col-sm-2 col-form-label">End Date : </label>
                               <div class="col-sm-6">
-                                <input type="date" id="EndDate" name="EndDate" placeholder="dd-mm-yy" class="form-control">
+                                <input type="date" id="EndDate" name="EndDate" value="<?php echo $EndDate; ?>" placeholder="yyyy-mm-dd" class="form-control">
                               </div>
 
                               <div class="col-sm-2">
@@ -186,31 +193,26 @@ $result_OrderMain = mysqli_fetch_array($query_OrderMain);
                             </tr>
                           </thead>
                           <tbody>
-                            <?php
-                            $sql_OrderMain = "SELECT * FROM `order_main` 
-                            INNER JOIN `detail` ON order_main.Order_id = detail.Order_id";
-                            $query_OrderMain = mysqli_query($Connection, $sql_OrderMain);
+                          <?php
+                                    if (isset($_POST["Search"])) {
 
-                            if (!$query_OrderMain) {
-                              die("Database query failed: " . mysqli_error($Connection));
-                            }
-
-                            while ($row = mysqli_fetch_assoc($query_OrderMain)) {
-                              // Process each row of data
-                              $Order_id = $row['Order_id'];
-                              $Detail_date = $row['Detail_date'];
-                              $order_status = $row['order_status'];
-                            ?>
-                              <tr>
-                                <th scope="row" class="narrow-column"><?php echo $Order_id; ?></th>
-                                <td><?php echo $Detail_date; ?></td>
-                                <td><?php echo $order_status; ?></td>
-                                <td><a href="Order-Details.php?orderId=<?php echo $Order_id; ?>" style="background-color: #6D6D6D; color: white;" class="btn btn-primary">Detail </a></td>
-                              </tr>
-                            <?php
-                            }
-                            ?>
+                                      $sql_orderD = "SELECT * FROM `detail` WHERE Detail_date < '$StartDate' AND Detail_date > '$EndDate';";
+                                      $query_orderD = mysqli_query($Connection, $sql_orderD);
+                                    }
+                                    while ($row = mysqli_fetch_array($query_orderD)) :
+                                    ?>
+                                        <tr>
+                                            <td><?php echo $row['Order_id']; ?></td>
+                                            <td class="name">
+                                                <?php echo $row['Detail_date']; ?>
+                                            </td>
+                                            <td><?php echo $row['order_status']; ?></td>
+                                            <td><a href="Order-Details.php?orderId=<?php echo $row['Order_id']; ?>" style="background-color: #6D6D6D; color: white;" class="btn btn-primary">Detail </a></td>
+                                        </tr>
+                                    <?php endwhile ?>
                           </tbody>
                         </table>
                         <br>
                         <!-- End Table with stripped rows -->
+                        
+                                    
