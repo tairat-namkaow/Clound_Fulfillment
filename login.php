@@ -15,6 +15,17 @@ if (isset($_POST["submit"])) {
   $query = mysqli_query($Connection, $sql);
   $result = mysqli_fetch_array($query, MYSQLI_ASSOC);
 
+  if ($_POST['Shop_email'] == 'Admin1' || $_POST['Shop_email'] == 'Admin2') {
+    session_start();
+    if ($_POST['Shop_email'] == 'Admin1') {
+      $_SESSION['Admin_user'] = 'Admin1';
+    }
+    if ($_POST['Shop_email'] == 'Admin2') {
+      $_SESSION['Admin_user'] = 'Admin2';
+    }
+    header("location:admin_dashboard.php");
+    exit();
+  }
   if (!$result) {
     $Shop_email = $_POST['Shop_email'];
     $check_submit = '<div class="alert alert-danger" role="alert">';
@@ -25,13 +36,8 @@ if (isset($_POST["submit"])) {
     $_SESSION["Shop_email"] = $result["Shop_email"];
     $_SESSION["Shop_name"] = $result["Shop_name"];
 
-    if ($_SESSION["user_level"] == 'admin') {
-      header("location:admin/index.php");
-      exit();
-    } else {
-      header("location:index.php");
-      exit();
-    }
+    header("location:index.php");
+    exit();
   }
 }
 ?>
