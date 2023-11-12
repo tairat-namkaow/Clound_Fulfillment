@@ -8,104 +8,77 @@ WHERE Shop_name = '" . $_SESSION['Shop_name'] . "'";
 $query_OrderDetail = mysqli_query($Connection, $sql_OrderDetail);
 $result_OrderDetail = mysqli_fetch_array($query_OrderDetail);
 ?>
+
+<?php
+require_once('connections/mysqli.php');
+
+$StartDate = isset($_POST['StartDate']) ? $_POST['StartDate'] : '';
+$EndDate = isset($_POST['EndDate']) ? $_POST['EndDate'] : '';
+$result = null;
+
+if (isset($_POST["Search"]) && $StartDate != '' && $EndDate != '') {
+    $stmt = $Connection->prepare("SELECT * FROM `detail` JOIN order_main ON order_main.Order_id = detail.Order_id WHERE Detail_date >= ? AND Detail_date <= ?");
+    $stmt->bind_param("ss", $StartDate, $EndDate);
+    $stmt->execute();
+    $result = $stmt->get_result();
+}
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Card with Rounded Borders</title>
+    <style>
+        .card {
+            background-color: white;
+            border: 3px solid #000;
+            border-radius: 20px;
+            margin-bottom: 4px;
+            padding: 0.5rem 1rem;
+        }
+        /* ... Other styles ... */
+    </style>
+</head>
+<body>
+    <main>
+        <div class="container-fluid px-4">
+            <!-- Table for Order History -->
+            <table class="table table-striped" style="text-align: center">
+                <!-- ... Table Content ... -->
+            </table>
+
+            <!-- Popup for Order Details -->
+            <div id="orderDetailsPopup" style="display:none;">
+                <!-- Order Details will be loaded here -->
+            </div>
+        </div>
+    </main>
+
+    <script>
+    function openOrderDetails(orderId) {
+        fetch('Order-Details.php?orderId=' + orderId)
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById("orderDetailsPopup").innerHTML = html;
+                document.getElementById("orderDetailsPopup").style.display = "block";
+            });
+    }
+
+    function closeOrderDetails() {
+        document.getElementById("orderDetailsPopup").style.display = "none";
+    }
+    </script>
+</body>
+</html>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
-<!-- Tab บน -->
 
-<head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta name="description" content="" />
-    <meta name="author" content="" />
-    <title>Dashboard</title>
-    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
-    <link href="css/styles.css" rel="stylesheet" />
-    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
-</head>
-
-<body class="sb-nav-fixed">
-    <nav class="sb-topnav navbar navbar-expand navbar-white" bg-white">
-        <!-- Navbar Brand-->
-        <a class="navbar-brand ps-3" href="index.html" style="color: black;">Cloud Fulfillment</a>
-        <!-- Sidebar Toggle-->
-        <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars" style="color: black;"></i></button>
-        <!-- Navbar Search-->
-        <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
-            <div class="input-group">
-                <input class="form-control" type="text" placeholder="Search for..." aria-label="Search for..." aria-describedby="btnNavbarSearch" />
-                <button class="btn btn-primary" id="btnNavbarSearch" type="button"><i class="fas fa-search"></i></button>
-            </div>
-        </form>
-        <!-- Navbar-->
-        <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
-                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-
-                    <li><a class="dropdown-item" href="#!"><?php echo $result_shop[2]; ?></a></li>
-                    <li>
-                        <hr class="dropdown-divider" />
-                    </li>
-                    <li><button class="dropdown-item" type="button" onclick="window.location.href='logout.php'">ออกจากระบบ</button></li>
-                </ul>
-            </li>
-        </ul>
-    </nav>
-
-
-
-
-
-
-
-
-
-    <!-- Tab ซ้าย -->
-    <div id="layoutSidenav">
-        <div id="layoutSidenav_nav">
-            <nav class="sb-sidenav accordion sb-sidenav-white" id="sidenavAccordion">
-                <div class="sb-sidenav-menu">
-                    <div class="nav">
-                        <a class="nav-link" href="charts.html">
-                            <div class="sb-nav-link-icon"><i class=""></i></div>
-                            <span style="color: black;">Dashboard</span>
-                        </a>
-                        <a class="nav-link" href="charts.html">
-                            <div class="sb-nav-link-icon"><i class=""></i></div>
-                            <span style="color: black;">Shop Information</span>
-                        </a>
-                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
-                            <div class="sb-nav-link-icon"><i class=""></i></div>
-                            <span style="color: black;">Order</span>
-                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down" style="color: black;"></i></div>
-                        </a>
-                        <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
-                            <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="layout-static.html" style="color: black;">Place Order</a>
-                                <a class="nav-link" href="layout-sidenav-light.html" style="color: black;">Order History</a>
-                            </nav>
-                        </div>
-
-                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseDownload" aria-expanded="false" aria-controls="collapseDownload">
-                            <div class="sb-nav-link-icon"><i class=""></i></div>
-                            <span style="color: black;">Download</span>
-                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down" style="color: black;"></i></div>
-                        </a>
-                        <div class="collapse" id="collapseDownload" aria-labelledby="headingDownload" data-bs-parent="#sidenavAccordion">
-                            <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="layout-static.html" style="color: black;">Report Summary</a>
-                            </nav>
-                        </div>
-                    </div>
-                </div>
-                <div class="sb-sidenav-footer">
-                    <div class="small">Logged in as:</div>
-                    <li><a class="dropdown-item" href="#!"><?php echo $result_shop[2]; ?></a></li>
-                </div>
-            </nav>
-        </div>
 
 
         <!-- หน้าต่าง Order Details -->
@@ -177,6 +150,19 @@ $result_OrderDetail = mysqli_fetch_array($query_OrderDetail);
 
                                         <div class="card">
                                             <div class="card-body">Order-ID:  <?php echo $result_OrderDetail[2]; ?> </div>
+        
+   <!-- ลองงง -->                                          
+                <select name="Product_id" type="text" required class="form-control">
+                    <?php
+                    $sql_Order = "SELECT * FROM `Order_main` 
+                    inner join detail on Order_main.Order_id = Detail.Order_id
+                    where Order_main.Order_id = '" . $_SESSION['Order_id'] . "'";
+                    $query_Order = mysqli_query($Connection, $sql_Order);
+                    while ($result_Order = mysqli_fetch_array($query_Order)) {
+                    ?>
+                    <option value="<?= $result_Order['Order_id'] ?>"><?= $result_Order['Order_name'] ?></option>
+                    <?php } ?>
+                </select>
                                             <div class="card-body">Order-Date:  <?php echo $result_OrderDetail[3]; ?></div>
                                             <div class="card-body">Shop-Name:  <?php echo $result_OrderDetail[15]; ?></div>
                                             <div class="card-body">Address:  <?php echo $result_shop[2]; ?></div>
@@ -278,7 +264,7 @@ while ($result_ProductID = mysqli_fetch_assoc($query_ProductID)) {
                                 <head>
                                     <meta charset="UTF-8">
                                     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                                    <title>Back Button</title>
+                                    
                                     <script>
                                         function goBack() {
                                             window.history.back();
@@ -302,9 +288,46 @@ while ($result_ProductID = mysqli_fetch_assoc($query_ProductID)) {
                                     </style>
                                 </head>
 
-                                <body>
+                                <!DOCTYPE html>
+                                    <html>
+                                    <head>
+                                        <title>Your Page Title</title>
+                                        <style>
+                                            body, html {
+                                                height: 100%;
+                                                margin: 0;
+                                                display: flex;
+                                                justify-content: center;
+                                                align-items: center;
+                                                background-color: #f0f0f0; /* สีพื้นหลัง, ปรับตามต้องการ */
+                                            }
 
-                                    <button onclick="goBack()">OK</button>
+                                            .center {
+                                                display: flex;
+                                                justify-content: center;
+                                                align-items: center;
+                                            }
+
+                                            .btn-link {
+                                                text-decoration: none;
+                                            }
+
+                                            button {
+                                                /* สไตล์ปุ่มตามความต้องการ */
+                                            }
+                                        </style>
+                                    </head>
+                                    <body>
+                                        <div class="center">
+                                            <a href="Order_history2.php" class="btn-link">
+                                                <button>OK</button>
+                                            </a>
+                                        </div>
+                                    </body>
+                                    </html>
+    
+
+                                
 
                                 </body>
 
@@ -326,28 +349,3 @@ while ($result_ProductID = mysqli_fetch_assoc($query_ProductID)) {
 
 
 
-
-
-                        </div>
-                </main>
-                <footer class="py-4 bg-light mt-auto">
-                    <div class="container-fluid px-4">
-                        <div class="d-flex align-items-center justify-content-between small">
-                            <div class="text-muted">Copyright &copy; Your Website 2023</div>
-
-                        </div>
-                    </div>
-                </footer>
-        </div>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-    <script src="js/scripts.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
-    <script src="assets/demo/chart-area-demo.js"></script>
-    <script src="assets/demo/chart-bar-demo.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
-    <script src="js/datatables-simple-demo.js"></script>
-</body>
-
-</html>
