@@ -1,5 +1,8 @@
 <?php
 require_once('connections/mysqli.php');
+$sql_shop = "SELECT * FROM shop WHERE Shop_email = '" . $_SESSION['Shop_email'] . "'";
+$query_shop = mysqli_query($Connection, $sql_shop);
+$result_shop = mysqli_fetch_array($query_shop);
 
 $sql_order = "SELECT max(Order_id) as Order_id, Order_status FROM order_main";
 $query_order = mysqli_query($Connection, $sql_order);

@@ -1,19 +1,25 @@
 <?php
 require_once('connections/mysqli.php');
 
-$sql_ishop = "SELECT * FROM `shop`";
-$query_ishop = mysqli_query($Connection, $sql_ishop);
-$result_ishop = mysqli_fetch_array($query_ishop);
+$sql_shop = "SELECT * FROM Shop WHERE Shop_email = '" . $_SESSION['Shop_email'] . "'";
+$query_shop = mysqli_query($Connection, $sql_shop);
+$result_shop = mysqli_fetch_array($query_shop);
 
-$shopname = "";
-$shopadd = "";
-$shoptel = "";
-$shopemail = "";
+$Shop_name = "";
+$Shop_address = "";
+$Shop_tel = "";
+$Shop_email = "";
 
+if (isset($_POST["Update_shop"])) {
 
-
+    $sql_update_shop = "UPDATE shop SET Shop_name = '" . $_POST["Shop_name"] . "', 
+                        Shop_address = '" . $_POST["Shop_address"] . "', 
+                        Shop_tel = '" . $_POST["Shop_tel"] . "'
+                        WHERE Shop_email = '" . $_SESSION['Shop_email'] . "' ";
+    $query = mysqli_query($Connection, $sql_update_shop);
+    header("Refresh:0; url=information.php");
+}
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -50,7 +56,7 @@ $shopemail = "";
                 <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
 
-                    <li><a class="dropdown-item" href="#!"><?php echo $result_shop[2]; ?></a></li>
+                    <li><a class="dropdown-item" href="#!"><?php echo $result_shop['Shop_name']; ?></a></li>
                     <li>
                         <hr class="dropdown-divider" />
                     </li>
@@ -101,7 +107,7 @@ $shopemail = "";
                 </div>
                 <div class="sb-sidenav-footer">
                     <div class="small">Logged in as:</div>
-                    <li><a class="dropdown-item" href="#!"><?php echo $result_shop[1]; ?></a></li>
+                    <li><a class="dropdown-item"><?php echo $result_shop['Shop_name']; ?></a></li>
                 </div>
             </nav>
         </div>
@@ -122,13 +128,8 @@ $shopemail = "";
                         border: 3px solid #000;
                         border-radius: 20px;
                         margin-bottom: 4px;
-
                         padding: 0.5rem 1rem;
                     }
-
-                    .card-body {}
-
-                    .card-header {}
                 </style>
             </head>
 
@@ -154,69 +155,36 @@ $shopemail = "";
                                             <div class="card-body">
                                                 <h5 class="card-title"><b>ข้อมูลร้านค้า</b></h5>
 
-                                                <?php
-                                                if ($query_ishop) {
-                                                    // Fetch all rows
-                                                    while ($result_ishop = mysqli_fetch_array($query_ishop)) {
-                                                        // Now $result_ishop contains the current row's data
-                                                        $shopname = $result_ishop['Shop_name'];
-                                                        $shopadd = $result_ishop['Shop_address'];
-                                                        $shoptel = $result_ishop['Shop_tel'];
-                                                        $shopemail = $result_ishop['Shop_email'];
-                                                    }
-                                                }
-                                                ?>
-
-                                                <form name="static" method="post" action="">
+                                                <form method="post">
                                                     <br>
                                                     <br>
-                                                    <input type="text" class="form-control" name='shopname' id='shopname' value="<?php echo $shopname; ?>" style="display:none">
-                                                    <input type="text" class="form-control" name='shopadd' id='shopadd' value="<?php echo $shopadd; ?>" style="display:none">
-                                                    <input type="text" class="form-control" name='shoptel' id='shoptel' value="<?php echo $shoptel; ?>" style="display:none">
-                                                    <input type="text" class="form-control" name='shopemail' id='shopemail' value="<?php echo $shopemail; ?>" style="display:none">
-
-
                                                     <div class="row mb-3">
                                                         <label for="inputText" class="col-sm-2 col-form-label">Shop Name</label>
                                                         <div class="col-sm-10">
-                                                            <input type="text" class="form-control" id="shopname" value="<?php echo $shopname ?>" disabled>
+                                                            <input type="text" class="form-control" name="Shop_name" value="<?php echo $result_shop['Shop_name'] ?>">
                                                         </div>
                                                     </div>
                                                     <div class="row mb-3">
                                                         <label for="inputText" class="col-sm-2 col-form-label">Shop Address</label>
                                                         <div class="col-sm-10">
-                                                            <input type="text" class="form-control" id="shopadd" value="<?php echo $shopadd ?>" disabled>
+                                                            <input type="text" class="form-control" name="Shop_address" value="<?php echo $result_shop['Shop_address'] ?>">
                                                         </div>
                                                     </div>
                                                     <div class="row mb-3">
                                                         <label for="inputText" class="col-sm-2 col-form-label">Telephone</label>
                                                         <div class="col-sm-10">
-                                                            <input type="text" class="form-control" id="shoptel" value="<?php echo $shoptel ?>" disabled>
+                                                            <input type="number" class="form-control" name="Shop_tel" value="<?php echo $result_shop['Shop_tel'] ?>">
                                                         </div>
-                                                    </div>
-                                                    <div class="row mb-3">
-                                                        <label for="inputEmail" class="col-sm-2 col-form-label">Email</label>
-                                                        <div class="col-sm-10">
-                                                            <input type="email" class="form-control" value="<?php echo $shopemail ?>" disabled>
-                                                        </div>
-                                                    </div>
+                                                    </div>                                          
 
                                                     <!-- Update button -->
                                                     <div class="col-sm-2">
-                                                        <?php echo '<button type="submit" name="updateButton" class="btn btn-primary" >Update</button>'; ?>
+                                                        <button type="submit" name="Update_shop" class="btn btn-primary">Update</button>
                                                     </div>
                                                 </form>
 
                                             </div>
                 </main>
-                <footer class="py-4 bg-light mt-auto">
-                    <div class="container-fluid px-4">
-                        <div class="d-flex align-items-center justify-content-between small">
-                            <div class="text-muted">Copyright &copy; Your Website 2023</div>
-
-                        </div>
-                    </div>
-                </footer>
         </div>
     </div>
 
