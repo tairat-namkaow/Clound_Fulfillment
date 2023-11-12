@@ -6,14 +6,21 @@ $query_order = mysqli_query($Connection, $sql_order);
 $result_order = mysqli_fetch_array($query_order);
 $Order_id = $result_order['Order_id'];
 
-if (isset($_POST["submit"])) {
+if (isset($_POST["submit_order"])) {
 
     $sql_insert_detail = "INSERT INTO detail (Product_id,Order_id,Detail_quantity) 
                 VALUES ('" . $_POST["Product_id"] . "',$Order_id ,'" . $_POST["Detail_quantity"] . "')";
     $query = mysqli_query($Connection, $sql_insert_detail);
 }
 
+if (isset($_POST["submit_status"])) {
+    
+    $sql_update_order = "UPDATE order_main SET Order_status = 'confirm' WHERE Order_id = $Order_id";
+    $query_update_order = mysqli_query($Connection, $sql_update_order);
 
+    $sql_insert_order = "INSERT INTO `order_main` (`Order_id`, `Order_status`) VALUES (NULL, 'pending');";
+    $query_insert_order = mysqli_query($Connection, $sql_insert_order);
+}
 
 ?>
 
@@ -107,7 +114,28 @@ $result_OrderDetail = mysqli_fetch_array($query_OrderDetail);
                             <div class="sb-nav-link-icon"><i class=""></i></div>
                             <span style="color: black;">Shop</span>
                         </a>
-                       
+                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
+                            <div class="sb-nav-link-icon"><i class=""></i></div>
+                            <span style="color: black;">Order</span>
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down" style="color: black;"></i></div>
+                        </a>
+                        <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                            <nav class="sb-sidenav-menu-nested nav">
+                                <a class="nav-link" href="layout-static.html" style="color: black;">Place Order</a>
+                                <a class="nav-link" href="layout-sidenav-light.html" style="color: black;">Order History</a>
+                            </nav>
+                        </div>
+
+                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseDownload" aria-expanded="false" aria-controls="collapseDownload">
+                            <div class="sb-nav-link-icon"><i class=""></i></div>
+                            <span style="color: black;">Download</span>
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down" style="color: black;"></i></div>
+                        </a>
+                        <div class="collapse" id="collapseDownload" aria-labelledby="headingDownload" data-bs-parent="#sidenavAccordion">
+                            <nav class="sb-sidenav-menu-nested nav">
+                                <a class="nav-link" href="layout-static.html" style="color: black;">Report Summary</a>
+                            </nav>
+                        </div>
                     </div>
                 </div>
                 <div class="sb-sidenav-footer">
@@ -262,27 +290,23 @@ $result_OrderDetail = mysqli_fetch_array($query_OrderDetail);
         </div>
         
     </div>
-    <form method="post">
-        <div >
-            <label for="product-name">PRODUCT-NAME</label>
-            <input type="text" name="product-name">
-        </div>
-        <div >
-            <label for="quantity">QUANTITY</label>
-            <input type="number" name="quantity">
-        </div>
-        <div >
-            <label for="expire-date">EXPIRE DATE</label>
-            <input type="date" name="expire-date">
-        </div>
-        <div >
-            <label for="zone">ZONE</label>
-            <input type="text" name="zone">
-        </div>
-        <button type="submit" name="Confirm_Product" ></button>
-    </form>
-
-    
+    <div class="form-input">
+        <label for="product-name">PRODUCT-NAME</label>
+        <input type="text" id="product-name" name="product-name">
+    </div>
+    <div class="form-input">
+        <label for="quantity">QUANTITY</label>
+        <input type="number" id="quantity" name="quantity">
+    </div>
+    <div class="form-input">
+        <label for="expire-date">EXPIRE DATE</label>
+        <input type="date" id="expire-date" name="expire-date">
+    </div>
+    <div class="form-input">
+        <label for="zone">ZONE</label>
+        <input type="text" id="zone" name="zone">
+    </div>
+    <input type="button" value="Confirm" onclick="confirmProduct()">
 </div>
 
 
