@@ -11,7 +11,7 @@ if (isset($_POST["submit_del"])) {
     $result_detail = mysqli_fetch_array($query_detail);
 
     if ($_POST["submit_del"] == $result_detail['Product_id']) {
-        $message = "สินค้านี้ ร้านค้าได้ส่งคำสั่งจัดส่งแล้ว";
+        $message = "ไม่สามารถลบได้ สินค้านี้ร้านค้าได้ส่งคำสั่งจัดส่งแล้ว";
         echo "<script type='text/javascript'>alert('$message');</script>";
     } else {
         $sql_product_detail = "DELETE FROM product WHERE Product_id = '" . $_POST["submit_del"] . "'";
