@@ -32,7 +32,7 @@ $result_OrderMain = mysqli_fetch_array($query_OrderMain);
 </head>
 
 <body class="sb-nav-fixed">
-  <nav class="sb-topnav navbar navbar-expand navbar-white" bg-white">
+  <nav class="sb-topnav navbar navbar-expand navbar-white" bg-white>
     <!-- Navbar Brand-->
     <a class="navbar-brand ps-3" href="index.html" style="color: black;">Cloud Fulfillment</a>
     <!-- Sidebar Toggle-->
@@ -107,7 +107,7 @@ $result_OrderMain = mysqli_fetch_array($query_OrderMain);
 
 
 
-    <!-- หน้าต่าง Order Details -->
+    <!-- หน้าต่าง Order history -->
     <div id="layoutSidenav_content">
       <!DOCTYPE html>
       <html lang="en">
@@ -157,22 +157,24 @@ $result_OrderMain = mysqli_fetch_array($query_OrderMain);
                         <!-- General Form Elements -->
                         <form name="Search" method="post" action="">
                           <div class="row mb-3">
-                            <label for="inputText" class="col-sm-2 col-form-label">Start Date : </label>
+                            <label for="inputText" class="col-sm-2 col-form-label">Start Date :</label>
                             <div class="col-sm-6">
                               <input type="date" id="StartDate" name="StartDate" value="<?php echo $StartDate; ?>" placeholder="yyyy-mm-dd" class="form-control">
                             </div>
+                          </div>
 
-                            <div class="row mb-3">
-                              <label for="inputText" class="col-sm-2 col-form-label">End Date : </label>
-                              <div class="col-sm-6">
-                                <input type="date" id="EndDate" name="EndDate" value="<?php echo $EndDate; ?>" placeholder="yyyy-mm-dd" class="form-control">
-                              </div>
-
-                              <div class="col-sm-2">
-                                <button type="submit" class="btn btn-primary" name="Search">Search</button>
-                              </div>
+                          <div class="row mb-3">
+                            <label for="inputText" class="col-sm-2 col-form-label">End Date :</label>
+                            <div class="col-sm-6">
+                              <input type="date" id="EndDate" name="EndDate" value="<?php echo $EndDate; ?>" placeholder="yyyy-mm-dd" class="form-control">
                             </div>
+
+                            <div class="col-sm-2">
+                              <button type="submit" class="btn btn-primary" name="Search">Search</button>
+                            </div>
+                          </div>
                         </form>
+
 
 
                         <!-- Table with stripped rows -->
@@ -216,3 +218,26 @@ $result_OrderMain = mysqli_fetch_array($query_OrderMain);
                         </table>
                         <br>
                         <!-- End Table with stripped rows -->
+                      </div>
+        </main>
+        <footer class="py-4 bg-light mt-auto">
+          <div class="container-fluid px-4">
+            <div class="d-flex align-items-center justify-content-between small">
+              <div class="text-muted">Copyright &copy; Your Website 2023</div>
+
+            </div>
+          </div>
+        </footer>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+  <script src="js/scripts.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+  <script src="assets/demo/chart-area-demo.js"></script>
+  <script src="assets/demo/chart-bar-demo.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
+  <script src="js/datatables-simple-demo.js"></script>
+</body>
+
+</html>
