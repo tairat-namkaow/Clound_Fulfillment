@@ -157,13 +157,6 @@ $result_OrderMain = mysqli_fetch_array($query_OrderMain);
                         <!-- General Form Elements -->
                         <form name="Search" method="post" action="">
                           <div class="row mb-3">
-                            <label for="inputText" class="col-sm-2 col-form-label">Order ID</label>
-                            <div class="col-sm-2">
-                              <input type="text" id="Order_ID" name="Order_ID" value="<?php echo $Order_ID; ?>" placeholder="Input your Order ID" class="form-control">
-                            </div>
-
-                          </div>
-                          <div class="row mb-3">
                             <label for="inputText" class="col-sm-2 col-form-label">Start Date : </label>
                             <div class="col-sm-6">
                               <input type="date" id="StartDate" name="StartDate" value="<?php echo $StartDate; ?>" placeholder="yyyy-mm-dd" class="form-control">
@@ -194,30 +187,32 @@ $result_OrderMain = mysqli_fetch_array($query_OrderMain);
                           </thead>
                           <tbody>
                             <?php
-                            if (isset($_POST["Search"])) {
+                            $StartDate = isset($_POST['StartDate']) ? $_POST['StartDate'] : '';
+                            $EndDate = isset($_POST['EndDate']) ? $_POST['EndDate'] : '';
 
-                              $sql_orderD = "SELECT * FROM `detail` WHERE Detail_date < '$StartDate' AND Detail_date > '$EndDate';";
-                              $query_orderD = mysqli_query($Connection, $sql_orderD);
-                           
+                            if (isset($_POST["Search"]) && $StartDate != '' && $EndDate != '') {
+                              // ใช้ prepared statements สำหรับความปลอดภัย
+                              $stmt = $Connection->prepare("SELECT * FROM `detail` join order_main on order_main.Order_id = detail.Order_id WHERE Detail_date >= ? AND Detail_date <= ?");
+                              $stmt->bind_param("ss", $StartDate, $EndDate);
+                              $stmt->execute();
+                              $result = $stmt->get_result();
 
-                            while ($row = mysqli_fetch_assoc($query_orderD)) {
-                              // Process each row of data
-                              $row['Order_id'];
-                              $row['Detail_date'];
-                              $row['order_status'];
+                              if ($result) {
+                                while ($row = $result->fetch_assoc()) {
+                                  // แสดงผลข้อมูล
+                                  echo "<tr>
+                    <td>" . htmlspecialchars($row['Order_id']) . "</td>
+                    <td class='name'>" . htmlspecialchars($row['Detail_date']) . "</td>
+                    <td>" . htmlspecialchars($row['order_status']) . "</td>
+                    <td><a href='Order-Details.php?orderId=" . htmlspecialchars($row['Order_id']) . "' class='btn btn-primary'>Detail</a></td>
+                  </tr>";
+                                }
+                              }
+                              $stmt->close();
                             }
                             ?>
-                              <tr>
-                                <th scope="row" class="narrow-column"><?php echo $row['Order_id']; ?></th>
-                                <td><?php echo $row['Detail_date']; ?></td>
-                                <td><?php echo $row['order_status']; ?></td>
-                                <td><a href="Order-Details.php?orderId=<?php echo $row['Order_id']; ?>" style="background-color: #6D6D6D; color: white;" class="btn btn-primary">Detail </a></td>
-                              </tr>
-                            <?php
-                            }
-                            ?>
+
                           </tbody>
                         </table>
                         <br>
                         <!-- End Table with stripped rows -->
-                        
