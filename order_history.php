@@ -12,6 +12,10 @@ inner join detail on order_main.Order_id = detail.Order_id";
 $query_OrderMain = mysqli_query($Connection, $sql_OrderMain);
 $result_OrderMain = mysqli_fetch_array($query_OrderMain);
 
+$sql_shop = "SELECT * FROM Shop WHERE Shop_email = '" . $_SESSION['Shop_email'] . "'";
+$query_shop = mysqli_query($Connection, $sql_shop);
+$result_shop = mysqli_fetch_array($query_shop);
+
 ?>
 
 <!DOCTYPE html>
@@ -100,7 +104,9 @@ $result_OrderMain = mysqli_fetch_array($query_OrderMain);
         </div>
         <div class="sb-sidenav-footer">
           <div class="small">Logged in as:</div>
-          <li><a class="dropdown-item" href="#!"><?php echo $result_shop[2]; ?></a></li>
+          <a class="dropdown-item" href="#!">
+            <?php echo $result_shop[1]; ?>
+          </a>
         </div>
       </nav>
     </div>
@@ -194,7 +200,7 @@ $result_OrderMain = mysqli_fetch_array($query_OrderMain);
 
                             if (isset($_POST["Search"]) && $StartDate != '' && $EndDate != '') {
                               // ใช้ prepared statements สำหรับความปลอดภัย
-                              $stmt = $Connection->prepare("SELECT * FROM `detail` join order_main on order_main.Order_id = detail.Order_id WHERE Detail_date >= ? AND Detail_date <= ?");
+                              $stmt = $Connection->prepare("SELECT * FROM `order_main` join detail on order_main.Order_id = detail.Order_id WHERE Order_date >= ? AND Order_date <= ?");
                               $stmt->bind_param("ss", $StartDate, $EndDate);
                               $stmt->execute();
                               $result = $stmt->get_result();
@@ -204,8 +210,8 @@ $result_OrderMain = mysqli_fetch_array($query_OrderMain);
                                   // แสดงผลข้อมูล
                                   echo "<tr>
                     <td>" . htmlspecialchars($row['Order_id']) . "</td>
-                    <td class='name'>" . htmlspecialchars($row['Detail_date']) . "</td>
-                    <td>" . htmlspecialchars($row['order_status']) . "</td>
+                    <td class='name'>" . htmlspecialchars($row['Order_date']) . "</td>
+                    <td>" . htmlspecialchars($row['Order_status']) . "</td>
                     <td><a href='Order-Details.php?orderId=" . htmlspecialchars($row['Order_id']) . "' class='btn btn-primary'>Detail</a></td>
                   </tr>";
                                 }
@@ -223,7 +229,7 @@ $result_OrderMain = mysqli_fetch_array($query_OrderMain);
         <footer class="py-4 bg-light mt-auto">
           <div class="container-fluid px-4">
             <div class="d-flex align-items-center justify-content-between small">
-              <div class="text-muted">Copyright &copy; Your Website 2023</div>
+              <div class="text-muted">Copyright &copy; 888Fulfillment 2023</div>
 
             </div>
           </div>
