@@ -7,8 +7,7 @@ $StartDate = "";
 $EndDate = "";
 
 
-$sql_OrderMain = "SELECT * FROM `order_main` 
-inner join detail on order_main.Order_id = detail.Order_id";
+$sql_OrderMain = "SELECT * FROM `order_main` where Order_id = '$Order_ID'";
 $query_OrderMain = mysqli_query($Connection, $sql_OrderMain);
 $result_OrderMain = mysqli_fetch_array($query_OrderMain);
 
@@ -200,7 +199,7 @@ $result_shop = mysqli_fetch_array($query_shop);
 
                             if (isset($_POST["Search"]) && $StartDate != '' && $EndDate != '') {
                               // ใช้ prepared statements สำหรับความปลอดภัย
-                              $stmt = $Connection->prepare("SELECT * FROM `order_main` join detail on order_main.Order_id = detail.Order_id WHERE Order_date >= ? AND Order_date <= ?");
+                              $stmt = $Connection->prepare("SELECT * FROM `order_main`  WHERE Order_date >= ? AND Order_date <= ?");
                               $stmt->bind_param("ss", $StartDate, $EndDate);
                               $stmt->execute();
                               $result = $stmt->get_result();
