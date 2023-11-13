@@ -6,13 +6,16 @@ $query_admin = mysqli_query($Connection, $sql_admin);
 $result_admin = mysqli_fetch_array($query_admin);
 
 if (isset($_POST["submit_cf"])) {
-    $orderId = $_POST["submit_cf"];
-    $sql_update = "UPDATE order_main SET Order_status = 'Confirmed' WHERE Order_id = '$orderId' AND Order_status = 'Pending'";
-    $query_update = mysqli_query($Connection, $sql_update);
 
-    if ($query_update) {
-        $message = "The order has been confirmed";
-        echo "<script type='text/javascript'>alert('$message');</script>";
+    $sql_order = "SELECT * FROM `order_main` WHERE order_id = '" . $_POST["submit_cf"] . "'";
+    $query_order = mysqli_query($Connection, $sql_order);
+    $result_order = mysqli_fetch_array($query_order);
+
+    if ($result_order['Order_status'] == 'pending') {
+
+        $orderId = $_POST["submit_cf"];
+        $sql_update = "UPDATE order_main SET Order_status = 'Confirmed' WHERE Order_id = '$orderId'";
+        $query_update = mysqli_query($Connection, $sql_update);
     } else {
         $message = "Failed to confirm the order";
         echo "<script type='text/javascript'>alert('$message');</script>";
@@ -20,13 +23,15 @@ if (isset($_POST["submit_cf"])) {
 }
 
 if (isset($_POST["submit_cc"])) {
-    $orderId = $_POST["submit_cc"];
-    $sql_update = "UPDATE order_main SET Order_status = 'Cancelled' WHERE Order_id = '$orderId' AND Order_status = 'Pending'";
-    $query_update = mysqli_query($Connection, $sql_update);
+    $sql_order = "SELECT * FROM `order_main` WHERE order_id = '" . $_POST["submit_cc"] . "'";
+    $query_order = mysqli_query($Connection, $sql_order);
+    $result_order = mysqli_fetch_array($query_order);
 
-    if ($query_update) {
-        $message = "The order has been cancelled";
-        echo "<script type='text/javascript'>alert('$message');</script>";
+    if ($result_order['Order_status'] == 'pending') {
+
+        $orderId = $_POST["submit_cc"];
+        $sql_update = "UPDATE order_main SET Order_status = 'Cancel' WHERE Order_id = '$orderId'";
+        $query_update = mysqli_query($Connection, $sql_update);
     } else {
         $message = "Failed to cancel the order";
         echo "<script type='text/javascript'>alert('$message');</script>";
@@ -121,7 +126,7 @@ if (isset($_POST["submit_cc"])) {
                                 <thead class="table-light">
                                     <tr>
                                         <th>Order_id</th>
-                                        <th>Shop_id</th>
+                                        <th>Shop_name</th>
                                         <th>Order_status</th>
                                         <th>Order_date</th>
                                         <th>Detail</th>
@@ -131,10 +136,12 @@ if (isset($_POST["submit_cc"])) {
                                 </thead>
                                 <tbody>
                                     <?php
-                                    $sql_adorder = "SELECT * FROM order_main
-                                                    inner join detail on order_main.Order_id = detail.Order_id
-                                                    inner join product on detail.product_id = Product.Product_id
-                                                    inner join shop on product.Shop_id = shop.Shop_id";
+                                    $sql_adorder =  "SELECT order_main.Order_id, order_main.Order_status, order_main.Order_date, shop.Shop_name
+                                    FROM order_main
+                                    INNER JOIN detail ON order_main.Order_id = detail.Order_id
+                                    INNER JOIN product ON detail.product_id = product.Product_id
+                                    INNER JOIN shop ON product.Shop_id = shop.Shop_id
+                                    GROUP BY order_main.Order_id";;
 
                                     $query_adorder = mysqli_query($Connection, $sql_adorder);
 
@@ -142,9 +149,9 @@ if (isset($_POST["submit_cc"])) {
                                     ?>
                                         <tr>
                                             <td><?php echo $row['Order_id']; ?></td>
-                                            <td><?php echo $row['Shop_id']; ?></td>
+                                            <td><?php echo $row['Shop_name']; ?></td>
                                             <td><?php echo $row['Order_status']; ?></td>
-                                            <td><?php echo $row['Order_date']; ?></td>
+                                            <td><?php echo $row['Order_date']; ?></td>                          
 
                                             <!-- detail Button -->
 
