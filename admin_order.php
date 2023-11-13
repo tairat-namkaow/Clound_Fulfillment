@@ -5,20 +5,14 @@ $sql_admin = "SELECT * FROM `admin` WHERE Admin_user = '" . $_SESSION['Admin_use
 $query_admin = mysqli_query($Connection, $sql_admin);
 $result_admin = mysqli_fetch_array($query_admin);
 
-$orderId = "";
-
 if (isset($_POST["submit_cf"])) {
-    $orderId = $_POST["Order_id"];
-    $sql_ord1 = "SELECT * FROM `order_main` WHERE Order_id = '$orderId'";
-    $query_ord1 = mysqli_query($Connection, $sql_ord1);
-    $result_ord1 = mysqli_fetch_array($query_ord1);
-
-    $sql_update = "UPDATE order_main SET Order_status = 'Confirmed' WHERE Order_id = '$orderId'";
+    $orderId = $_POST["submit_cf"];
+    $sql_update = "UPDATE order_main SET Order_status = 'Confirmed' WHERE Order_id = '$orderId' AND Order_status = 'Pending'";
     $query_update = mysqli_query($Connection, $sql_update);
 
-    if ($result_ord['Order_status'] == 'Pending') {
-        $sql_update = "UPDATE order_main SET Order_status = 'Confirmed' WHERE Order_id = '$orderId'";
-        $query_update = mysqli_query($Connection, $sql_update);
+    if ($query_update) {
+        $message = "The order has been confirmed";
+        echo "<script type='text/javascript'>alert('$message');</script>";
     } else {
         $message = "Failed to confirm the order";
         echo "<script type='text/javascript'>alert('$message');</script>";
@@ -26,17 +20,13 @@ if (isset($_POST["submit_cf"])) {
 }
 
 if (isset($_POST["submit_cc"])) {
-    $orderId = $_POST["Order_id"];
-    $sql_ord = "SELECT * FROM `order_main` WHERE Order_id = '$orderId'";
-    $query_ord = mysqli_query($Connection, $sql_ord);
-    $result_ord = mysqli_fetch_array($query_ord);
-
-    $sql_update = "UPDATE order_main SET Order_status = 'Cancelled' WHERE Order_id = '$orderId'";
+    $orderId = $_POST["submit_cc"];
+    $sql_update = "UPDATE order_main SET Order_status = 'Cancelled' WHERE Order_id = '$orderId' AND Order_status = 'Pending'";
     $query_update = mysqli_query($Connection, $sql_update);
 
-    if ($result_ord['Order_status'] == 'Pending') {
-        $sql_update = "UPDATE order_main SET Order_status = 'Cancelled' WHERE Order_id = '$orderId'";
-        $query_update = mysqli_query($Connection, $sql_update);
+    if ($query_update) {
+        $message = "The order has been cancelled";
+        echo "<script type='text/javascript'>alert('$message');</script>";
     } else {
         $message = "Failed to cancel the order";
         echo "<script type='text/javascript'>alert('$message');</script>";
