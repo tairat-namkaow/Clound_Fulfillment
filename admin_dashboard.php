@@ -63,7 +63,7 @@ $result_admin = mysqli_fetch_array($query_admin);
                         <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
                                 <a class="nav-link" href="admin_dashboard.php">Dash board</a>
-                                <a class="nav-link" href="">In-bound</a>
+                                <a class="nav-link" href="In_bound.php">In-bound</a>
                                 <a class="nav-link" href="admin_inventory.php">Inventory</a>
                                 <a class="nav-link" href="">Order</a>
                                 <a class="nav-link" href="">Shop</a>
