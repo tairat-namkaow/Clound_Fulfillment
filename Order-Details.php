@@ -1,10 +1,12 @@
 <?php
 require_once('connections/mysqli.php');
 
-$sql_OrderDetail = "SELECT * FROM `detail` 
+$sql_OrderDetail = "SELECT * FROM `detail`
+inner join order_main on detail.Order_id = order_main.Order_id
 inner join product on detail.Product_id = product.Product_id
 inner join shop on product.Shop_id = shop.Shop_id
-WHERE Shop_name = '" . $_SESSION['Shop_name'] . "'";
+where order_main.Order_id = " . $_GET['orderId'] . "";
+
 $query_OrderDetail = mysqli_query($Connection, $sql_OrderDetail);
 $result_OrderDetail = mysqli_fetch_array($query_OrderDetail);
 ?>
@@ -26,6 +28,7 @@ if (isset($_POST["Search"]) && $StartDate != '' && $EndDate != '') {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -38,9 +41,11 @@ if (isset($_POST["Search"]) && $StartDate != '' && $EndDate != '') {
             margin-bottom: 4px;
             padding: 0.5rem 1rem;
         }
+
         /* ... Other styles ... */
     </style>
 </head>
+
 <body>
     <main>
         <div class="container-fluid px-4">
@@ -57,20 +62,21 @@ if (isset($_POST["Search"]) && $StartDate != '' && $EndDate != '') {
     </main>
 
     <script>
-    function openOrderDetails(orderId) {
-        fetch('Order-Details.php?orderId=' + orderId)
-            .then(response => response.text())
-            .then(html => {
-                document.getElementById("orderDetailsPopup").innerHTML = html;
-                document.getElementById("orderDetailsPopup").style.display = "block";
-            });
-    }
+        function openOrderDetails(orderId) {
+            fetch('Order-Details.php?orderId=' + orderId)
+                .then(response => response.text())
+                .then(html => {
+                    document.getElementById("orderDetailsPopup").innerHTML = html;
+                    document.getElementById("orderDetailsPopup").style.display = "block";
+                });
+        }
 
-    function closeOrderDetails() {
-        document.getElementById("orderDetailsPopup").style.display = "none";
-    }
+        function closeOrderDetails() {
+            document.getElementById("orderDetailsPopup").style.display = "none";
+        }
     </script>
 </body>
+
 </html>
 
 
@@ -81,271 +87,249 @@ if (isset($_POST["Search"]) && $StartDate != '' && $EndDate != '') {
 
 
 
-        <!-- หน้าต่าง Order Details -->
-        <div id="layoutSidenav_content">
-            <!DOCTYPE html>
-            <html lang="en">
+<!-- หน้าต่าง Order Details -->
+<div id="layoutSidenav_content">
+    <!DOCTYPE html>
+    <html lang="en">
 
-            <head>
-                <meta charset="UTF-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>Card with Rounded Borders</title>
-                <style>
-                    .card {
-                        background-color: white;
-                        border: 3px solid #000;
-                        border-radius: 20px;
-                        margin-bottom: 4px;
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Card with Rounded Borders</title>
+        <style>
+            .card {
+                background-color: white;
+                border: 3px solid #000;
+                border-radius: 20px;
+                margin-bottom: 4px;
 
-                        padding: 0.5rem 1rem;
-                    }
+                padding: 0.5rem 1rem;
+            }
 
-                    .card-body {}
+            .card-body {}
 
-                    .card-header {}
-                </style>
-            </head>
+            .card-header {}
+        </style>
+    </head>
 
-            <body>
-                <main>
-                    <div class="container-fluid px-4">
-                        <div class="card">
-                            <div class="card-header">
-                                <h1 class="mt-4">Order Details</h1>
-                            </div>
-                            <div class="card-body">
-                                <ol class="breadcrumb mb-4">
+    <body>
+        <main>
+            <div class="container-fluid px-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h1 class="mt-4">Order Details</h1>
+                    </div>
+                    <div class="card-body">
+                        <ol class="breadcrumb mb-4">
 
-                                </ol>
+                        </ol>
 
-                            </div>
+                    </div>
 
 
-                            <!-- หน้าต่าง ข้างใน Order Details -->
+                    <!-- หน้าต่าง ข้างใน Order Details -->
 
-                            <div class="row">
-                                <div class="col-12">
+                    <div class="row">
+                        <div class="col-12">
+                            <!DOCTYPE html>
+                            <html lang="en">
+
+                            <head>
+                                <meta charset="UTF-8">
+                                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                                <title>Card with Rounded Borders</title>
+                                <style>
+                                    .card {
+                                        background-color: white;
+                                        border: 3px solid #000;
+                                        border-radius: 20px;
+                                        margin-bottom: 4px;
+                                    }
+
+                                    .card-body {
+                                        padding: 0.5rem 1rem;
+                                    }
+                                </style>
+                            </head>
+
+                            <body>
+
+                                <div class="card">
+                                    <div class="card-body">Order-ID: <?php echo $result_OrderDetail['Order_id']; ?> </div>
+                                    <div class="card-body">Order-Date: <?php echo $result_OrderDetail['Order_date']; ?></div>
+                                    <div class="card-body">Shop-Name: <?php echo $result_OrderDetail['Shop_name']; ?></div>
+                                    <div class="card-body">Address: <?php echo $result_OrderDetail['Order_address']; ?></div>
+
+
+
                                     <!DOCTYPE html>
-                                    <html lang="en">
+
+                                    <html lang="th">
 
                                     <head>
                                         <meta charset="UTF-8">
-                                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                                        <title>Card with Rounded Borders</title>
+                                        <title>ตารางสินค้า</title>
                                         <style>
-                                            .card {
-                                                background-color: white;
-                                                border: 3px solid #000;
-                                                border-radius: 20px;
-                                                margin-bottom: 4px;
+                                            .border-right {
+                                                border-right: 3px solid black;
                                             }
 
-                                            .card-body {
-                                                padding: 0.5rem 1rem;
+                                            tr td {
+                                                border-bottom: 3px solid black;
+                                            }
+
+                                            table {
+                                                border-collapse: collapse;
+                                                width: 100%;
+                                            }
+
+                                            th,
+                                            td {
+                                                padding: 8px;
+                                                text-align: left;
                                             }
                                         </style>
                                     </head>
 
                                     <body>
 
-                                        <div class="card">
-                                            <div class="card-body">Order-ID:  <?php echo $result_OrderDetail[2]; ?> </div>
-        
-   <!-- ลองงง -->                                          
-                <select name="Product_id" type="text" required class="form-control">
-                    <?php
-                    $sql_Order = "SELECT * FROM `Order_main` 
-                    inner join detail on Order_main.Order_id = Detail.Order_id
-                    where Order_main.Order_id = '" . $_SESSION['Order_id'] . "'";
-                    $query_Order = mysqli_query($Connection, $sql_Order);
-                    while ($result_Order = mysqli_fetch_array($query_Order)) {
-                    ?>
-                    <option value="<?= $result_Order['Order_id'] ?>"><?= $result_Order['Order_name'] ?></option>
-                    <?php } ?>
-                </select>
-                                            <div class="card-body">Order-Date:  <?php echo $result_OrderDetail[3]; ?></div>
-                                            <div class="card-body">Shop-Name:  <?php echo $result_OrderDetail[15]; ?></div>
-                                            <div class="card-body">Address:  <?php echo $result_shop[2]; ?></div>
 
 
 
-                                            <!DOCTYPE html>
-
-                                            <html lang="th">
-
-                                            <head>
-                                                <meta charset="UTF-8">
-                                                <title>ตารางสินค้า</title>
-                                                <style>
-                                                    .border-right {
-                                                        border-right: 3px solid black;
-                                                    }
-
-                                                    tr td {
-                                                        border-bottom: 3px solid black;
-                                                    }
-
-                                                    table {
-                                                        border-collapse: collapse;
-                                                        width: 100%;
-                                                    }
-
-                                                    th,
-                                                    td {
-                                                        padding: 8px;
-                                                        text-align: left;
-                                                    }
-                                                </style>
-                                            </head>
-
-                                            <body>
-
-
-                                            
-
-                                                <table>
-                                                    <table class="table mx-auto" style="margin-top: 20px; width: auto;">
-                                                        <tr>
-                                                            <td class="border-right">Product-ID</td>
-                                                            <td class="border-right">Product-Name</td>
-                                                            <td>Quantity</td>
-                                                        </tr>
+                                        <table>
+                                            <table class="table mx-auto" style="margin-top: 20px; width: auto;">
+                                                <tr>
+                                                    <td class="border-right">Product-ID</td>
+                                                    <td class="border-right">Product-Name</td>
+                                                    <td>Quantity</td>
+                                                </tr>
 
 
 
-<?php
-$sql_ProductID = "SELECT * FROM `detail`
+                                                <?php
+
+                                                $sql_ProductID = "SELECT * FROM `detail`
+inner join order_main on detail.Order_id = order_main.Order_id
 inner join product on detail.Product_id = product.Product_id
 inner join shop on product.Shop_id = shop.Shop_id
-WHERE Shop_name = '" . mysqli_real_escape_string($Connection, $_SESSION['Shop_name']) . "'";
-$query_ProductID = mysqli_query($Connection, $sql_ProductID);
+where order_main.Order_id = " . $_GET['orderId'] . "";
+                                                $query_ProductID = mysqli_query($Connection, $sql_ProductID);
 
-// ดึงข้อมูลทั้งหมดมาเก็บใน array
-$products = [];
-while ($result_ProductID = mysqli_fetch_assoc($query_ProductID)) {
-    $products[] = $result_ProductID;
-}
-?>
+                                                // ดึงข้อมูลทั้งหมดมาเก็บใน array
+                                                $products = [];
+                                                while ($result_ProductID = mysqli_fetch_assoc($query_ProductID)) {
+                                                    $products[] = $result_ProductID;
+                                                }
+                                                ?>
 
-<tr>
-    <td class="border-right">
-        <?php foreach ($products as $product) { 
-            echo htmlspecialchars($product['Product_id']) . "<br>"; 
-        }?>
-    </td>
-    <td class="border-right">
-        <?php foreach ($products as $product) { 
-            echo htmlspecialchars($product['Product_name']) . "<br>"; 
-        }?>
-    </td>
-    <td>
-        <?php foreach ($products as $product) { 
-            echo htmlspecialchars($product['Detail_quantity']) . "<br>"; 
-        }?>
-    </td>
-</tr>
-
-                                                    </table>
-
-                                            </body>
-
-                                            </html>
+                                                <tr>
+                                                    <td class="border-right">
+                                                        <?php foreach ($products as $product) {
+                                                            echo htmlspecialchars($product['Product_id']) . "<br>";
+                                                        } ?>
+                                                    </td>
+                                                    <td class="border-right">
+                                                        <?php foreach ($products as $product) {
+                                                            echo htmlspecialchars($product['Product_name']) . "<br>";
+                                                        } ?>
+                                                    </td>
+                                                    <td>
+                                                        <?php foreach ($products as $product) {
+                                                            echo htmlspecialchars($product['Detail_quantity']) . "<br>";
+                                                        } ?>
+                                                    </td>
+                                                </tr>
 
                                             </table>
-                                        </div>
 
                                     </body>
 
                                     </html>
+
+                                    </table>
                                 </div>
-                                <!DOCTYPE html>
-                                <html lang="en">
 
-                                <head>
-                                    <meta charset="UTF-8">
-                                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                                    
-                                    <script>
-                                        function goBack() {
-                                            window.history.back();
-                                        }
-                                    </script>
-                                    <style>
-                                        button {
-                                            border: 3px solid black;
-                                            border-radius: 5px;
-                                            padding: 5px 10px;
-                                            font-size: 14px;
-                                            cursor: pointer;
-                                            background-color: white;
-                                            transition: background-color 0.3s;
-                                            display: inline-block;
-                                        }
+                            </body>
 
-                                        button:hover {
-                                            background-color: #f0f0f0;
-                                        }
-                                    </style>
-                                </head>
+                            </html>
+                        </div>
+                        <!DOCTYPE html>
+                        <html lang="en">
 
-                                <!DOCTYPE html>
-                                    <html>
-                                    <head>
-                                        <title>Your Page Title</title>
-                                        <style>
-                                            body, html {
-                                                height: 100%;
-                                                margin: 0;
-                                                display: flex;
-                                                justify-content: center;
-                                                align-items: center;
-                                                background-color: #f0f0f0; /* สีพื้นหลัง, ปรับตามต้องการ */
-                                            }
+                        <head>
+                            <meta charset="UTF-8">
+                            <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-                                            .center {
-                                                display: flex;
-                                                justify-content: center;
-                                                align-items: center;
-                                            }
+                            <script>
+                                function goBack() {
+                                    window.history.back();
+                                }
+                            </script>
+                            <style>
+                                button {
+                                    border: 3px solid black;
+                                    border-radius: 5px;
+                                    padding: 5px 10px;
+                                    font-size: 14px;
+                                    cursor: pointer;
+                                    background-color: white;
+                                    transition: background-color 0.3s;
+                                    display: inline-block;
+                                }
 
-                                            .btn-link {
-                                                text-decoration: none;
-                                            }
+                                button:hover {
+                                    background-color: #f0f0f0;
+                                }
+                            </style>
+                        </head>
 
-                                            button {
-                                                /* สไตล์ปุ่มตามความต้องการ */
-                                            }
-                                        </style>
-                                    </head>
-                                    <body>
-                                        <div class="center">
-                                            <a href="Order_history2.php" class="btn-link">
-                                                <button>OK</button>
-                                            </a>
-                                        </div>
-                                    </body>
-                                    </html>
-    
+                        <!DOCTYPE html>
+                        <html>
 
-                                
+                        <head>
+                            <title>Your Page Title</title>
+                            <style>
+                                body,
+                                html {
+                                    height: 100%;
+                                    margin: 0;
+                                    display: flex;
+                                    justify-content: center;
+                                    align-items: center;
+                                    background-color: #f0f0f0;
+                                    /* สีพื้นหลัง, ปรับตามต้องการ */
+                                }
 
-                                </body>
+                                .center {
+                                    display: flex;
+                                    justify-content: center;
+                                    align-items: center;
+                                }
 
-                                </html>
+                                .btn-link {
+                                    text-decoration: none;
+                                }
+
+                                button {
+                                    /* สไตล์ปุ่มตามความต้องการ */
+                                }
+                            </style>
+                        </head>
+
+                        <body>
+                            <div class="center">
+                                <a href="Order_history2.php" class="btn-link">
+                                    <button>OK</button>
+                                </a>
                             </div>
+                        </body>
+
+                        </html>
 
 
 
 
+    </body>
 
-
-
-
-
-
-
-
-
-
-
-
+    </html>
+</div>
