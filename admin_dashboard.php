@@ -44,6 +44,10 @@ $result_admin = mysqli_fetch_array($query_admin);
                     <li>
                         <hr class="dropdown-divider" />
                     </li>
+                    <li><a class="dropdown-item" href="admin_information.php">แก้ไขข้อมูล</a></li>
+                    <li>
+                        <hr class="dropdown-divider" />
+                    </li>
                     <li><button class="dropdown-item" type="button" onclick="window.location.href='logout.php'">ออกจากระบบ</button></li>
                 </ul>
             </li>
