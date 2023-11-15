@@ -318,7 +318,7 @@ where order_main.Order_id = " . $_GET['orderId'] . "";
 
                         <body>
                             <div class="center">
-                                <a href="Order_history2.php" class="btn-link">
+                                <a href="Order_history.php" class="btn-link">
                                     <button>OK</button>
                                 </a>
                             </div>
