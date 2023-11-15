@@ -47,7 +47,7 @@ if (isset($_POST["submit_cc"])) {
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <title>Cloud_Fulfillment</title>
+    <title>Clound_Fulfillment</title>
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
     <link href="css/styles.css" rel="stylesheet" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
@@ -89,7 +89,7 @@ if (isset($_POST["submit_cc"])) {
                         <div class="sb-sidenav-menu-heading">MENU</div>
                         <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
                             <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
-                            Order
+                            Menu
                             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
                         <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
@@ -155,8 +155,9 @@ if (isset($_POST["submit_cc"])) {
 
                                             <!-- detail Button -->
 
-                                            <td><a href='Order-Details.php?orderId=" . htmlspecialchars(<?php echo $row['Order_id']; ?>) . "' class='btn btn-primary btn-sm'>Detail</a></td>
+                                            <td><a href='Admin_Details.php?orderId=<?php echo $row['Order_id']; ?>' class='btn btn-primary'>Detail</a></td>
 
+                                        
                                             <td>
                                                 <!-- cf/cc Button -->
                                                 <button type="submit" name="submit_cf" value=<?php echo $row['Order_id']; ?> class="btn btn-success btn-sm">Confirm</button>
