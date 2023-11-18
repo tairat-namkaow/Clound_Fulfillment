@@ -28,7 +28,7 @@ if (isset($_POST["submit_del"])) {
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <title>Clound_Fulfillment</title>
+    <title>Cloud_Fulfillment</title>
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
     <link href="css/styles.css" rel="stylesheet" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
@@ -37,7 +37,7 @@ if (isset($_POST["submit_del"])) {
 <body class="sb-nav-fixed">
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
         <!-- Navbar Brand-->
-        <a class="navbar-brand ps-3" href="index.php">Admin Dashboard</a>
+        <a class="navbar-brand ps-3" href="admin_dashboard.php">Admin Dashboard</a>
         <!-- Sidebar Toggle-->
         <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
         <!-- Navbar Search-->
@@ -54,6 +54,10 @@ if (isset($_POST["submit_del"])) {
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
 
                     <li><a class="dropdown-item" href="#!"><?php echo $result_admin[3]; ?></a></li>
+                    <li>
+                        <hr class="dropdown-divider" />
+                    </li>
+                    <li><a class="dropdown-item" href="admin_information.php">แก้ไขข้อมูล</a></li>
                     <li>
                         <hr class="dropdown-divider" />
                     </li>
@@ -75,13 +79,13 @@ if (isset($_POST["submit_del"])) {
                         </a>
                         <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="admin_dashboard.php">Dash board</a>
-                                <a class="nav-link" href="">In-bound</a>
-                                <a class="nav-link" href="">Inventory</a>
-                                <a class="nav-link" href="">Order</a>
+                                <a class="nav-link" href="admin_dashboard.php">Dashboard</a>
+                                <a class="nav-link" href="In_bound.php">In-bound</a>
+                                <a class="nav-link" href="admin_inventory.php">Inventory</a>
+                                <a class="nav-link" href="admin_order.php">Order</a>
                                 <a class="nav-link" href="">Shop</a>
                             </nav>
-                        </div>
+                        </div> 
                     </div>
                 </div>
                 <div class="sb-sidenav-footer">

@@ -3,57 +3,71 @@
 require_once('connections/mysqli.php');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Get start date and end date from the form
-    $startDate = $_POST['start_date'];
-    $endDate = $_POST['end_date'];
+    // Get start date and end date from the form (validate and sanitize input)
+    $startDate = mysqli_real_escape_string($Connection, $_POST['start_date']);
+    $endDate = mysqli_real_escape_string($Connection, $_POST['end_date']);
+
+    // Set the SQL query using prepared statements
+    $sql_exp = "SELECT order_main.Order_id, order_main.Order_date, shop.Shop_name, product.Product_id, product.Product_name, warehouse.Warehouse_id, warehouse.Warehouse_id, warehouse.Warehouse_zone, detail.Detail_quantity
+                FROM `detail`
+                INNER JOIN order_main ON detail.Order_id = order_main.Order_id
+                INNER JOIN product ON detail.Product_id = product.Product_id
+                INNER JOIN shop ON product.Shop_id = shop.Shop_id
+                INNER JOIN warehouse ON product.Warehouse_id = warehouse.Warehouse_id
+                WHERE order_main.Order_date BETWEEN ? AND ?";
+
+    // Prepare and bind the statement
+    $stmt = mysqli_prepare($Connection, $sql_exp);
+    mysqli_stmt_bind_param($stmt, "ss", $startDate, $endDate);
+
+    // Execute the query
+    $query_exp = mysqli_stmt_execute($stmt);
 
     // Set the CSV filename
     $csv_filename = 'exported_data.csv';
 
-    // Set the SQL query to fetch data from your table
-    $sql_exp = "SELECT order_main.Order_id, order_main.Order_date, shop.Shop_name, product.Product_id, product.Product_name, detail.Detail_quantity
-FROM `detail`
-INNER JOIN order_main ON detail.Order_id = order_main.Order_id
-INNER JOIN product ON detail.Product_id = product.Product_id
-INNER JOIN shop ON product.Shop_id = shop.Shop_id
-WHERE order_main.Order_date BETWEEN '$startDate' AND '$endDate'";
-
-    // Execute the query
-    $query_exp = mysqli_query($Connection, $sql_exp);
-
     // Check if the query was successful
     if ($query_exp) {
-
-        // Output CSV headers
-        header('Content-Type: text/csv');
+        header('Content-Type: text/csv; charset=utf-8');
         header('Content-Disposition: attachment; filename="' . $csv_filename . '"');
 
         // Open a file handle for writing to the CSV file
         $file = fopen('php://output', 'w');
 
         // Write headers to the CSV file
-        $header = array('Order_id', 'Order_date', 'Shop_name', 'Product_id', 'Product_name', 'Quantity'); // Replace with your actual column names
+        $header = array('Order_id', 'Order_date', 'Shop_name', 'Product_id', 'Product_name', 'Warehouse_id', 'Warehouse_zone', 'Quantity');
         fputcsv($file, $header);
 
         // Fetch and write data to the CSV file
-        while ($row = mysqli_fetch_assoc($query_exp)) {
+        $result = mysqli_stmt_get_result($stmt);
+        while ($row = mysqli_fetch_assoc($result)) {
             fputcsv($file, $row);
         }
 
         // Close the file handle
         fclose($file);
 
-        $message = "CSV file successfully created";
-        echo "<script type='text/javascript'>alert('$message');</script>";
+        // Exit to prevent further output
+        exit;
     } else {
-        echo "Error: " . mysqli_error($connection);
+        echo "Error: " . mysqli_error($Connection);
     }
+
+    // Close the statement
+    mysqli_stmt_close($stmt);
 }
 ?>
 
 
 <!DOCTYPE html>
 <html lang="en">
+
+<?php
+// Assuming $_SESSION['Admin_user'] is safe from SQL injection
+$sql_admin = "SELECT * FROM `admin` WHERE Admin_user = '" . $_SESSION['Admin_user'] . "'";
+$query_admin = mysqli_query($Connection, $sql_admin);
+$result_admin = mysqli_fetch_array($query_admin);
+?>
 
 <!-- Tab บน -->
 
@@ -63,18 +77,18 @@ WHERE order_main.Order_date BETWEEN '$startDate' AND '$endDate'";
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <title>Dashboard</title>
+    <title>Cloud_Fulfillment</title>
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
     <link href="css/styles.css" rel="stylesheet" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
 </head>
 
 <body class="sb-nav-fixed">
-    <nav class="sb-topnav navbar navbar-expand navbar-white" bg-white>
+    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
         <!-- Navbar Brand-->
-        <a class="navbar-brand ps-3" href="index.html" style="color: black;">Cloud Fulfillment</a>
+        <a class="navbar-brand ps-3" href="admin_dashboard.php">Admin Dashboard</a>
         <!-- Sidebar Toggle-->
-        <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars" style="color: black;"></i></button>
+        <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
         <!-- Navbar Search-->
         <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
             <div class="input-group">
@@ -88,7 +102,11 @@ WHERE order_main.Order_date BETWEEN '$startDate' AND '$endDate'";
                 <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
 
-                    <li><a class="dropdown-item"><?php echo $result_admin['Admin_user']; ?></a></li>
+                    <li><a class="dropdown-item" href="#!"><?php echo $result_admin[3]; ?></a></li>
+                    <li>
+                        <hr class="dropdown-divider" />
+                    </li>
+                    <li><a class="dropdown-item" href="admin_information.php">แก้ไขข้อมูล</a></li>
                     <li>
                         <hr class="dropdown-divider" />
                     </li>
@@ -97,49 +115,31 @@ WHERE order_main.Order_date BETWEEN '$startDate' AND '$endDate'";
             </li>
         </ul>
     </nav>
-
-
-    <!-- Tab ซ้าย -->
     <div id="layoutSidenav">
         <div id="layoutSidenav_nav">
-            <nav class="sb-sidenav accordion sb-sidenav-white" id="sidenavAccordion">
+            <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
                 <div class="sb-sidenav-menu">
                     <div class="nav">
-                        <a class="nav-link" href="charts.html">
-                            <div class="sb-nav-link-icon"><i class=""></i></div>
-                            <span style="color: black;">Dashboard</span>
-                        </a>
-                        <a class="nav-link" href="charts.html">
-                            <div class="sb-nav-link-icon"><i class=""></i></div>
-                            <span style="color: black;">Admin Information</span>
-                        </a>
+                        <div class="sb-sidenav-menu-heading">MENU</div>
                         <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
-                            <div class="sb-nav-link-icon"><i class=""></i></div>
-                            <span style="color: black;">Order</span>
-                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down" style="color: black;"></i></div>
+                            <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                            Order
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
                         <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="layout-static.html" style="color: black;">Place Order</a>
-                                <a class="nav-link" href="layout-sidenav-light.html" style="color: black;">Order History</a>
-                            </nav>
-                        </div>
-
-                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseDownload" aria-expanded="false" aria-controls="collapseDownload">
-                            <div class="sb-nav-link-icon"><i class=""></i></div>
-                            <span style="color: black;">Download</span>
-                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down" style="color: black;"></i></div>
-                        </a>
-                        <div class="collapse" id="collapseDownload" aria-labelledby="headingDownload" data-bs-parent="#sidenavAccordion">
-                            <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="layout-static.html" style="color: black;">Export Data Summary</a>
+                                <a class="nav-link" href="admin_dashboard.php">Dashboard</a>
+                                <a class="nav-link" href="In_bound.php">In-bound</a>
+                                <a class="nav-link" href="admin_inventory.php">Inventory</a>
+                                <a class="nav-link" href="admin_order.php">Order</a>
+                                <a class="nav-link" href="export_data.php">Download</a>
                             </nav>
                         </div>
                     </div>
                 </div>
                 <div class="sb-sidenav-footer">
                     <div class="small">Logged in as:</div>
-                    <li><a class="dropdown-item"><?php echo $result_admin['Admin_user']; ?></a></li>
+                    <?php echo $result_admin[3]; ?>
                 </div>
             </nav>
         </div>
@@ -204,6 +204,19 @@ WHERE order_main.Order_date BETWEEN '$startDate' AND '$endDate'";
                                         </div>
 
 
-            </body>
+                </main>
+        </div>
+    </div>
 
-            </html>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script src="js/scripts.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+    <script src="assets/demo/chart-area-demo.js"></script>
+    <script src="assets/demo/chart-bar-demo.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
+    <script src="js/datatables-simple-demo.js"></script>
+</body>
+
+</html>
+
+</html>

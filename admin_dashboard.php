@@ -15,7 +15,7 @@ $result_admin = mysqli_fetch_array($query_admin);
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <title>Clound_Fulfillment</title>
+    <title>Cloud_Fulfillment</title>
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
     <link href="css/styles.css" rel="stylesheet" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
@@ -24,7 +24,7 @@ $result_admin = mysqli_fetch_array($query_admin);
 <body class="sb-nav-fixed">
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
         <!-- Navbar Brand-->
-        <a class="navbar-brand ps-3" href="index.php">Admin Dashboard</a>
+        <a class="navbar-brand ps-3" href="admin_dashboard.php">Admin Dashboard</a>
         <!-- Sidebar Toggle-->
         <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
         <!-- Navbar Search-->
@@ -61,16 +61,16 @@ $result_admin = mysqli_fetch_array($query_admin);
                         <div class="sb-sidenav-menu-heading">MENU</div>
                         <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
                             <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
-                            Order
+                            Admin Operation
                             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
                         <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="admin_dashboard.php">Dash board</a>
+                                <a class="nav-link" href="admin_dashboard.php">Dashboard</a>
                                 <a class="nav-link" href="In_bound.php">In-bound</a>
                                 <a class="nav-link" href="admin_inventory.php">Inventory</a>
-                                <a class="nav-link" href="">Order</a>
-                                <a class="nav-link" href="">Shop</a>
+                                <a class="nav-link" href="admin_order.php">Order</a>
+                                <a class="nav-link" href="export_data.php">Download</a>
                             </nav>
                         </div> 
                     </div>
