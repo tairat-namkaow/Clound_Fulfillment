@@ -79,13 +79,8 @@ if (isset($_POST["Search"]) && $StartDate != '' && $EndDate != '') {
 
 </html>
 
-
-
 <!DOCTYPE html>
 <html lang="en">
-
-
-
 
 <!-- หน้าต่าง Order Details -->
 <div id="layoutSidenav_content">
@@ -120,13 +115,8 @@ if (isset($_POST["Search"]) && $StartDate != '' && $EndDate != '') {
                         <h1 class="mt-4">Order Details</h1>
                     </div>
                     <div class="card-body">
-                        <ol class="breadcrumb mb-4">
-
-                        </ol>
-
+                        <ol class="breadcrumb mb-4"></ol>
                     </div>
-
-
                     <!-- หน้าต่าง ข้างใน Order Details -->
 
                     <div class="row">
@@ -190,12 +180,7 @@ if (isset($_POST["Search"]) && $StartDate != '' && $EndDate != '') {
                                             }
                                         </style>
                                     </head>
-
                                     <body>
-
-
-
-
                                         <table>
                                             <table class="table mx-auto" style="margin-top: 20px; width: auto;">
                                                 <tr>
@@ -203,19 +188,13 @@ if (isset($_POST["Search"]) && $StartDate != '' && $EndDate != '') {
                                                     <td class="border-right">Product-Name</td>
                                                     <td>Quantity</td>
                                                 </tr>
-
-
-
                                                 <?php
-
-$sql_ProductID = "SELECT * FROM `detail`
-INNER JOIN order_main ON detail.Order_id = order_main.Order_id
-INNER JOIN product ON detail.Product_id = product.Product_id
-INNER JOIN shop ON product.Shop_id = shop.Shop_id
-INNER JOIN product_category ON product.category_id= product_category.category_id 
-WHERE order_main.Order_id = '" . $_GET['orderId'] . "' ORDER BY product.category_id ASC";
-
-
+                                                $sql_ProductID = "SELECT * FROM `detail`
+                                                                  INNER JOIN order_main ON detail.Order_id = order_main.Order_id
+                                                                  INNER JOIN product ON detail.Product_id = product.Product_id
+                                                                  INNER JOIN shop ON product.Shop_id = shop.Shop_id
+                                                                  INNER JOIN product_category ON product.category_id= product_category.category_id 
+                                                                  WHERE order_main.Order_id = '" . $_GET['orderId'] . "' ORDER BY product.category_id ASC";
                                                 $query_ProductID = mysqli_query($Connection, $sql_ProductID);
 
                                                 // ดึงข้อมูลทั้งหมดมาเก็บใน array

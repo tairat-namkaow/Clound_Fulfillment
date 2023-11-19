@@ -60,7 +60,9 @@ if (isset($_POST["submit_status"])) {
                     <li><a class="dropdown-item"><?php echo $result_shop[3]; ?></a></li>
                     <li><hr class="dropdown-divider" /></li>
                     <li><a class="dropdown-item" href="shop_information.php">แก้ไขข้อมูล</a></li>
-                    <li><hr class="dropdown-divider" /></li>
+                    <li>
+                        <hr class="dropdown-divider" />
+                    </li>
                     <li><button class="dropdown-item" type="button" onclick="window.location.href='logout.php'">ออกจากระบบ</button></li>
                 </ul>
             </li>

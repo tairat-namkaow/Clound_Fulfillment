@@ -57,23 +57,22 @@ if (isset($_POST["Update_shop"])) {
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
 
                     <li><a class="dropdown-item" href="#!"><?php echo $result_shop[3]; ?></a></li>
-                    <li>
-                        <hr class="dropdown-divider" />
-                    </li>
+                    <li><hr class="dropdown-divider" /></li>
+                    <li><a class="dropdown-item" href="shop_information.php">แก้ไขข้อมูล</a></li>
+                    <li><hr class="dropdown-divider" /></li>
                     <li><button class="dropdown-item" type="button" onclick="window.location.href='logout.php'">ออกจากระบบ</button></li>
                 </ul>
             </li>
         </ul>
     </nav>
-
-  <!-- Tab ซ้าย -->
-  <div id="layoutSidenav">
+    <br>
+    <!-- Tab ซ้าย -->
+    <div id="layoutSidenav">
         <div id="layoutSidenav_nav">
             <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
                 <div class="sb-sidenav-menu">
                     <div class="nav">
-                        <div class="sb-sidenav-menu-heading">MENU</div>
-                        <a class="nav-link" href="shop_information.php">Shop Information</a>
+                        <div class="sb-sidenav-menu-heading">MENU</div>                        
                         <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
                             <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
                             Order
@@ -85,9 +84,6 @@ if (isset($_POST["Update_shop"])) {
                                 <a class="nav-link" href="shop_order_history.php">Order History</a>
                             </nav>
                         </div>
-                        <a class="nav-link" href=".php">DASHBOARD รอใส่ลิงค์</a>
-                        
-                                         
                     </div>
                 </div>
                 <div class="sb-sidenav-footer">
@@ -160,7 +156,7 @@ if (isset($_POST["Update_shop"])) {
                                                         <div class="col-sm-10">
                                                             <input type="number" class="form-control" name="Shop_tel" value="<?php echo $result_shop['Shop_tel'] ?>">
                                                         </div>
-                                                    </div>                                          
+                                                    </div>
 
                                                     <!-- Update button -->
                                                     <div class="col-sm-2">
