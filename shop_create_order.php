@@ -10,8 +10,8 @@ $result_order = mysqli_fetch_array($query_order);
 $Order_id = $result_order['Order_id'];
 
 if (isset($_POST["submit_list"])) {
-    $sql_insert_detail = "INSERT INTO detail (Product_id,Order_id,Detail_quantity) 
-                    VALUES ('" . $_POST["Product_id"] . "',$Order_id ,'" . $_POST["Detail_quantity"] . "')";
+    $sql_insert_detail = "INSERT INTO detail (Product_detail_id,Order_id,Detail_quantity) 
+                    VALUES ('" . $_POST["Product_detail_id"] . "',$Order_id ,'" . $_POST["Detail_quantity"] . "')";
     $query = mysqli_query($Connection, $sql_insert_detail);
 }
 
@@ -130,18 +130,18 @@ if (isset($_POST["submit_cancel"])) {
 
                                 <div class="input-group mb-3">
                                     <span class="input-group-text" id="inputGroup-sizing-default">Product Name</span>
-                                    <select name="Product_id" type="text" required class="form-control">
-                                        <?php
+                                    <select name="Product_detail_id" type="text" required class="form-control">
+                                        <?php                                        
                                         $sql_detail = "SELECT * FROM product_detail
-                                                    INNER JOIN product ON product.Product_id = Product_detail.Product_id
-                                                    INNER JOIN shop ON product_detail.Shop_id = shop.Shop_id
-                                                    
-                                                    WHERE Shop_email = '" . $_SESSION['Shop_email'] . "'";
+                                        INNER JOIN product ON product_detail.Product_id = Product.Product_id
+                                        INNER JOIN shop ON product_detail.Shop_id = shop.Shop_id                                                    
+                                        WHERE Shop_email = '" . $_SESSION['Shop_email'] . "'
+                                        GROUP by product_detail.Product_id";
+
                                         $query_detail = mysqli_query($Connection, $sql_detail);
-                                        while ($result_detail = mysqli_fetch_array($query_detail)) {
-                                            $selected_product = $result_detail['Product_id'];
+                                        while ($result_detail = mysqli_fetch_array($query_detail)) {                                        
                                         ?>
-                                            <option value="<?= $selected_product ?>"><?= $result_detail['Product_name'] ?></option>
+                                            <option value="<?= $result_detail['Product_detail_id']; ?>"><?= $result_detail['Product_name'] ?></option>
                                         <?php } ?>
                                     </select>
                                 </div>
