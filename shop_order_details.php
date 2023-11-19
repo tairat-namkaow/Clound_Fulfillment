@@ -190,14 +190,14 @@ if (isset($_POST["Search"]) && $StartDate != '' && $EndDate != '') {
                                                     <td>Quantity</td>
                                                 </tr>
                                                 <?php
-                                                $sql_ProductID = "SELECT product.product_id, product.product_name, SUM(detail.Detail_quantity) AS Detail_quantity
+                                                $sql_ProductID = "SELECT product.Product_id, product.Product_name, SUM(detail.Detail_quantity) AS Detail_quantity
                                                 FROM detail
                                                 INNER JOIN order_main ON order_main.Order_id = detail.Order_id
-                                                INNER JOIN product_detail ON product_detail.product_detail_id = detail.product_detail_id
+                                                INNER JOIN product_detail ON product_detail.Product_detail_id = detail.Product_detail_id
                                                 INNER JOIN shop ON product_detail.Shop_id = shop.Shop_id
-                                                INNER JOIN product ON product_detail.product_id = product.product_id 
+                                                INNER JOIN product ON product_detail.Product_id = product.Product_id 
                                                 WHERE order_main.Order_id = '" . mysqli_real_escape_string($Connection, $_GET['orderId']) . "' 
-                                                GROUP BY product.Product_id, product.product_name
+                                                GROUP BY product.Product_id, product.Product_name
                                                 ORDER BY product.Product_id ASC";
                               $query_ProductID = mysqli_query($Connection, $sql_ProductID);
                               
