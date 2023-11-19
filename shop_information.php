@@ -17,7 +17,7 @@ if (isset($_POST["Update_shop"])) {
                         Shop_tel = '" . $_POST["Shop_tel"] . "'
                         WHERE Shop_email = '" . $_SESSION['Shop_email'] . "' ";
     $query = mysqli_query($Connection, $sql_update_shop);
-    header("Refresh:0; url=information.php");
+    header("Refresh:0; url=shop_information.php");
 }
 ?>
 <!DOCTYPE html>
@@ -73,7 +73,7 @@ if (isset($_POST["Update_shop"])) {
                 <div class="sb-sidenav-menu">
                     <div class="nav">
                         <div class="sb-sidenav-menu-heading">MENU</div>
-                        <a class="nav-link" href="information.php">Shop Information</a>
+                        <a class="nav-link" href="shop_information.php">Shop Information</a>
                         <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
                             <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
                             Order
@@ -81,8 +81,8 @@ if (isset($_POST["Update_shop"])) {
                         </a>
                         <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="create_order.php">Create Order</a>
-                                <a class="nav-link" href="order_history.php">Order History</a>
+                                <a class="nav-link" href="shop_create_order.php">Create Order</a>
+                                <a class="nav-link" href="shop_order_history.php">Order History</a>
                             </nav>
                         </div>
                         <a class="nav-link" href=".php">DASHBOARD รอใส่ลิงค์</a>

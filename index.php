@@ -55,6 +55,7 @@ $result_shop = mysqli_fetch_array($query_shop);
                 <div class="sb-sidenav-menu">
                     <div class="nav">
                         <div class="sb-sidenav-menu-heading">MENU</div>
+                        <a class="nav-link" href="shop_information.php">Information</a>
                         <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
                             <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
                             Order
@@ -62,51 +63,12 @@ $result_shop = mysqli_fetch_array($query_shop);
                         </a>
                         <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="create_order.php">Create Order</a>
-                                <a class="nav-link" href="order_history.php">Order History</a>
-                                <a class="nav-link" href="Order-Details.php">Order Details</a>
+                                <a class="nav-link" href="shop_create_order.php">Create Order</a>
+                                <a class="nav-link" href="shop_order_history.php">Order History</a>
                             </nav>
                         </div>
-                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
-                            <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
-                            Pages
-                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                        </a>
-                        <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
-                            <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
-                                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseAuth" aria-expanded="false" aria-controls="pagesCollapseAuth">
-                                    Authentication
-                                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                                </a>
-                                <div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
-                                    <nav class="sb-sidenav-menu-nested nav">
-                                        <a class="nav-link" href="login.html">Login</a>
-                                        <a class="nav-link" href="register.html">Register</a>
-                                        <a class="nav-link" href="password.html">Forgot Password</a>
-                                    </nav>
-                                </div>
-                                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseError" aria-expanded="false" aria-controls="pagesCollapseError">
-                                    Error
-                                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                                </a>
-                                <div class="collapse" id="pagesCollapseError" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
-                                    <nav class="sb-sidenav-menu-nested nav">
-                                        <a class="nav-link" href="401.html">401 Page</a>
-                                        <a class="nav-link" href="404.html">404 Page</a>
-                                        <a class="nav-link" href="500.html">500 Page</a>
-                                    </nav>
-                                </div>
-                            </nav>
-                        </div>
-                        <div class="sb-sidenav-menu-heading">Addons</div>
-                        <a class="nav-link" href="charts.html">
-                            <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                            Charts
-                        </a>
-                        <a class="nav-link" href="tables.html">
-                            <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
-                            Tables
-                        </a>
+                        <a class="nav-link" href=".php">Dashboard รอเพิ่มลิงค์</a>
+
                     </div>
                 </div>
                 <div class="sb-sidenav-footer">
@@ -180,54 +142,7 @@ $result_shop = mysqli_fetch_array($query_shop);
                             </div>
                         </div>
                     </div>
-                    <div class="card mb-4">
-                        <div class="card-header">
-                            <i class="fas fa-table me-1"></i>
-                            DataTable Example
-                        </div>
-                        <div class="card-body">
-                            <table id="datatablesSimple">
-                                <thead>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Position</th>
-                                        <th>Office</th>
-                                        <th>Age</th>
-                                        <th>Start date</th>
-                                        <th>Salary</th>
-                                    </tr>
-                                </thead>
-                                <tfoot>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Position</th>
-                                        <th>Office</th>
-                                        <th>Age</th>
-                                        <th>Start date</th>
-                                        <th>Salary</th>
-                                    </tr>
-                                </tfoot>
-                                
-                                    <tr>
-                                        <td>Michael Bruce</td>
-                                        <td>Javascript Developer</td>
-                                        <td>Singapore</td>
-                                        <td>29</td>
-                                        <td>2011/06/27</td>
-                                        <td>$183,000</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Donna Snider</td>
-                                        <td>Customer Support</td>
-                                        <td>New York</td>
-                                        <td>27</td>
-                                        <td>2011/01/25</td>
-                                        <td>$112,000</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+
                 </div>
             </main>
             <footer class="py-4 bg-light mt-auto">

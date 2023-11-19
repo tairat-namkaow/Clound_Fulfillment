@@ -70,7 +70,7 @@ $result_shop = mysqli_fetch_array($query_shop);
                 <div class="sb-sidenav-menu">
                     <div class="nav">
                         <div class="sb-sidenav-menu-heading">MENU</div>
-                        <a class="nav-link" href="information.php">Shop Information</a>
+                        <a class="nav-link" href="shop_information.php">Shop Information</a>
                         <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
                             <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
                             Order
@@ -78,8 +78,8 @@ $result_shop = mysqli_fetch_array($query_shop);
                         </a>
                         <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="create_order.php">Create Order</a>
-                                <a class="nav-link" href="order_history.php">Order History</a>
+                                <a class="nav-link" href="shop_create_order.php">Create Order</a>
+                                <a class="nav-link" href="shop_order_history.php">Order History</a>
                             </nav>
                         </div>
                         <a class="nav-link" href=".php">DASHBOARD รอใส่ลิงค์</a>
@@ -195,7 +195,7 @@ $result_shop = mysqli_fetch_array($query_shop);
                     <td>" . htmlspecialchars($row['Order_id']) . "</td>
                     <td class='name'>" . htmlspecialchars($row['Order_date']) . "</td>
                     <td>" . htmlspecialchars($row['Order_status']) . "</td>
-                    <td><a href='order_Details.php?orderId=" . htmlspecialchars($row['Order_id']) . "' class='btn btn-primary'>Detail</a></td>
+                    <td><a href='shop_order_Details.php?orderId=" . htmlspecialchars($row['Order_id']) . "' class='btn btn-primary'>Detail</a></td>
                   </tr>";
                                 }
                               }

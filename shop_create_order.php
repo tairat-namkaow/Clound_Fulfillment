@@ -69,6 +69,7 @@ if (isset($_POST["submit_status"])) {
                 <div class="sb-sidenav-menu">
                     <div class="nav">
                         <div class="sb-sidenav-menu-heading">MENU</div>
+                        <a class="nav-link" href="shop_information.php">Information</a>
                         <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
                             <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
                             Order
@@ -76,29 +77,17 @@ if (isset($_POST["submit_status"])) {
                         </a>
                         <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="create_order.php">Create Order</a>
-                                <a class="nav-link" href="layout-sidenav-light.html">Order History</a>
+                                <a class="nav-link" href="shop_create_order.php">Create Order</a>
+                                <a class="nav-link" href="shop_order_history.php">Order History</a>
                             </nav>
                         </div>
-                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
-                            <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
-                            Pages
-                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                        </a>
-                        <div class="sb-sidenav-menu-heading">Addons</div>
-                        <a class="nav-link" href="charts.html">
-                            <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                            Charts
-                        </a>
-                        <a class="nav-link" href="tables.html">
-                            <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
-                            Tables
-                        </a>
+                        <a class="nav-link" href=".php">Dashboard รอเพิ่มลิงค์</a>
+
                     </div>
                 </div>
                 <div class="sb-sidenav-footer">
                     <div class="small">Logged in as:</div>
-                    <?php echo $result_shop[3] ?>
+                    <?php echo $result_shop[3]; ?>
                 </div>
             </nav>
         </div>
@@ -140,11 +129,12 @@ if (isset($_POST["submit_status"])) {
                                         <?php
                                         $sql_detail = "SELECT * FROM `product` 
                                             inner join shop on product.Shop_id = shop.Shop_id
+                                            inner join product_category on product.category_id= product_category.category_id 
                                             where shop.Shop_email = '" . $_SESSION['Shop_email'] . "'";
                                         $query_detail = mysqli_query($Connection, $sql_detail);
                                         while ($result_detail = mysqli_fetch_array($query_detail)) {
                                         ?>
-                                            <option value="<?= $result_detail['Product_id'] ?>"><?= $result_detail['Product_name'] ?></option>
+                                            <option value="<?= $result_detail['Category_id'] ?>"><?= $result_detail['Category_name'] ?></option>
                                         <?php } ?>
                                     </select>
 
