@@ -3,9 +3,10 @@ require_once('connections/mysqli.php');
 
 $sql_OrderDetail = "SELECT * FROM `detail`
 inner join order_main on detail.Order_id = order_main.Order_id
-inner join product on detail.Product_id = product.Product_id
-inner join shop on product.Shop_id = shop.Shop_id
+inner join product_detail on product_detail.product_detail_id = detail.product_detail_id
+inner join shop on product_detail.Shop_id = shop.Shop_id
 where order_main.Order_id = " . $_GET['orderId'] . "";
+
 
 $query_OrderDetail = mysqli_query($Connection, $sql_OrderDetail);
 $result_OrderDetail = mysqli_fetch_array($query_OrderDetail);
@@ -189,13 +190,18 @@ if (isset($_POST["Search"]) && $StartDate != '' && $EndDate != '') {
                                                     <td>Quantity</td>
                                                 </tr>
                                                 <?php
-                                                $sql_ProductID = "SELECT * FROM `detail`
-                                                                  INNER JOIN order_main ON detail.Order_id = order_main.Order_id
-                                                                  INNER JOIN product ON detail.Product_id = product.Product_id
-                                                                  INNER JOIN shop ON product.Shop_id = shop.Shop_id
-                                                                  INNER JOIN product_category ON product.category_id= product_category.category_id 
-                                                                  WHERE order_main.Order_id = '" . $_GET['orderId'] . "' ORDER BY product.category_id ASC";
-                                                $query_ProductID = mysqli_query($Connection, $sql_ProductID);
+                                                $sql_ProductID = "SELECT product.product_id, product.product_name, SUM(detail.Detail_quantity) AS Detail_quantity
+                                                FROM detail
+                                                INNER JOIN order_main ON order_main.Order_id = detail.Order_id
+                                                INNER JOIN product_detail ON product_detail.product_detail_id = detail.product_detail_id
+                                                INNER JOIN shop ON product_detail.Shop_id = shop.Shop_id
+                                                INNER JOIN product ON product_detail.product_id = product.product_id 
+                                                WHERE order_main.Order_id = '" . mysqli_real_escape_string($Connection, $_GET['orderId']) . "' 
+                                                GROUP BY product.Product_id, product.product_name
+                                                ORDER BY product.Product_id ASC";
+                              $query_ProductID = mysqli_query($Connection, $sql_ProductID);
+                              
+                              
 
                                                 // ดึงข้อมูลทั้งหมดมาเก็บใน array
                                                 $products = [];
@@ -207,12 +213,12 @@ if (isset($_POST["Search"]) && $StartDate != '' && $EndDate != '') {
                                                 <tr>
                                                     <td class="border-right">
                                                         <?php foreach ($products as $product) {
-                                                            echo htmlspecialchars($product['Category_id']) . "<br>";
+                                                            echo htmlspecialchars($product['Product_id']) . "<br>";
                                                         } ?>
                                                     </td>
                                                     <td class="border-right">
                                                         <?php foreach ($products as $product) {
-                                                            echo htmlspecialchars($product['Category_name']) . "<br>";
+                                                            echo htmlspecialchars($product['Product_name']) . "<br>";
                                                         } ?>
                                                     </td>
                                                     <td>
