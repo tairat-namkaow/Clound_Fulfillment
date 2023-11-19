@@ -17,12 +17,15 @@ if (isset($_POST["submit_order"])) {
 }
 
 if (isset($_POST["submit_status"])) {
-    
-    $sql_update_order = "UPDATE order_main SET Order_status = 'confirm' WHERE Order_id = $Order_id";
+
+    $sql_update_order = "UPDATE order_main SET Order_status = 'confirm', Order_address = '" . $_POST["Order_address"] . "' WHERE Order_id = $Order_id";
     $query_update_order = mysqli_query($Connection, $sql_update_order);
+
 
     $sql_insert_order = "INSERT INTO `order_main` (`Order_id`, `Order_status`) VALUES (NULL, 'pending');";
     $query_insert_order = mysqli_query($Connection, $sql_insert_order);
+
+    header("Refresh:0; url=shop_create_order.php");
 }
 ?>
 <!DOCTYPE html>
@@ -55,9 +58,9 @@ if (isset($_POST["submit_status"])) {
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
 
                     <li><a class="dropdown-item"><?php echo $result_shop[3]; ?></a></li>
-                    <li>
-                        <hr class="dropdown-divider" />
-                    </li>
+                    <li><hr class="dropdown-divider" /></li>
+                    <li><a class="dropdown-item" href="shop_information.php">แก้ไขข้อมูล</a></li>
+                    <li><hr class="dropdown-divider" /></li>
                     <li><button class="dropdown-item" type="button" onclick="window.location.href='logout.php'">ออกจากระบบ</button></li>
                 </ul>
             </li>
@@ -98,7 +101,6 @@ if (isset($_POST["submit_status"])) {
 
                     <form method="post">
                         <div class="row g-3 align-items-center">
-
                             <tr>
                                 <td>
                                     <div class="col-auto">
@@ -106,14 +108,6 @@ if (isset($_POST["submit_status"])) {
                                     </div>
                                     <div class="col-auto">
                                         <input type="text" class="form-control form-control-sm" value="<?php echo $result_shop[3]; ?>" placeholder="Enter Email" readonly required />
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="col-auto">
-                                        <label for="inputPassword6" class="col-form-label">Address</label>
-                                    </div>
-                                    <div class="col-auto">
-                                        <input type="text" class="form-control form-control-sm" placeholder="Enter Address" required />
                                     </div>
                                 </td>
                             </tr>
@@ -127,14 +121,14 @@ if (isset($_POST["submit_status"])) {
 
                                     <select name="Product_id" type="text" required class="form-control">
                                         <?php
-                                        $sql_detail = "SELECT * FROM `product` 
-                                            inner join shop on product.Shop_id = shop.Shop_id
-                                            inner join product_category on product.category_id= product_category.category_id 
-                                            where shop.Shop_email = '" . $_SESSION['Shop_email'] . "'";
+                                        $sql_detail = "SELECT * FROM product
+                                        inner join shop on product.Shop_id = shop.Shop_id
+                                        inner join product_category on product.Category_id = product_category.Category_id 
+                                        WHERE Shop_email = '" . $_SESSION['Shop_email'] . "'";
                                         $query_detail = mysqli_query($Connection, $sql_detail);
                                         while ($result_detail = mysqli_fetch_array($query_detail)) {
                                         ?>
-                                            <option value="<?= $result_detail['Category_id'] ?>"><?= $result_detail['Category_name'] ?></option>
+                                            <option value="<?= $result_detail['Product_id'] ?>"><?= $result_detail['Category_name'] ?></option>
                                         <?php } ?>
                                     </select>
 
@@ -156,9 +150,17 @@ if (isset($_POST["submit_status"])) {
 
                     <form method="post">
                         <h5 class="card-header" style="text-align: center;">รายการสินค้า</h5>
-
+                        <div class="row g-3 align-items-center">
+                            <div class="col-auto">
+                                <label for="inputPassword6" class="col-form-label">Address</label>
+                            </div>                            
+                            <div class="col-auto">
+                                <input type="text" name="Order_address" class="form-control form-control-sm" placeholder="Enter Address" required />
+                            </div>
+                        </div>
+                        <br>
                         <div class="card-body" style="height: 300px;">
-                            <table class="table" table id="datatablesSimple" style="table-layout: fixed;">
+                            <table class="table" id="datatablesSimple" style="table-layout: fixed;">
                                 <colgroup>
                                     <col style="width: 5%;">
                                     <col style="width: 25%;">
@@ -174,19 +176,18 @@ if (isset($_POST["submit_status"])) {
                                 <tbody>
                                     <?php
                                     $sql_detail = "SELECT * FROM detail
-                                INNER JOIN product ON product.Product_id = detail.Product_id
-                                INNER JOIN order_main ON order_main.Order_id = detail.Order_id
-                                INNER JOIN shop ON shop.Shop_id = product.Shop_id
-                                WHERE order_main.Order_id = $Order_id AND shop.Shop_email = '" . $_SESSION['Shop_email'] . "'";
+                INNER JOIN product ON product.Product_id = detail.Product_id
+                INNER JOIN product_category ON product.Category_id = product_category.Category_id 
+                INNER JOIN order_main ON order_main.Order_id = detail.Order_id
+                INNER JOIN shop ON shop.Shop_id = product.Shop_id
+                WHERE order_main.Order_id = $Order_id AND shop.Shop_email = '" . $_SESSION['Shop_email'] . "'";
                                     $query_detail = mysqli_query($Connection, $sql_detail);
 
                                     while ($row = mysqli_fetch_array($query_detail)) :
                                     ?>
                                         <tr>
                                             <td><?php echo $row['Detail_id']; ?></td>
-                                            <td class="name">
-                                                <?php echo $row['Product_name']; ?>
-                                            </td>
+                                            <td class="name"><?php echo $row['Category_name']; ?></td>
                                             <td><?php echo $row['Detail_quantity']; ?></td>
                                         </tr>
                                     <?php endwhile ?>
@@ -196,6 +197,7 @@ if (isset($_POST["submit_status"])) {
                             <button type="submit" class="btn btn-success" name="submit_status">Confirm</button>
                         </div>
                     </form>
+
                 </div>
             </main>
         </div>
