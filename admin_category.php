@@ -4,44 +4,20 @@ require_once('connections/mysqli.php');
 $sql_admin = "SELECT * FROM `admin` WHERE Admin_user = '" . $_SESSION['Admin_user'] . "'";
 $query_admin = mysqli_query($Connection, $sql_admin);
 $result_admin = mysqli_fetch_array($query_admin);
-
-if (isset($_POST["submit_cf"])) {
-
-    $sql_order = "SELECT * FROM `order_main` WHERE order_id = '" . $_POST["submit_cf"] . "'";
-    $query_order = mysqli_query($Connection, $sql_order);
-    $result_order = mysqli_fetch_array($query_order);
-
-    if ($result_order['Order_status'] == 'pending') {
-
-        $orderId = $_POST["submit_cf"];
-        $sql_update = "UPDATE order_main SET Order_status = 'Confirmed' WHERE Order_id = '$orderId'";
-        $query_update = mysqli_query($Connection, $sql_update);
-    } else {
-        $message = "Failed to confirm the order";
-        echo "<script type='text/javascript'>alert('$message');</script>";
-    }
+$Admin_id = $result_admin['Admin_id'];
+if (isset($_POST["add_category"])) {
+    $sql_insert_category = "INSERT INTO product_category (`Category_id`, `Category_name`) VALUES (NULL, '" . $_POST["Category_name"] . "');";
+    $query_insert_category = mysqli_query($Connection, $sql_insert_category);
 }
 
-if (isset($_POST["submit_cc"])) {
-    $sql_order = "SELECT * FROM `order_main` WHERE order_id = '" . $_POST["submit_cc"] . "'";
-    $query_order = mysqli_query($Connection, $sql_order);
-    $result_order = mysqli_fetch_array($query_order);
-
-    if ($result_order['Order_status'] == 'pending') {
-
-        $orderId = $_POST["submit_cc"];
-        $sql_update = "UPDATE order_main SET Order_status = 'Cancel' WHERE Order_id = '$orderId'";
-        $query_update = mysqli_query($Connection, $sql_update);
-    } else {
-        $message = "Failed to cancel the order";
-        echo "<script type='text/javascript'>alert('$message');</script>";
-    }
+if (isset($_POST["del_category"])) {
+    $sql_del_category = "DELETE FROM product_category WHERE Category_id = '" . $_POST["del_category"] . "'";
+    $query_del_category = mysqli_query($Connection, $sql_del_category);
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
-
-<!-- Tab บน -->
 
 <head>
     <meta charset="utf-8" />
@@ -105,7 +81,7 @@ if (isset($_POST["submit_cc"])) {
                                 <a class="nav-link" href="admin_In_bound.php">In-bound</a>
                                 <a class="nav-link" href="admin_inventory.php">Inventory</a>
                                 <a class="nav-link" href="admin_order.php">Order</a>
-                                <a class="nav-link" href="admin_export_data.php">Download</a>
+                                <a class="nav-link" href="">Shop</a>
                             </nav>
                         </div>
                     </div>
@@ -116,13 +92,28 @@ if (isset($_POST["submit_cc"])) {
                 </div>
             </nav>
         </div>
-
         <div id="layoutSidenav_content">
             <main>
                 <div class="container-fluid px-4">
-                    <h1 class="mt-4">Admin Order</h1>
+                    <h1 class="mt-4">Admin Category</h1>         
+                    <br>           
                     <form method="post">
-                        <h5 class="card-header" style="text-align: center;">รายการคำสั่ง</h5>
+                        <div class="card">
+                            <h5 class="card-header">Add Category</h5>
+                            <div class="card-body">                                
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="inputGroup-sizing-default">Category name</span>
+                                    <input type="text" class="form-control" name="Category_name" placeholder="Enter Category" required />
+                                </div>
+
+                                <label class="mb-3">
+                                <button type="submit" name="add_category" class="btn btn-primary">Add</button>
+                                </label>
+                            </div>
+                        </div>
+                    </form>
+                    <br>
+                    <form method="post">                        
 
                         <div class="card-body" style="height: 300px;">
                             <table class="table" table id="datatablesSimple" style="table-layout: fixed;">
@@ -133,43 +124,25 @@ if (isset($_POST["submit_cc"])) {
                                 </colgroup>
                                 <thead class="table-light">
                                     <tr>
-                                        <th>Order_id</th>
-                                        <th>Shop_name</th>
-                                        <th>Order_status</th>
-                                        <th>Order_date</th>
-                                        <th>Detail</th>
-                                        <th>Action</th>
+                                        <th>Product_id</th>
+                                        <th>Product_name</th>
+                                        <th>ลบ</th>
 
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php
-                                    $sql_adorder =  "SELECT order_main.Order_id, order_main.Order_status, order_main.Order_date, shop.Shop_name
-                                    FROM order_main
-                                    INNER JOIN detail ON order_main.Order_id = detail.Order_id
-                                    INNER JOIN product ON detail.product_id = product.Product_id
-                                    INNER JOIN shop ON product.Shop_id = shop.Shop_id
-                                    GROUP BY order_main.Order_id";;
+                                    $sql_category = "SELECT * FROM Product_category";
+                                    $query_category = mysqli_query($Connection, $sql_category);
 
-                                    $query_adorder = mysqli_query($Connection, $sql_adorder);
-
-                                    while ($row = mysqli_fetch_array($query_adorder)) :
+                                    while ($row = mysqli_fetch_array($query_category)) :
                                     ?>
                                         <tr>
-                                            <td><?php echo $row['Order_id']; ?></td>
-                                            <td><?php echo $row['Shop_name']; ?></td>
-                                            <td><?php echo $row['Order_status']; ?></td>
-                                            <td><?php echo $row['Order_date']; ?></td>
-
-                                            <!-- detail Button -->
-
-                                            <td><a href='Admin_Details.php?orderId=<?php echo $row['Order_id']; ?>' class='btn btn-primary'>Detail</a></td>
-
-
+                                            <td><?php echo $row['Category_id']; ?></td>
+                                            <td><?php echo $row['Category_name']; ?></td>
                                             <td>
-                                                <!-- cf/cc Button -->
-                                                <button type="submit" name="submit_cf" value=<?php echo $row['Order_id']; ?> class="btn btn-success btn-sm">Confirm</button>
-                                                <button type="submit" name="submit_cc" value=<?php echo $row['Order_id']; ?> class="btn btn-danger btn-sm">Cancel</button>
+                                                <!-- Delete Button -->
+                                                <button type="submit" name="del_category" value=<?php echo $row['Category_id']; ?> class="btn btn-danger btn-sm">Delete</button>
                                             </td>
                                         </tr>
                                     <?php endwhile ?>

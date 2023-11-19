@@ -77,6 +77,7 @@ if (isset($_POST["Update_admin"])) {
                         <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
                                 <a class="nav-link" href="admin_dashboard.php">Dashboard</a>
+                                <a class="nav-link" href="admin_category.php">Category</a>
                                 <a class="nav-link" href="admin_In_bound.php">In-bound</a>
                                 <a class="nav-link" href="admin_inventory.php">Inventory</a>
                                 <a class="nav-link" href="admin_order.php">Order</a>
