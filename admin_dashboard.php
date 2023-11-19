@@ -129,15 +129,15 @@ $result_admin = mysqli_fetch_array($query_admin);
 
                     <?php
                     $sql_test = "SELECT * FROM Product
-                                 inner join shop on product.shop_id = shop.Shop_id";
+             INNER JOIN shop ON product.shop_id = shop.Shop_id";
                     $query_test = mysqli_query($Connection, $sql_test);
-                    $result_test = mysqli_fetch_array($query_test);
                     $datax = array();
                     while ($k = mysqli_fetch_assoc($query_test)) {
                         $datax[] = "['" . $k['Product_name'] . "'" . ", " . $k['Product_quantity'] . "]";
                     }
                     $datax = implode(",", $datax);
                     ?>
+
                     <html>
 
                     <head>
@@ -147,28 +147,51 @@ $result_admin = mysqli_fetch_array($query_admin);
                             google.charts.load('current', {
                                 'packages': ['corechart']
                             });
-                            google.charts.setOnLoadCallback(drawChart);
+                            google.charts.setOnLoadCallback(drawCharts);
 
-                            function drawChart() {
+                            function drawCharts() {
+                                ColumnChart();
+                                PieChart();
+                            }
 
+                            function ColumnChart() {
                                 var data = google.visualization.arrayToDataTable([
                                     ['Task', 'Summary per product_type'],
                                     <?php echo $datax; ?>
                                 ]);
                                 var options = {
-                                    title: 'REPORT'
+                                    title: 'Column Chart'
                                 };
-                                var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+                                var chart = new google.visualization.ColumnChart(document.getElementById('ColumnChart'));
+                                chart.draw(data, options);
+                            }
+
+                            function PieChart() {
+                                var data = google.visualization.arrayToDataTable([
+                                    ['Task', 'Summary per product_type'],
+                                    <?php echo $datax; ?>
+                                ]);
+
+                                var options = {
+                                    title: 'Pie Chart'
+                                };
+
+                                var chart = new google.visualization.PieChart(document.getElementById('PieChart'));
                                 chart.draw(data, options);
                             }
                         </script>
                     </head>
 
                     <body>
-                        <div id="piechart" style="width: 900px; height: 500px;"></div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <div id="ColumnChart" style="width: 48%; height: 300px;"></div>
+                            <div id="PieChart" style="width: 48%; height: 300px;"></div>
+                        </div>
                     </body>
 
                     </html>
+
 
                     <div class="card mb-4">
                         <div class="card-header">
