@@ -31,18 +31,18 @@ if (isset($_POST["Update_shop"])) {
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <title>Dashboard</title>
+    <title>Clound_Fulfillment</title>
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
     <link href="css/styles.css" rel="stylesheet" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
 </head>
 
 <body class="sb-nav-fixed">
-    <nav class="sb-topnav navbar navbar-expand navbar-white" bg-white>
+    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
         <!-- Navbar Brand-->
-        <a class="navbar-brand ps-3" href="index.html" style="color: black;">Cloud Fulfillment</a>
+        <a class="navbar-brand ps-3" href="index.php">Clound Fulfillment</a>
         <!-- Sidebar Toggle-->
-        <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars" style="color: black;"></i></button>
+        <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
         <!-- Navbar Search-->
         <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
             <div class="input-group">
@@ -56,7 +56,7 @@ if (isset($_POST["Update_shop"])) {
                 <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
 
-                    <li><a class="dropdown-item" href="#!"><?php echo $result_shop['Shop_name']; ?></a></li>
+                    <li><a class="dropdown-item" href="#!"><?php echo $result_shop[3]; ?></a></li>
                     <li>
                         <hr class="dropdown-divider" />
                     </li>
@@ -66,48 +66,33 @@ if (isset($_POST["Update_shop"])) {
         </ul>
     </nav>
 
-
-    <!-- Tab ซ้าย -->
-    <div id="layoutSidenav">
+  <!-- Tab ซ้าย -->
+  <div id="layoutSidenav">
         <div id="layoutSidenav_nav">
-            <nav class="sb-sidenav accordion sb-sidenav-white" id="sidenavAccordion">
+            <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
                 <div class="sb-sidenav-menu">
                     <div class="nav">
-                        <a class="nav-link" href="charts.html">
-                            <div class="sb-nav-link-icon"><i class=""></i></div>
-                            <span style="color: black;">Dashboard</span>
-                        </a>
-                        <a class="nav-link" href="charts.html">
-                            <div class="sb-nav-link-icon"><i class=""></i></div>
-                            <span style="color: black;">Shop Information</span>
-                        </a>
+                        <div class="sb-sidenav-menu-heading">MENU</div>
+                        <a class="nav-link" href="information.php">Shop Information</a>
                         <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
-                            <div class="sb-nav-link-icon"><i class=""></i></div>
-                            <span style="color: black;">Order</span>
-                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down" style="color: black;"></i></div>
+                            <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                            Order
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
                         <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="layout-static.html" style="color: black;">Place Order</a>
-                                <a class="nav-link" href="layout-sidenav-light.html" style="color: black;">Order History</a>
+                                <a class="nav-link" href="create_order.php">Create Order</a>
+                                <a class="nav-link" href="order_history.php">Order History</a>
                             </nav>
                         </div>
-
-                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseDownload" aria-expanded="false" aria-controls="collapseDownload">
-                            <div class="sb-nav-link-icon"><i class=""></i></div>
-                            <span style="color: black;">Download</span>
-                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down" style="color: black;"></i></div>
-                        </a>
-                        <div class="collapse" id="collapseDownload" aria-labelledby="headingDownload" data-bs-parent="#sidenavAccordion">
-                            <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="layout-static.html" style="color: black;">Report Summary</a>
-                            </nav>
-                        </div>
+                        <a class="nav-link" href=".php">DASHBOARD รอใส่ลิงค์</a>
+                        
+                                         
                     </div>
                 </div>
                 <div class="sb-sidenav-footer">
                     <div class="small">Logged in as:</div>
-                    <li><a class="dropdown-item"><?php echo $result_shop['Shop_name']; ?></a></li>
+                    <?php echo $result_shop[3]; ?>
                 </div>
             </nav>
         </div>
