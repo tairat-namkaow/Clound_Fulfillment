@@ -10,11 +10,11 @@ if (isset($_POST["submit_del"])) {
     $query_detail = mysqli_query($Connection, $sql_detail);
     $result_detail = mysqli_fetch_array($query_detail);
 
-    if ($_POST["submit_del"] == $result_detail['Product_id']) {
+    if ($_POST["submit_del"] == $result_detail['Product_detail_id']) {
         $message = "ไม่สามารถลบได้ สินค้านี้ร้านค้าได้ส่งคำสั่งจัดส่งแล้ว";
         echo "<script type='text/javascript'>alert('$message');</script>";
     } else {
-        $sql_product_detail = "DELETE FROM product WHERE Product_id = '" . $_POST["submit_del"] . "'";
+        $sql_product_detail = "DELETE FROM product_detail WHERE Product_detail_id = '" . $_POST["submit_del"] . "'";
         $query = mysqli_query($Connection, $sql_product_detail);
     }
 }
@@ -111,7 +111,7 @@ if (isset($_POST["submit_del"])) {
                                 </colgroup>
                                 <thead class="table-light">
                                     <tr>
-                                        <th>Product_id</th>
+                                        <th>Product_detail_id</th>
                                         <th>Product_name</th>
                                         <th>Product_quantity</th>                                     
                                         <th>Shop_name</th>
@@ -123,21 +123,22 @@ if (isset($_POST["submit_del"])) {
                                     <?php
                                     $sql_detail = "SELECT * FROM Product_detail
                                     inner join product on product_detail.Product_id = product.Product_id
-                                    inner join shop on product_detail.shop_id = shop.Shop_id";                                                    
+                                    inner join shop on product_detail.shop_id = shop.Shop_id
+                                    group by Product_detail_id";                                      
                                                     
                                     $query_detail = mysqli_query($Connection, $sql_detail);
 
                                     while ($row = mysqli_fetch_array($query_detail)) :
                                     ?>
                                         <tr>
-                                            <td><?php echo $row['Product_id']; ?></td>
+                                            <td><?php echo $row['Product_detail_id']; ?></td>
                                             <td><?php echo $row['Product_name']; ?></td>
                                             <td><?php echo $row['Product_quantity']; ?></td>                                            
                                             <td><?php echo $row['Shop_name']; ?></td>
 
                                             <td>
                                                 <!-- Delete Button -->
-                                                <button type="submit" name="submit_del" value =<?php echo $row['Product_id']; ?> class="btn btn-danger btn-sm">Delete</button>
+                                                <button type="submit" name="submit_del" value =<?php echo $row['Product_detail_id']; ?> class="btn btn-danger btn-sm">Delete</button>
                                             </td>
                                         </tr>
                                     <?php endwhile ?>

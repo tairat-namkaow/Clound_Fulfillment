@@ -147,9 +147,9 @@ if (isset($_POST["submit_cc"])) {
                                     $sql_adorder =  "SELECT order_main.Order_id, order_main.Order_status, order_main.Order_date, shop.Shop_name
                                     FROM order_main
                                     INNER JOIN detail ON order_main.Order_id = detail.Order_id
-                                    INNER JOIN product ON detail.product_id = product.Product_id
-                                    INNER JOIN shop ON product.Shop_id = shop.Shop_id
-                                    GROUP BY order_main.Order_id";;
+                                    INNER JOIN product_detail ON detail.product_detail_id = product_detail.Product_detail_id
+                                    INNER JOIN shop ON product_detail.Shop_id = shop.Shop_id
+                                    GROUP BY order_main.Order_id";
 
                                     $query_adorder = mysqli_query($Connection, $sql_adorder);
 
@@ -163,7 +163,7 @@ if (isset($_POST["submit_cc"])) {
 
                                             <!-- detail Button -->
 
-                                            <td><a href='Admin_Details.php?orderId=<?php echo $row['Order_id']; ?>' class='btn btn-primary'>Detail</a></td>
+                                            <td><a href='Admin_Details.php?orderId=<?php echo $row['Order_id']; ?>' class='btn btn-primary btn-sm'>Detail</a></td>
 
 
                                             <td>

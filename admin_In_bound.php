@@ -7,9 +7,9 @@ $result_admin = mysqli_fetch_array($query_admin);
 $Admin_id = $result_admin['Admin_id'];
 if (isset($_POST["submit_product"])) {
 
-    $sql_insert_product = "INSERT INTO product (Admin_id, Shop_id, Warehouse_id, Product_quantity, Category_id) 
+    $sql_insert_product = "INSERT INTO product_detail (Admin_id, Shop_id, Warehouse_id, Product_quantity, Product_id) 
                             VALUES ($Admin_id, " . $_POST["Shop_id"] . "," . $_POST["Warehouse_id"] . ",
-                            " . $_POST["Product_quantity"] . ",'" . $_POST["Category_id"] . "')";
+                            " . $_POST["Product_quantity"] . ",'" . $_POST["Product_id"] . "')";
 
     $query_insert_product = mysqli_query($Connection, $sql_insert_product);
 }
@@ -135,13 +135,13 @@ if (isset($_POST["submit_product"])) {
                                 </div>
                                 <div class="input-group mb-3">
                                     <span class="input-group-text" id="inputGroup-sizing-default">Product name</span>
-                                    <select name="Category_id" type="text" required class="form-control">
+                                    <select name="Product_id" type="text" required class="form-control">
                                         <?php
-                                        $sql_product = "SELECT * FROM product_category";
+                                        $sql_product = "SELECT * FROM product";
                                         $query_product = mysqli_query($Connection, $sql_product);
                                         while ($result_product = mysqli_fetch_array($query_product)) {
                                         ?>
-                                            <option value="<?= $result_product['Category_id'] ?>"><?= $result_product['Category_name'] ?></option>
+                                            <option value="<?= $result_product['Product_id'] ?>"><?= $result_product['Product_name'] ?></option>
                                         <?php } ?>
                                     </select>
                                 </div>
