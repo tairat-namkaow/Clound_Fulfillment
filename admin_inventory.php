@@ -80,7 +80,7 @@ if (isset($_POST["submit_del"])) {
                         <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
                                 <a class="nav-link" href="admin_dashboard.php">Dashboard</a>
-                                <a class="nav-link" href="In_bound.php">In-bound</a>
+                                <a class="nav-link" href="admin_In_bound.php">In-bound</a>
                                 <a class="nav-link" href="admin_inventory.php">Inventory</a>
                                 <a class="nav-link" href="admin_order.php">Order</a>
                                 <a class="nav-link" href="">Shop</a>
@@ -112,8 +112,7 @@ if (isset($_POST["submit_del"])) {
                                     <tr>
                                         <th>Product_id</th>
                                         <th>Product_name</th>
-                                        <th>Product_quantity</th>
-                                        <th>Product_expire</th>
+                                        <th>Product_quantity</th>                                     
                                         <th>Shop_name</th>
                                         <th>ลบ</th>
 
@@ -122,16 +121,17 @@ if (isset($_POST["submit_del"])) {
                                 <tbody>
                                     <?php
                                     $sql_detail = "SELECT * FROM Product
-                                                    inner join shop on product.shop_id = shop.Shop_id";
+                                                    inner join shop on product.shop_id = shop.Shop_id
+                                                    inner join Product_category on Product_category.Category_id = Product_category.Category_id
+                                                    group by Product_id";
                                     $query_detail = mysqli_query($Connection, $sql_detail);
 
                                     while ($row = mysqli_fetch_array($query_detail)) :
                                     ?>
                                         <tr>
                                             <td><?php echo $row['Product_id']; ?></td>
-                                            <td><?php echo $row['Product_name']; ?></td>
-                                            <td><?php echo $row['Product_quantity']; ?></td>
-                                            <td><?php echo $row['Product_expire']; ?></td>
+                                            <td><?php echo $row['Category_name']; ?></td>
+                                            <td><?php echo $row['Product_quantity']; ?></td>                                            
                                             <td><?php echo $row['Shop_name']; ?></td>
 
                                             <td>

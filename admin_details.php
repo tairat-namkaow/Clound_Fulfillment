@@ -105,8 +105,6 @@ if (isset($_POST["Search"]) && $StartDate != '' && $EndDate != '') {
 
                 padding: 0.5rem 1rem;
             }
-
-            
         </style>
     </head>
 
@@ -194,23 +192,22 @@ if (isset($_POST["Search"]) && $StartDate != '' && $EndDate != '') {
 
 
 
-                                        <table>
-                                            <table class="table mx-auto" style="margin-top: 20px; width: auto;">
+                                        <table class="table mx-auto" style="margin-top: 50px; width: 50px;">                                           
                                                 <tr>
-                                                    <td class="border-right">Product-ID</td>
                                                     <td class="border-right">Product-Name</td>
                                                     <td>Quantity</td>
                                                 </tr>
-
-
-
                                                 <?php
 
-                                                $sql_ProductID = "SELECT * FROM `detail`
-inner join order_main on detail.Order_id = order_main.Order_id
-inner join product on detail.Product_id = product.Product_id
-inner join shop on product.Shop_id = shop.Shop_id
-where order_main.Order_id = " . $_GET['orderId'] . "";
+                                                $sql_ProductID = "SELECT product_category.Category_name, SUM(detail.Detail_quantity) AS Detail_quantity
+                                                FROM detail
+                                                INNER JOIN order_main ON detail.Order_id = order_main.Order_id
+                                                INNER JOIN product ON detail.Product_id = product.Product_id
+                                                INNER JOIN shop ON product.Shop_id = shop.Shop_id
+                                                INNER JOIN product_category ON product.category_id = product_category.category_id
+                                                WHERE order_main.Order_id = 11
+                                                GROUP BY product_category.Category_name
+                                                ORDER BY product_category.category_id ASC";
                                                 $query_ProductID = mysqli_query($Connection, $sql_ProductID);
 
                                                 // ดึงข้อมูลทั้งหมดมาเก็บใน array
@@ -223,12 +220,7 @@ where order_main.Order_id = " . $_GET['orderId'] . "";
                                                 <tr>
                                                     <td class="border-right">
                                                         <?php foreach ($products as $product) {
-                                                            echo htmlspecialchars($product['Product_id']) . "<br>";
-                                                        } ?>
-                                                    </td>
-                                                    <td class="border-right">
-                                                        <?php foreach ($products as $product) {
-                                                            echo htmlspecialchars($product['Product_name']) . "<br>";
+                                                            echo htmlspecialchars($product['Category_name']) . "<br>";
                                                         } ?>
                                                     </td>
                                                     <td>

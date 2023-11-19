@@ -7,9 +7,9 @@ $result_admin = mysqli_fetch_array($query_admin);
 $Admin_id = $result_admin['Admin_id'];
 if (isset($_POST["submit_product"])) {
 
-    $sql_insert_product = "INSERT INTO product (Admin_id, Shop_id, Warehouse_id, Product_name, Product_quantity, Product_expire) 
+    $sql_insert_product = "INSERT INTO product (Admin_id, Shop_id, Warehouse_id, Product_quantity, Category_id) 
                             VALUES ($Admin_id, " . $_POST["Shop_id"] . "," . $_POST["Warehouse_id"] . ",
-                            '" . $_POST["Product_name"] . "'," . $_POST["Product_quantity"] . ",'" . $_POST["Category_id"] . "')";
+                            " . $_POST["Product_quantity"] . ",'" . $_POST["Category_id"] . "')";
 
     $query_insert_product = mysqli_query($Connection, $sql_insert_product);
 }
@@ -79,10 +79,10 @@ if (isset($_POST["submit_product"])) {
                         <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
                                 <a class="nav-link" href="admin_dashboard.php">Dashboard</a>
-                                <a class="nav-link" href="In_bound.php">In-bound</a>
+                                <a class="nav-link" href="admin_In_bound.php">In-bound</a>
                                 <a class="nav-link" href="admin_inventory.php">Inventory</a>
                                 <a class="nav-link" href="admin_order.php">Order</a>
-                                <a class="nav-link" href="export_data.php">Download</a>
+                                <a class="nav-link" href="admin_export_data.php">Download</a>
                             </nav>
                         </div>
                     </div>
@@ -134,16 +134,20 @@ if (isset($_POST["submit_product"])) {
                                 </div>
                                 <div class="input-group mb-3">
                                     <span class="input-group-text" id="inputGroup-sizing-default">Product name</span>
-                                    <input type="text" class="form-control" name="Product_name" placeholder="Enter Product name" required />
+                                    <select name="Category_id" type="text" required class="form-control">
+                                        <?php
+                                        $sql_product = "SELECT * FROM product_category";
+                                        $query_product = mysqli_query($Connection, $sql_product);
+                                        while ($result_product = mysqli_fetch_array($query_product)) {
+                                        ?>
+                                            <option value="<?= $result_product['Category_id'] ?>"><?= $result_product['Category_name'] ?></option>
+                                        <?php } ?>
+                                    </select>
                                 </div>
                                 <div class="input-group mb-3">
                                     <span class="input-group-text" id="inputGroup-sizing-default">Quantity</span>
                                     <input type="text" class="form-control" name="Product_quantity" placeholder="Enter quantity" required />
-                                </div>
-                                <div class="input-group mb-3">
-                                    <span class="input-group-text" id="inputGroup-sizing-default">Product expire</span>
-                                    <input type="date" class="form-control" name="Product_expire" placeholder="Enter expire" required />
-                                </div>
+                                </div>                                
 
                                 <label class="mb-3">
                                     <button type="submit" class="btn btn-success" name="submit_product">Add</button>

@@ -67,10 +67,10 @@ $result_admin = mysqli_fetch_array($query_admin);
                         <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
                                 <a class="nav-link" href="admin_dashboard.php">Dashboard</a>
-                                <a class="nav-link" href="In_bound.php">In-bound</a>
+                                <a class="nav-link" href="admin_In_bound.php">In-bound</a>
                                 <a class="nav-link" href="admin_inventory.php">Inventory</a>
                                 <a class="nav-link" href="admin_order.php">Order</a>
-                                <a class="nav-link" href="export_data.php">Download</a>
+                                <a class="nav-link" href="admin_export_data.php">Download</a>
                             </nav>
                         </div>
                     </div>
@@ -132,7 +132,7 @@ $result_admin = mysqli_fetch_array($query_admin);
                                  INNER JOIN shop ON product.shop_id = shop.Shop_id
                                  INNER JOIN product_category ON product.Category_id = product.Category_id                        
                                  GROUP by Category_name";
-                                 
+
                     $query_test = mysqli_query($Connection, $sql_test);
                     $datax = array();
                     while ($k = mysqli_fetch_assoc($query_test)) {
@@ -195,52 +195,46 @@ $result_admin = mysqli_fetch_array($query_admin);
 
                     </html>
 
+                    <div class="card-body" style="height: 300px;">
+                        <table class="table" table id="datatablesSimple" style="table-layout: fixed;">
+                            <colgroup>
+                                <col style="width: 5%;">
+                                <col style="width: 25%;">
+                                <col style="width: 25%;">
+                            </colgroup>
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Product_id</th>
+                                    <th>Product_name</th>
+                                    <th>Product_quantity</th>
+                                    <th>Shop_name</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                $sql_detail = "SELECT * FROM Product
+                                               INNER JOIN shop on product.shop_id = shop.Shop_id
+                                               INNER JOIN product_category ON product.Category_id = product.Category_id";
+                                $query_detail = mysqli_query($Connection, $sql_detail);
 
-                    
-                        <div class="card-header">
-                            <i class="fas fa-table me-1"></i>
-                            DataTable Example
-                        </div>
-                        <div class="card-body" style="height: 300px;">
-                            <table class="table" table id="datatablesSimple" style="table-layout: fixed;">
-                                <colgroup>
-                                    <col style="width: 5%;">
-                                    <col style="width: 25%;">
-                                    <col style="width: 25%;">
-                                </colgroup>
-                                <thead class="table-light">
+                                while ($row = mysqli_fetch_array($query_detail)) :
+                                ?>
                                     <tr>
-                                        <th>Product_id</th>
-                                        <th>Product_name</th>
-                                        <th>Product_quantity</th>
-                                        <th>Shop_name</th>
+                                        <td><?php echo $row['Product_id']; ?></td>
+                                        <td><?php echo $row['Category_name']; ?></td>
+                                        <td><?php echo $row['Product_quantity']; ?></td>
+                                        <td><?php echo $row['Shop_name']; ?></td>
+
                                     </tr>
-                                </thead>
-                                <tbody>
-                                    <?php
-                                    $sql_detail = "SELECT * FROM Product
-                                                    INNER JOIN shop on product.shop_id = shop.Shop_id
-                                                    INNER JOIN product_category ON product.Category_id = product.Category_id";
-                                    $query_detail = mysqli_query($Connection, $sql_detail);
+                                <?php endwhile ?>
+                            </tbody>
+                            <br>
+                        </table>
 
-                                    while ($row = mysqli_fetch_array($query_detail)) :
-                                    ?>
-                                        <tr>
-                                            <td><?php echo $row['Product_id']; ?></td>
-                                            <td><?php echo $row['Category_name']; ?></td>
-                                            <td><?php echo $row['Product_quantity']; ?></td>
-                                            <td><?php echo $row['Shop_name']; ?></td>
+                    </div>
 
-                                        </tr>
-                                    <?php endwhile ?>
-                                </tbody>
-                                <br>
-                            </table>
-
-                        </div>
-                    
                 </div>
-            </main>            
+            </main>
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
