@@ -91,12 +91,7 @@ $result_shop = mysqli_fetch_array($query_shop);
                         <div class="col-xl-3 col-md-6">
                             <div class="card bg-primary text-white mb-4">
                                 <div class="card-body">รายการส่งสินค้า</div>
-                                <div class="card-footer d-flex align-items-center justify-content-between">
-                                    <?php
-                                    $sql_shop = "SELECT distinct count(Category) FROM product WHERE Shop_email = '" . $_SESSION['Shop_email'] . "'";
-                                    $query_shop = mysqli_query($Connection, $sql_shop);
-                                    $result_shop = mysqli_fetch_array($query_shop);
-                                    ?>
+                                <div class="card-footer d-flex align-items-center justify-content-between">                                    
                                     <a class="small text-white stretched-link" href="#">View Details</a>
                                     <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                                 </div>

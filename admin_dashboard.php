@@ -129,17 +129,17 @@ $result_admin = mysqli_fetch_array($query_admin);
                     </div>
 
                     <?php
-                    $sql_test = "SELECT * FROM Product
-                                 INNER JOIN shop ON product.shop_id = shop.Shop_id
-                                 INNER JOIN product_category ON product.Category_id = product.Category_id                        
-                                 GROUP by Category_name";
+                    #$sql_test = "SELECT * FROM Product
+                    #             INNER JOIN shop ON product.shop_id = shop.Shop_id
+                    #             INNER JOIN product_category ON product.Category_id = product.Category_id                        
+                    #             GROUP by Category_name";
 
-                    $query_test = mysqli_query($Connection, $sql_test);
-                    $datax = array();
-                    while ($k = mysqli_fetch_assoc($query_test)) {
-                        $datax[] = "['" . $k['Category_name'] . "'" . ", " . $k['Product_quantity'] . "]";
-                    }
-                    $datax = implode(",", $datax);
+                    #$query_test = mysqli_query($Connection, $sql_test);
+                    #$datax = array();
+                    #while ($k = mysqli_fetch_assoc($query_test)) {
+                    #    $datax[] = "['" . $k['Category_name'] . "'" . ", " . $k['Product_quantity'] . "]";
+                    #}
+                    #$datax = implode(",", $datax);
                     ?>
 
                     <html>
@@ -213,12 +213,12 @@ $result_admin = mysqli_fetch_array($query_admin);
                             </thead>
                             <tbody>
                                 <?php
-                                $sql_detail = "SELECT * FROM Product
-                                               INNER JOIN shop on product.shop_id = shop.Shop_id
-                                               INNER JOIN product_category ON product.Category_id = product.Category_id";
-                                $query_detail = mysqli_query($Connection, $sql_detail);
+                                #$sql_detail = "SELECT * FROM Product
+                                #               INNER JOIN shop on product.shop_id = shop.Shop_id
+                                #               INNER JOIN product_category ON product.Category_id = product.Category_id";
+                                #$query_detail = mysqli_query($Connection, $sql_detail);
 
-                                while ($row = mysqli_fetch_array($query_detail)) :
+                                #while ($row = mysqli_fetch_array($query_detail)) :
                                 ?>
                                     <tr>
                                         <td><?php echo $row['Product_id']; ?></td>
@@ -227,7 +227,7 @@ $result_admin = mysqli_fetch_array($query_admin);
                                         <td><?php echo $row['Shop_name']; ?></td>
 
                                     </tr>
-                                <?php endwhile ?>
+                                <?php #endwhile ?>
                             </tbody>
                             <br>
                         </table>
