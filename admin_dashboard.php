@@ -72,7 +72,7 @@ $result_admin = mysqli_fetch_array($query_admin);
                                 <a class="nav-link" href="admin_order.php">Order</a>
                                 <a class="nav-link" href="export_data.php">Download</a>
                             </nav>
-                        </div> 
+                        </div>
                     </div>
                 </div>
                 <div class="sb-sidenav-footer">
@@ -126,72 +126,91 @@ $result_admin = mysqli_fetch_array($query_admin);
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-xl-6">
-                            <div class="card mb-4">
-                                <div class="card-header">
-                                    <i class="fas fa-chart-area me-1"></i>
-                                    Area Chart Example
-                                </div>
-                                <div class="card-body"><canvas id="myAreaChart" width="100%" height="40"></canvas></div>
-                            </div>
-                        </div>
-                        <div class="col-xl-6">
-                            <div class="card mb-4">
-                                <div class="card-header">
-                                    <i class="fas fa-chart-bar me-1"></i>
-                                    Bar Chart Example
-                                </div>
-                                <div class="card-body"><canvas id="myBarChart" width="100%" height="40"></canvas></div>
-                            </div>
-                        </div>
-                    </div>
+
+                    <?php
+                    $sql_test = "SELECT * FROM Product
+                                 inner join shop on product.shop_id = shop.Shop_id";
+                    $query_test = mysqli_query($Connection, $sql_test);
+                    $result_test = mysqli_fetch_array($query_test);
+                    $datax = array();
+                    while ($k = mysqli_fetch_assoc($query_test)) {
+                        $datax[] = "['" . $k['Product_name'] . "'" . ", " . $k['Product_quantity'] . "]";
+                    }
+                    $datax = implode(",", $datax);
+                    ?>
+                    <html>
+
+                    <head>
+                        <!-- เรียก js มาใช้งาน -->
+                        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+                        <script type="text/javascript">
+                            google.charts.load('current', {
+                                'packages': ['corechart']
+                            });
+                            google.charts.setOnLoadCallback(drawChart);
+
+                            function drawChart() {
+
+                                var data = google.visualization.arrayToDataTable([
+                                    ['Task', 'Summary per product_type'],
+                                    <?php echo $datax; ?>
+                                ]);
+                                var options = {
+                                    title: 'REPORT'
+                                };
+                                var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+                                chart.draw(data, options);
+                            }
+                        </script>
+                    </head>
+
+                    <body>
+                        <div id="piechart" style="width: 900px; height: 500px;"></div>
+                    </body>
+
+                    </html>
+
                     <div class="card mb-4">
                         <div class="card-header">
                             <i class="fas fa-table me-1"></i>
                             DataTable Example
                         </div>
-                        <div class="card-body">
-                            <table id="datatablesSimple">
-                                <thead>
+                        <div class="card-body" style="height: 300px;">
+                            <table class="table" table id="datatablesSimple" style="table-layout: fixed;">
+                                <colgroup>
+                                    <col style="width: 5%;">
+                                    <col style="width: 25%;">
+                                    <col style="width: 25%;">
+                                </colgroup>
+                                <thead class="table-light">
                                     <tr>
-                                        <th>Name</th>
-                                        <th>Position</th>
-                                        <th>Office</th>
-                                        <th>Age</th>
-                                        <th>Start date</th>
-                                        <th>Salary</th>
+                                        <th>Product_id</th>
+                                        <th>Product_name</th>
+                                        <th>Product_quantity</th>
+                                        <th>Shop_name</th>
+
+
                                     </tr>
                                 </thead>
-                                <tfoot>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Position</th>
-                                        <th>Office</th>
-                                        <th>Age</th>
-                                        <th>Start date</th>
-                                        <th>Salary</th>
-                                    </tr>
-                                </tfoot>
-                                
-                                    <tr>
-                                        <td>Michael Bruce</td>
-                                        <td>Javascript Developer</td>
-                                        <td>Singapore</td>
-                                        <td>29</td>
-                                        <td>2011/06/27</td>
-                                        <td>$183,000</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Donna Snider</td>
-                                        <td>Customer Support</td>
-                                        <td>New York</td>
-                                        <td>27</td>
-                                        <td>2011/01/25</td>
-                                        <td>$112,000</td>
-                                    </tr>
+                                <tbody>
+                                    <?php
+                                    $sql_detail = "SELECT * FROM Product
+                                                    inner join shop on product.shop_id = shop.Shop_id";
+                                    $query_detail = mysqli_query($Connection, $sql_detail);
+
+                                    while ($row = mysqli_fetch_array($query_detail)) :
+                                    ?>
+                                        <tr>
+                                            <td><?php echo $row['Product_id']; ?></td>
+                                            <td><?php echo $row['Product_name']; ?></td>
+                                            <td><?php echo $row['Product_quantity']; ?></td>
+                                            <td><?php echo $row['Shop_name']; ?></td>
+
+                                        </tr>
+                                    <?php endwhile ?>
                                 </tbody>
                             </table>
+
                         </div>
                     </div>
                 </div>
