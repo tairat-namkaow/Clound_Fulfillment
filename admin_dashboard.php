@@ -129,11 +129,14 @@ $result_admin = mysqli_fetch_array($query_admin);
 
                     <?php
                     $sql_test = "SELECT * FROM Product
-             INNER JOIN shop ON product.shop_id = shop.Shop_id";
+                                 INNER JOIN shop ON product.shop_id = shop.Shop_id
+                                 INNER JOIN product_category ON product.Category_id = product.Category_id                        
+                                 GROUP by Category_name";
+                                 
                     $query_test = mysqli_query($Connection, $sql_test);
                     $datax = array();
                     while ($k = mysqli_fetch_assoc($query_test)) {
-                        $datax[] = "['" . $k['Product_name'] . "'" . ", " . $k['Product_quantity'] . "]";
+                        $datax[] = "['" . $k['Category_name'] . "'" . ", " . $k['Product_quantity'] . "]";
                     }
                     $datax = implode(",", $datax);
                     ?>
@@ -193,7 +196,7 @@ $result_admin = mysqli_fetch_array($query_admin);
                     </html>
 
 
-                    <div class="card mb-4">
+                    
                         <div class="card-header">
                             <i class="fas fa-table me-1"></i>
                             DataTable Example
@@ -211,45 +214,33 @@ $result_admin = mysqli_fetch_array($query_admin);
                                         <th>Product_name</th>
                                         <th>Product_quantity</th>
                                         <th>Shop_name</th>
-
-
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php
                                     $sql_detail = "SELECT * FROM Product
-                                                    inner join shop on product.shop_id = shop.Shop_id";
+                                                    INNER JOIN shop on product.shop_id = shop.Shop_id
+                                                    INNER JOIN product_category ON product.Category_id = product.Category_id";
                                     $query_detail = mysqli_query($Connection, $sql_detail);
 
                                     while ($row = mysqli_fetch_array($query_detail)) :
                                     ?>
                                         <tr>
                                             <td><?php echo $row['Product_id']; ?></td>
-                                            <td><?php echo $row['Product_name']; ?></td>
+                                            <td><?php echo $row['Category_name']; ?></td>
                                             <td><?php echo $row['Product_quantity']; ?></td>
                                             <td><?php echo $row['Shop_name']; ?></td>
 
                                         </tr>
                                     <?php endwhile ?>
                                 </tbody>
+                                <br>
                             </table>
 
                         </div>
-                    </div>
+                    
                 </div>
-            </main>
-            <footer class="py-4 bg-light mt-auto">
-                <div class="container-fluid px-4">
-                    <div class="d-flex align-items-center justify-content-between small">
-                        <div class="text-muted">Copyright &copy; Your Website 2023</div>
-                        <div>
-                            <a href="#">Privacy Policy</a>
-                            &middot;
-                            <a href="#">Terms &amp; Conditions</a>
-                        </div>
-                    </div>
-                </div>
-            </footer>
+            </main>            
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>

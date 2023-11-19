@@ -9,7 +9,7 @@ if (isset($_POST["submit_product"])) {
 
     $sql_insert_product = "INSERT INTO product (Admin_id, Shop_id, Warehouse_id, Product_name, Product_quantity, Product_expire) 
                             VALUES ($Admin_id, " . $_POST["Shop_id"] . "," . $_POST["Warehouse_id"] . ",
-                            '" . $_POST["Product_name"] . "'," . $_POST["Product_quantity"] . ",'" . $_POST["Product_expire"] . "')";
+                            '" . $_POST["Product_name"] . "'," . $_POST["Product_quantity"] . ",'" . $_POST["Category_id"] . "')";
 
     $query_insert_product = mysqli_query($Connection, $sql_insert_product);
 }
