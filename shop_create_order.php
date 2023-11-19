@@ -132,15 +132,16 @@ if (isset($_POST["submit_cancel"])) {
                                     <span class="input-group-text" id="inputGroup-sizing-default">Product Name</span>
                                     <select name="Product_id" type="text" required class="form-control">
                                         <?php
-                                        $sql_detail = "SELECT * FROM product
-                                                    INNER JOIN shop ON product.Shop_id = shop.Shop_id
-                                                    INNER JOIN product_category ON product.Category_id = product_category.Category_id 
+                                        $sql_detail = "SELECT * FROM product_detail
+                                                    INNER JOIN product ON product.Product_id = Product_detail.Product_id
+                                                    INNER JOIN shop ON product_detail.Shop_id = shop.Shop_id
+                                                    
                                                     WHERE Shop_email = '" . $_SESSION['Shop_email'] . "'";
                                         $query_detail = mysqli_query($Connection, $sql_detail);
                                         while ($result_detail = mysqli_fetch_array($query_detail)) {
                                             $selected_product = $result_detail['Product_id'];
                                         ?>
-                                            <option value="<?= $selected_product ?>"><?= $result_detail['Category_name'] ?></option>
+                                            <option value="<?= $selected_product ?>"><?= $result_detail['Product_name'] ?></option>
                                         <?php } ?>
                                     </select>
                                 </div>
@@ -187,10 +188,10 @@ if (isset($_POST["submit_cancel"])) {
                                 <tbody>
                                     <?php
                                     $sql_detail = "SELECT * FROM detail
-                                    INNER JOIN product ON product.Product_id = detail.Product_id
-                                    INNER JOIN product_category ON product.Category_id = product_category.Category_id 
+                                    INNER JOIN product_detail ON product_detail.Product_detail_id = detail.Product_detail_id
+                                    INNER JOIN product ON product.Product_id= product_detail.Product_id
                                     INNER JOIN order_main ON order_main.Order_id = detail.Order_id
-                                    INNER JOIN shop ON shop.Shop_id = product.Shop_id
+                                    INNER JOIN shop ON shop.Shop_id = product_detail.Shop_id
                                     WHERE order_main.Order_id = $Order_id AND shop.Shop_email = '" . $_SESSION['Shop_email'] . "'";
                                     $query_detail = mysqli_query($Connection, $sql_detail);
 
@@ -198,7 +199,7 @@ if (isset($_POST["submit_cancel"])) {
                                     ?>
                                         <tr>
                                             <td><?php echo $row['Detail_id']; ?></td>
-                                            <td class="name"><?php echo $row['Category_name']; ?></td>
+                                            <td class="name"><?php echo $row['Product_name']; ?></td>
                                             <td><?php echo $row['Detail_quantity']; ?></td>
                                         </tr>
                                     <?php endwhile ?>
