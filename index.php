@@ -41,9 +41,13 @@ $result_shop = mysqli_fetch_array($query_shop);
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
 
                     <li><a class="dropdown-item" href="#!"><?php echo $result_shop[3]; ?></a></li>
-                    <li><hr class="dropdown-divider" /></li>
+                    <li>
+                        <hr class="dropdown-divider" />
+                    </li>
                     <li><a class="dropdown-item" href="shop_information.php">แก้ไขข้อมูล</a></li>
-                    <li><hr class="dropdown-divider" /></li>
+                    <li>
+                        <hr class="dropdown-divider" />
+                    </li>
                     <li><button class="dropdown-item" type="button" onclick="window.location.href='logout.php'">ออกจากระบบ</button></li>
                 </ul>
             </li>
@@ -54,7 +58,7 @@ $result_shop = mysqli_fetch_array($query_shop);
             <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
                 <div class="sb-sidenav-menu">
                     <div class="nav">
-                        <div class="sb-sidenav-menu-heading">MENU</div>                        
+                        <div class="sb-sidenav-menu-heading">MENU</div>
                         <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
                             <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
                             Order
@@ -86,8 +90,13 @@ $result_shop = mysqli_fetch_array($query_shop);
                     <div class="row">
                         <div class="col-xl-3 col-md-6">
                             <div class="card bg-primary text-white mb-4">
-                                <div class="card-body">Primary Card</div>
+                                <div class="card-body">รายการส่งสินค้า</div>
                                 <div class="card-footer d-flex align-items-center justify-content-between">
+                                    <?php
+                                    $sql_shop = "SELECT distinct count(Category) FROM product WHERE Shop_email = '" . $_SESSION['Shop_email'] . "'";
+                                    $query_shop = mysqli_query($Connection, $sql_shop);
+                                    $result_shop = mysqli_fetch_array($query_shop);
+                                    ?>
                                     <a class="small text-white stretched-link" href="#">View Details</a>
                                     <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                                 </div>
