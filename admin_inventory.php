@@ -121,17 +121,17 @@ if (isset($_POST["submit_del"])) {
                                 </thead>
                                 <tbody>
                                     <?php
-                                    $sql_detail = "SELECT * FROM Product
-                                                    inner join shop on product.shop_id = shop.Shop_id
-                                                    inner join Product_category on Product_category.Category_id = Product_category.Category_id
-                                                    group by Product_id";
+                                    $sql_detail = "SELECT * FROM Product_detail
+                                    inner join product on product_detail.Product_id = product.Product_id
+                                    inner join shop on product_detail.shop_id = shop.Shop_id";                                                    
+                                                    
                                     $query_detail = mysqli_query($Connection, $sql_detail);
 
                                     while ($row = mysqli_fetch_array($query_detail)) :
                                     ?>
                                         <tr>
                                             <td><?php echo $row['Product_id']; ?></td>
-                                            <td><?php echo $row['Category_name']; ?></td>
+                                            <td><?php echo $row['Product_name']; ?></td>
                                             <td><?php echo $row['Product_quantity']; ?></td>                                            
                                             <td><?php echo $row['Shop_name']; ?></td>
 
