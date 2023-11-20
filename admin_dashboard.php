@@ -92,55 +92,91 @@ $result_admin = mysqli_fetch_array($query_admin);
                     <div class="row">
                         <div class="col-xl-3 col-md-6">
                             <div class="card bg-primary text-white mb-4">
-                                <div class="card-body">Primary Card</div>
-                                <div class="card-footer d-flex align-items-center justify-content-between">
-                                    <a class="small text-white stretched-link" href="#">View Details</a>
-                                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                                <?php
+                                $sql_time = "SELECT count(*) as date FROM `product_detail` 
+                                WHERE Product_time_add = curdate()";
+                                $query_time = mysqli_query($Connection, $sql_time);
+                                $result_time = mysqli_fetch_array($query_time);
+                                ?>
+                                <div class="card-body">Inbound</div>
+                                <div class="card-footer d-flex align-items-center">
+                                    <a>เพิ่มสินค้าเข้าวันนี้จำนวน : <?php echo $result_time['date']?> รายการ</a>
                                 </div>
                             </div>
                         </div>
                         <div class="col-xl-3 col-md-6">
                             <div class="card bg-warning text-white mb-4">
-                                <div class="card-body">Warning Card</div>
-                                <div class="card-footer d-flex align-items-center justify-content-between">
-                                    <a class="small text-white stretched-link" href="#">View Details</a>
-                                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                                <?php
+                                $sql_pending = "SELECT count(*) as pending FROM order_main 
+                                WHERE Order_status = 'pending'";
+                                $query_pending = mysqli_query($Connection, $sql_pending);
+                                $result_pending = mysqli_fetch_array($query_pending);
+
+                                $sql_confirm = "SELECT count(*) as confirm FROM order_main 
+                                WHERE Order_status = 'confirm'";
+                                $query_confirm = mysqli_query($Connection, $sql_confirm);
+                                $result_confirm = mysqli_fetch_array($query_confirm);
+                                ?>
+                                <div class="card-body">Order</div>
+                                <div class="card-footer d-flex align-items-center">
+                                    <a style="margin-right: 10px;">Pending: <?php echo $result_pending['pending'] ?> รายการ</a>
+                                    <a style="margin-right: 10px;">Confirm: <?php echo $result_confirm['confirm'] ?> รายการ</a>
                                 </div>
                             </div>
                         </div>
                         <div class="col-xl-3 col-md-6">
                             <div class="card bg-success text-white mb-4">
-                                <div class="card-body">Success Card</div>
-                                <div class="card-footer d-flex align-items-center justify-content-between">
-                                    <a class="small text-white stretched-link" href="#">View Details</a>
-                                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                            <?php
+                                $sql_time = "SELECT count(*) as date FROM product_category";                                
+                                $query_time = mysqli_query($Connection, $sql_time);
+                                $result_time = mysqli_fetch_array($query_time);
+                                ?>
+                                <div class="card-body">Category</div>
+                                <div class="card-footer d-flex align-items-center">
+                                    <a>Category ในระบบจำนวน : <?php echo $result_time['date']?> รายการ</a>
                                 </div>
                             </div>
                         </div>
                         <div class="col-xl-3 col-md-6">
                             <div class="card bg-danger text-white mb-4">
-                                <div class="card-body">Danger Card</div>
-                                <div class="card-footer d-flex align-items-center justify-content-between">
-                                    <a class="small text-white stretched-link" href="#">View Details</a>
-                                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                            <?php
+                                $sql_shop = "SELECT count(*) as shop FROM shop";
+                                
+                                $query_shop = mysqli_query($Connection, $sql_shop);
+                                $result_shop = mysqli_fetch_array($query_shop);
+                                ?>
+                                <div class="card-body">Shop</div>
+                                <div class="card-footer d-flex align-items-center">
+                                    <a>จำนวนร้านค้าในระบบ : <?php echo $result_shop['shop']?> ร้าน</a>
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <?php
-                    $sql_test = "SELECT * FROM Product_detail
+                    $sql_category = "SELECT product_category.Category_name,sum(product_detail.Product_quantity) as Product_quantity FROM Product_detail
                     INNER JOIN shop ON product_detail.shop_id = shop.Shop_id
                     INNER JOIN product ON product_detail.Product_id = product.Product_id
                     INNER join product_category on Product.Category_id = product_category.Category_id
                     GROUP by Category_name";
 
-                    $query_test = mysqli_query($Connection, $sql_test);
-                    $datax = array();
-                    while ($k = mysqli_fetch_assoc($query_test)) {
-                        $datax[] = "['" . $k['Category_name'] . "'" . ", " . $k['Product_quantity'] . "]";
+                    $query_category = mysqli_query($Connection, $sql_category);
+                    $category = array();
+                    while ($i = mysqli_fetch_assoc($query_category)) {
+                        $category[] = "['" . $i['Category_name'] . "'" . ", " . $i['Product_quantity'] . "]";
                     }
-                    $datax = implode(",", $datax);
+                    $category = implode(",", $category);
+
+                    $sql_zone = "SELECT sum(product_detail.Product_quantity) as Product_quantity,warehouse.Warehouse_zone FROM Product_detail
+                                INNER JOIN warehouse ON product_detail.Warehouse_id = warehouse.Warehouse_id
+                                GROUP by warehouse.Warehouse_zone";
+
+                    $query_zone = mysqli_query($Connection, $sql_zone);
+                    $zone = array();
+                    while ($j = mysqli_fetch_assoc($query_zone)) {
+                        $zone[] = "['" . $j['Warehouse_zone'] . "'" . ", " . $j['Product_quantity'] . "]";
+                    }
+                    $zone = implode(",", $zone);
                     ?>
 
                     <html>
@@ -160,30 +196,30 @@ $result_admin = mysqli_fetch_array($query_admin);
                             }
 
                             function ColumnChart() {
-                                var data = google.visualization.arrayToDataTable([
-                                    ['Task', 'Summary per product_type'],
-                                    <?php echo $datax; ?>
+                                var data1 = google.visualization.arrayToDataTable([
+                                    ['Task', 'จำนวนสินค้า'],
+                                    <?php echo $category; ?>
                                 ]);
-                                var options = {
-                                    title: 'Column Chart'
+                                var options1 = {
+                                    title: 'จำนวนสินค้าแต่ละ Category'
                                 };
 
-                                var chart = new google.visualization.ColumnChart(document.getElementById('ColumnChart'));
-                                chart.draw(data, options);
+                                var chart1 = new google.visualization.ColumnChart(document.getElementById('ColumnChart'));
+                                chart1.draw(data1, options1);
                             }
 
                             function PieChart() {
-                                var data = google.visualization.arrayToDataTable([
-                                    ['Task', 'Summary per product_type'],
-                                    <?php echo $datax; ?>
+                                var data2 = google.visualization.arrayToDataTable([
+                                    ['Task', 'จำนวนสินค้า'],
+                                    <?php echo $zone; ?>
                                 ]);
 
-                                var options = {
-                                    title: 'Pie Chart'
+                                var options2 = {
+                                    title: 'จำนวนสินค้าในแต่ละ Zone'
                                 };
 
-                                var chart = new google.visualization.PieChart(document.getElementById('PieChart'));
-                                chart.draw(data, options);
+                                var chart2 = new google.visualization.PieChart(document.getElementById('PieChart'));
+                                chart2.draw(data2, options2);
                             }
                         </script>
                     </head>
@@ -197,6 +233,7 @@ $result_admin = mysqli_fetch_array($query_admin);
 
                     </html>
 
+
                     <div class="card-body" style="height: 300px;">
                         <table class="table" table id="datatablesSimple" style="table-layout: fixed;">
                             <colgroup>
@@ -206,7 +243,7 @@ $result_admin = mysqli_fetch_array($query_admin);
                             </colgroup>
                             <thead class="table-light">
                                 <tr>
-                                    <th>Product_id</th>
+                                    <th>Product_detail_id</th>
                                     <th>Product_name</th>
                                     <th>Category_name</th>
                                     <th>Product_quantity</th>
@@ -224,7 +261,7 @@ $result_admin = mysqli_fetch_array($query_admin);
                                 while ($row = mysqli_fetch_array($query_detail)) :
                                 ?>
                                     <tr>
-                                        <td><?php echo $row['Product_id']; ?></td>
+                                        <td><?php echo $row['Product_detail_id']; ?></td>
                                         <td><?php echo $row['Product_name']; ?></td>
                                         <td><?php echo $row['Category_name']; ?></td>
                                         <td><?php echo $row['Product_quantity']; ?></td>
