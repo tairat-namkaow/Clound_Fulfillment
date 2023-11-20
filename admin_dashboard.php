@@ -98,7 +98,7 @@ $result_admin = mysqli_fetch_array($query_admin);
                                 ?>
                                 <div class="card-body">Inbound</div>
                                 <div class="card-footer d-flex align-items-center">
-                                    <a>เพิ่มสินค้าเข้าวันนี้จำนวน : <?php echo $result_time['date'] ?> รายการ</a>
+                                    <a>สินค้าเข้าคลังวันนี้ จำนวน : <?php echo $result_time['date'] ?> รายการ</a>
                                 </div>
                             </div>
                         </div>
@@ -115,7 +115,7 @@ $result_admin = mysqli_fetch_array($query_admin);
                                 $query_confirm = mysqli_query($Connection, $sql_confirm);
                                 $result_confirm = mysqli_fetch_array($query_confirm);
                                 ?>
-                                <div class="card-body">Order</div>
+                                <div class="card-body">Order Status</div>
                                 <div class="card-footer d-flex align-items-center">
                                     <a style="margin-right: 10px;">Pending: <?php echo $result_pending['pending'] ?> รายการ</a>
                                     <a style="margin-right: 10px;">Confirm: <?php echo $result_confirm['confirm'] ?> รายการ</a>
@@ -129,9 +129,9 @@ $result_admin = mysqli_fetch_array($query_admin);
                                 $query_time = mysqli_query($Connection, $sql_time);
                                 $result_time = mysqli_fetch_array($query_time);
                                 ?>
-                                <div class="card-body">Category</div>
+                                <div class="card-body">Inventory</div>
                                 <div class="card-footer d-flex align-items-center">
-                                    <a>Category ในระบบจำนวน : <?php echo $result_time['date'] ?> รายการ</a>
+                                    <a>สินค้าคงคลังในระบบ จำนวน : <?php echo $result_time['date'] ?> รายการ</a>
                                 </div>
                             </div>
                         </div>
@@ -152,18 +152,27 @@ $result_admin = mysqli_fetch_array($query_admin);
                     </div>
 
                     <?php
-                    $sql_category = "SELECT product_category.Category_name,sum(product_detail.Product_quantity) as Product_quantity FROM Product_detail
-                    INNER JOIN shop ON product_detail.shop_id = shop.Shop_id
-                    INNER JOIN product ON product_detail.Product_id = product.Product_id
-                    INNER join product_category on Product.Category_id = product_category.Category_id
-                    GROUP by Category_name";
+                    $sql_category = "SELECT
+                   DATE(order_main.Order_date) AS order_date,
+                   COUNT(distinct  order_main.Order_id) AS total_order
+               FROM
+                   product_detail
+                   INNER JOIN shop ON product_detail.Shop_id = shop.Shop_id
+                   INNER JOIN product ON product_detail.Product_id = product.Product_id
+                   INNER JOIN detail ON detail.Product_detail_id = product_detail.Product_detail_id
+                   INNER JOIN order_main ON detail.Order_id = order_main.Order_id
+               GROUP BY
+                   order_date";
 
                     $query_category = mysqli_query($Connection, $sql_category);
                     $category = array();
-                    while ($i = mysqli_fetch_assoc($query_category)) {
-                        $category[] = "['" . $i['Category_name'] . "'" . ", " . $i['Product_quantity'] . "]";
+
+                    while ($row = mysqli_fetch_assoc($query_category)) {
+                        $category[] = "['" . $row['order_date'] . "', " . $row['total_order'] . "]";
                     }
+
                     $category = implode(",", $category);
+
 
                     $sql_zone = "SELECT sum(product_detail.Product_quantity) as Product_quantity,warehouse.Warehouse_zone FROM Product_detail
                                 INNER JOIN warehouse ON product_detail.Warehouse_id = warehouse.Warehouse_id
@@ -176,7 +185,29 @@ $result_admin = mysqli_fetch_array($query_admin);
                     }
                     $zone = implode(",", $zone);
 
-                    $sql_out = "SELECT product_category.Category_name, 
+                    $sql_out = "SELECT
+                    product_category.Category_name,
+                    month(order_main.Order_date) AS order_date,
+                    SUM(product_detail.Product_quantity) as total_quantity,
+                    COUNT(product_detail.Product_detail_id) as sku_count
+                FROM
+                    detail
+                    INNER JOIN order_main ON detail.Order_id = order_main.Order_id
+                    INNER JOIN product_detail ON detail.Product_detail_id = product_detail.Product_detail_id
+                    INNER JOIN product ON product_detail.Product_id = product.Product_id
+                    INNER JOIN product_category ON product.Category_id = product_category.Category_id
+                GROUP BY
+                    product_category.Category_name";
+
+                    $query_out = mysqli_query($Connection, $sql_out);
+                    $out = array();
+                    while ($k = mysqli_fetch_assoc($query_out)) {
+
+                        $out[] = "['" . $k['Category_name'] . "', " . $k['total_quantity'] . "]";
+                    }
+                    $out = implode(",", $out);
+
+                    $sql_year = "SELECT product_category.Category_name, 
                     SUM(detail.Detail_quantity) AS Detail_quantity, 
                     month(order_main.Order_date)
                     FROM detail
@@ -186,26 +217,6 @@ $result_admin = mysqli_fetch_array($query_admin);
                     INNER JOIN product_category ON product.Category_id = product_category.Category_id
                     WHERE order_main.Order_status = 'confirm' 
                     and month(order_main.Order_date) = MONTH(CURDATE())
-                    GROUP BY product_category.Category_id, Order_date";
-
-                    $query_out = mysqli_query($Connection, $sql_out);
-                    $out = array();
-                    while ($k = mysqli_fetch_assoc($query_out)) {
-
-                        $out[] = "['" . $k['Category_name'] . "', " . $k['Detail_quantity'] . "]";
-                    }
-                    $out = implode(",", $out);
-
-                    $sql_year = "SELECT product_category.Category_name, 
-                    SUM(detail.Detail_quantity) AS Detail_quantity, 
-                    year(order_main.Order_date)
-                    FROM detail
-                    INNER JOIN order_main ON detail.Order_id = order_main.Order_id
-                    INNER JOIN product_detail ON detail.Product_detail_id = product_detail.Product_detail_id
-                    INNER JOIN product ON product_detail.Product_id = product.Product_id
-                    INNER JOIN product_category ON product.Category_id = product_category.Category_id
-                    WHERE order_main.Order_status = 'confirm' 
-                    and year(order_main.Order_date) = year(CURDATE())
                     GROUP BY product_category.Category_id";
 
                     $query_year = mysqli_query($Connection, $sql_year);
@@ -238,18 +249,27 @@ $result_admin = mysqli_fetch_array($query_admin);
 
                             function ColumnChart() {
                                 var data1 = google.visualization.arrayToDataTable([
-                                    ['Task', 'จำนวนสินค้า'],
+                                    ['Task', 'จำนวนคำสั่ง'],
                                     <?php echo $category; ?>
                                 ]);
 
                                 var options1 = {
-                                    title: 'จำนวนสินค้าในคลังของแต่ละ Category',
-                                    colors: ['green']
+                                    title: 'จำนวนคำสั่ง (รายวัน)',
+                                    colors: ['green'],
+                                    vAxis: {
+                                        viewWindow: {
+                                            min: 0
+                                        },
+                                        ticks: [0, 1, 2, 3, 4, 5]
+                                    }
                                 };
 
-                                var chart1 = new google.visualization.BarChart(document.getElementById('ColumnChart'));
+                                var chart1 = new google.visualization.LineChart(document.getElementById('ColumnChart'));
                                 chart1.draw(data1, options1);
                             }
+
+
+
 
 
                             function PieChart() {
@@ -273,7 +293,7 @@ $result_admin = mysqli_fetch_array($query_admin);
                                 ]);
 
                                 var options3 = {
-                                    title: 'จำนวนสินค้าแต่ละ Category ที่ถูกส่งออกในเดือนนี้'
+                                    title: 'จำนวนสินค้าแต่ละประเภทที่ถูกนำเข้าคลังสินค้า (รายเดือน)'
 
                                 };
 
@@ -283,12 +303,12 @@ $result_admin = mysqli_fetch_array($query_admin);
 
                             function OutChartyear() {
                                 var data4 = google.visualization.arrayToDataTable([
-                                    ['Task', 'จำนวนสินค้า'],                                    
+                                    ['Task', 'จำนวนสินค้า'],
                                     <?php echo $year; ?>
                                 ]);
 
                                 var options4 = {
-                                    title: 'จำนวนสินค้าแต่ละ Category ที่ถูกส่งออกในปีนี้',
+                                    title: 'จำนวนสินค้าแต่ละประเภทที่ถูกนำออกจากคลังสินค้า (รายเดือน)',
                                     colors: ['orange']
                                 };
 
@@ -300,12 +320,13 @@ $result_admin = mysqli_fetch_array($query_admin);
 
                     <body>
                         <div style="display: flex; justify-content: space-between;">
-                            <div id="OutChart" style="width: 45%; height: 280px;"></div>
-                            <div id="OutChartyear" style="width: 45%; height: 280px;"></div>
+                            <div id="ColumnChart" style="width: 65%; height: 280px;"></div>
+                            <div id="PieChart" style="width: 35%; height: 280px;"></div>
+
                         </div>
                         <div style="display: flex; justify-content: space-between;">
-                            <div id="ColumnChart" style="width: 45%; height: 280px;"></div>
-                            <div id="PieChart" style="width: 45%; height: 280px;"></div>
+                            <div id="OutChart" style="width: 50%; height: 280px;"></div>
+                            <div id="OutChartyear" style="width: 50%; height: 280px;"></div>
                         </div>
                     </body>
 
