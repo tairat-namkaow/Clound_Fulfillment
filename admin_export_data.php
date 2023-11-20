@@ -8,12 +8,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $endDate = mysqli_real_escape_string($Connection, $_POST['end_date']);
 
     // Set the SQL query using prepared statements
-    $sql_exp = "SELECT order_main.Order_id, order_main.Order_date, shop.Shop_name, product.Product_id, product.Product_name, warehouse.Warehouse_id, warehouse.Warehouse_id, warehouse.Warehouse_zone, detail.Detail_quantity
+    $sql_exp = "SELECT distinct(order_main.Order_id), order_main.Order_date, product.Product_id, product.Product_name, shop.Shop_name, warehouse.Warehouse_zone, product_category.Category_name, product_detail.Product_quantity
                 FROM `detail`
-                INNER JOIN order_main ON detail.Order_id = order_main.Order_id
-                INNER JOIN product ON detail.Product_id = product.Product_id
-                INNER JOIN shop ON product.Shop_id = shop.Shop_id
-                INNER JOIN warehouse ON product.Warehouse_id = warehouse.Warehouse_id
+                inner join order_main on detail.Order_id = order_main.Order_id
+                inner join product_detail on detail.Product_detail_id = product_detail.Product_detail_id
+                inner join shop on product_detail.Shop_id = shop.Shop_id
+                inner join product on product.Product_id = product_detail.Product_id
+                inner join product_category on product_category.Category_id = product.Category_id
+                INNER JOIN warehouse ON product_detail.Warehouse_id = warehouse.Warehouse_id
                 WHERE order_main.Order_date BETWEEN ? AND ?";
 
     // Prepare and bind the statement
@@ -35,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $file = fopen('php://output', 'w');
 
         // Write headers to the CSV file
-        $header = array('Order_id', 'Order_date', 'Shop_name', 'Product_id', 'Product_name', 'Warehouse_id', 'Warehouse_zone', 'Quantity');
+        $header = array('Order_id', 'Order_date', 'Product_id', 'Product_name', 'Shop_name', 'Warehouse_zone', 'Product_category', 'Quantity');
         fputcsv($file, $header);
 
         // Fetch and write data to the CSV file
@@ -129,11 +131,10 @@ $result_admin = mysqli_fetch_array($query_admin);
                         <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
                                 <a class="nav-link" href="admin_dashboard.php">Dashboard</a>
-                                <a class="nav-link" href="admin_category.php">Category</a>
-                                <a class="nav-link" href="admin_In_bound.php">In-bound</a>
+                                <a class="nav-link" href="In_bound.php">In-bound</a>
                                 <a class="nav-link" href="admin_inventory.php">Inventory</a>
                                 <a class="nav-link" href="admin_order.php">Order</a>
-                                <a class="nav-link" href="admin_export_data.php">Download</a>
+                                <a class="nav-link" href="export_data.php">Download</a>
                             </nav>
                         </div>
                     </div>
@@ -168,7 +169,6 @@ $result_admin = mysqli_fetch_array($query_admin);
 
             <body>
                 <main>
-                    <br>
                     <div class="container-fluid px-4">
                         <div class="card">
                             <div class="card-header">
