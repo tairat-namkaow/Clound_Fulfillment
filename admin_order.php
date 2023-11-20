@@ -93,17 +93,23 @@ if (isset($_POST["submit_cc"])) {
                 <div class="sb-sidenav-menu">
                     <div class="nav">
                         <div class="sb-sidenav-menu-heading">MENU</div>
-                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
+                        
+                        <div>
+                            <nav class="sb-sidenav-menu-nested nav">
+                                <a class="nav-link" href="admin_dashboard.php">Dashboard</a>
+                                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
                             <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
-                            Order
+                            Product
                             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
                         <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="admin_dashboard.php">Dashboard</a>
-                                <a class="nav-link" href="admin_product.php">Product</a>
-                                <a class="nav-link" href="admin_category.php">Category</a>
-                                <a class="nav-link" href="admin_In_bound.php">In-bound</a>
+                            <a class="nav-link" href="admin_in_bound.php">Inbound</a>
+                                <a class="nav-link" href="admin_product.php">Product Category</a>
+                                <a class="nav-link" href="admin_category.php">Category Management</a>
+                            </nav>   
+                            </div>
+                                
                                 <a class="nav-link" href="admin_inventory.php">Inventory</a>
                                 <a class="nav-link" href="admin_order.php">Order</a>
                                 <a class="nav-link" href="admin_export_data.php">Download</a>
@@ -121,7 +127,7 @@ if (isset($_POST["submit_cc"])) {
         <div id="layoutSidenav_content">
             <main>
                 <div class="container-fluid px-4">
-                    <h1 class="mt-4">Admin Order</h1>
+                    <h1 class="mt-4">Total Order</h1>
                     <form method="post">
                         <h5 class="card-header" style="text-align: center;">รายการคำสั่ง</h5>
 

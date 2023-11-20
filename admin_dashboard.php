@@ -9,6 +9,8 @@ $result_admin = mysqli_fetch_array($query_admin);
 <!DOCTYPE html>
 <html lang="en">
 
+<!-- Tab บน -->
+
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -59,17 +61,23 @@ $result_admin = mysqli_fetch_array($query_admin);
                 <div class="sb-sidenav-menu">
                     <div class="nav">
                         <div class="sb-sidenav-menu-heading">MENU</div>
-                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
+                        
+                        <div>
+                            <nav class="sb-sidenav-menu-nested nav">
+                                <a class="nav-link" href="admin_dashboard.php">Dashboard</a>
+                                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
                             <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
-                            Admin Operation
+                            Product
                             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
                         <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="admin_dashboard.php">Dashboard</a>
-                                <a class="nav-link" href="admin_product.php">Product</a>
-                                <a class="nav-link" href="admin_category.php">Category</a>
-                                <a class="nav-link" href="admin_In_bound.php">In-bound</a>
+                            <a class="nav-link" href="admin_in_bound.php">Inbound</a>
+                                <a class="nav-link" href="admin_product.php">Product Category</a>
+                                <a class="nav-link" href="admin_category.php">Category Management</a>
+                            </nav>   
+                            </div>
+                                
                                 <a class="nav-link" href="admin_inventory.php">Inventory</a>
                                 <a class="nav-link" href="admin_order.php">Order</a>
                                 <a class="nav-link" href="admin_export_data.php">Download</a>
@@ -268,10 +276,6 @@ $result_admin = mysqli_fetch_array($query_admin);
                                 chart1.draw(data1, options1);
                             }
 
-
-
-
-
                             function PieChart() {
                                 var data2 = google.visualization.arrayToDataTable([
                                     ['Task', 'จำนวนสินค้า'],
@@ -342,10 +346,10 @@ $result_admin = mysqli_fetch_array($query_admin);
                             </colgroup>
                             <thead class="table-light">
                                 <tr>
-                                    <th>Product_name</th>
-                                    <th>Category_name</th>
-                                    <th>Product_quantity</th>
-                                    <th>Shop_name</th>
+                                    <th>Product</th>
+                                    <th>Category</th>
+                                    <th>Quantity</th>
+                                    <th>Shop</th>
                                 </tr>
                             </thead>
                             <tbody>

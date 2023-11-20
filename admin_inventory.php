@@ -22,6 +22,8 @@ if (isset($_POST["submit_del"])) {
 <!DOCTYPE html>
 <html lang="en">
 
+<!-- Tab บน -->
+
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -72,22 +74,28 @@ if (isset($_POST["submit_del"])) {
                 <div class="sb-sidenav-menu">
                     <div class="nav">
                         <div class="sb-sidenav-menu-heading">MENU</div>
-                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
+                        
+                        <div>
+                            <nav class="sb-sidenav-menu-nested nav">
+                                <a class="nav-link" href="admin_dashboard.php">Dashboard</a>
+                                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
                             <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
-                            Order
+                            Product
                             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
                         <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="admin_dashboard.php">Dashboard</a>
-                                <a class="nav-link" href="admin_product.php">Product</a>
-                                <a class="nav-link" href="admin_category.php">Category</a>
-                                <a class="nav-link" href="admin_In_bound.php">In-bound</a>
+                            <a class="nav-link" href="admin_in_bound.php">Inbound</a>
+                                <a class="nav-link" href="admin_product.php">Product Category</a>
+                                <a class="nav-link" href="admin_category.php">Category Management</a>
+                            </nav>   
+                            </div>
+                                
                                 <a class="nav-link" href="admin_inventory.php">Inventory</a>
                                 <a class="nav-link" href="admin_order.php">Order</a>
-                                <a class="nav-link" href="">Shop</a>
+                                <a class="nav-link" href="admin_export_data.php">Download</a>
                             </nav>
-                        </div> 
+                        </div>
                     </div>
                 </div>
                 <div class="sb-sidenav-footer">
@@ -99,9 +107,9 @@ if (isset($_POST["submit_del"])) {
         <div id="layoutSidenav_content">
             <main>
                 <div class="container-fluid px-4">
-                    <h1 class="mt-4">Admin Inventory</h1>
+                    <h1 class="mt-4">Total Inventory</h1>
                     <form method="post">
-                        <h5 class="card-header" style="text-align: center;">รายการสินค้า</h5>
+                        <h5 class="card-header" style="text-align: center;">รายการสินค้าในคลังสินค้า</h5>
 
                         <div class="card-body" style="height: 300px;">
                             <table class="table" table id="datatablesSimple" style="table-layout: fixed;">
@@ -116,7 +124,7 @@ if (isset($_POST["submit_del"])) {
                                         <th>Product_name</th>
                                         <th>Product_quantity</th>                                     
                                         <th>Shop_name</th>
-                                        <th>ลบ</th>
+                                       
 
                                     </tr>
                                 </thead>
@@ -137,10 +145,7 @@ if (isset($_POST["submit_del"])) {
                                             <td><?php echo $row['Product_quantity']; ?></td>                                            
                                             <td><?php echo $row['Shop_name']; ?></td>
 
-                                            <td>
-                                                <!-- Delete Button -->
-                                                <button type="submit" name="submit_del" value =<?php echo $row['Product_detail_id']; ?> class="btn btn-danger btn-sm">Delete</button>
-                                            </td>
+                                            
                                         </tr>
                                     <?php endwhile ?>
                                 </tbody>

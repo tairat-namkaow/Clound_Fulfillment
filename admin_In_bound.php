@@ -7,9 +7,9 @@ $result_admin = mysqli_fetch_array($query_admin);
 $Admin_id = $result_admin['Admin_id'];
 if (isset($_POST["submit_product"])) {
 
-    $sql_insert_product = "INSERT INTO product_detail (Admin_id, Shop_id, Warehouse_id, Product_quantity, Product_id) 
+    $sql_insert_product = "INSERT INTO product (Admin_id, Shop_id, Warehouse_id, Product_quantity, Category_id) 
                             VALUES ($Admin_id, " . $_POST["Shop_id"] . "," . $_POST["Warehouse_id"] . ",
-                            " . $_POST["Product_quantity"] . ",'" . $_POST["Product_id"] . "')";
+                            " . $_POST["Product_quantity"] . ",'" . $_POST["Category_id"] . "')";
 
     $query_insert_product = mysqli_query($Connection, $sql_insert_product);
 }
@@ -71,17 +71,23 @@ if (isset($_POST["submit_product"])) {
                 <div class="sb-sidenav-menu">
                     <div class="nav">
                         <div class="sb-sidenav-menu-heading">MENU</div>
-                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
+                        
+                        <div>
+                            <nav class="sb-sidenav-menu-nested nav">
+                                <a class="nav-link" href="admin_dashboard.php">Dashboard</a>
+                                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
                             <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
-                            Order
+                            Product
                             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
                         <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="admin_dashboard.php">Dashboard</a>
-                                <a class="nav-link" href="admin_product.php">Product</a>
-                                <a class="nav-link" href="admin_category.php">Category</a>
-                                <a class="nav-link" href="admin_In_bound.php">In-bound</a>
+                            <a class="nav-link" href="admin_in_bound.php">Inbound</a>
+                                <a class="nav-link" href="admin_product.php">Product Category</a>
+                                <a class="nav-link" href="admin_category.php">Category Management</a>
+                            </nav>   
+                            </div>
+                                
                                 <a class="nav-link" href="admin_inventory.php">Inventory</a>
                                 <a class="nav-link" href="admin_order.php">Order</a>
                                 <a class="nav-link" href="admin_export_data.php">Download</a>
@@ -96,22 +102,19 @@ if (isset($_POST["submit_product"])) {
             </nav>
         </div>
 
-        
-
-
 
         <div id="layoutSidenav_content">
             <main>
                 <div class="container-fluid px-4">
-                    <h1 class="mt-4">In Bound</h1>
+                    <h1 class="mt-4">Inbound</h1>
 
                     <form method="post">
-                        
+
                         <div class="card">
-                            <h5 class="card-header">Add Product in warehouse</h5>
+                            <h5 class="card-header">Adding Product in the Warehouse</h5>
                             <div class="card-body">
                                 <div class="input-group mb-3">
-                                    <span class="input-group-text" id="inputGroup-sizing-default">Shop Name</span>
+                                    <span class="input-group-text" id="inputGroup-sizing-default">Shop</span>
                                     <select name="Shop_id" type="text" required class="form-control">
                                         <?php
                                         $sql_shop = "SELECT * FROM shop";
@@ -123,7 +126,7 @@ if (isset($_POST["submit_product"])) {
                                     </select>
                                 </div>
                                 <div class="input-group mb-3">
-                                    <span class="input-group-text" id="inputGroup-sizing-default">warehouse</span>
+                                    <span class="input-group-text" id="inputGroup-sizing-default">Warehouse</span>
                                     <select name="Warehouse_id" type="text" required class="form-control">
                                         <?php
                                         $sql_warehouse = "SELECT * FROM warehouse";
@@ -136,20 +139,20 @@ if (isset($_POST["submit_product"])) {
                                 </div>
                                 <div class="input-group mb-3">
                                     <span class="input-group-text" id="inputGroup-sizing-default">Product name</span>
-                                    <select name="Product_id" type="text" required class="form-control">
+                                    <select name="Category_id" type="text" required class="form-control">
                                         <?php
-                                        $sql_product = "SELECT * FROM product";
+                                        $sql_product = "SELECT * FROM product_category";
                                         $query_product = mysqli_query($Connection, $sql_product);
                                         while ($result_product = mysqli_fetch_array($query_product)) {
                                         ?>
-                                            <option value="<?= $result_product['Product_id'] ?>"><?= $result_product['Product_name'] ?></option>
+                                            <option value="<?= $result_product['Category_id'] ?>"><?= $result_product['Category_name'] ?></option>
                                         <?php } ?>
                                     </select>
                                 </div>
                                 <div class="input-group mb-3">
-                                    <span class="input-group-text" id="inputGroup-sizing-default">Quantity</span>
+                                    <span class="input-group-text" id="inputGroup-sizing-default">Product Quantity</span>
                                     <input type="text" class="form-control" name="Product_quantity" placeholder="Enter quantity" required />
-                                </div>                                
+                                </div>
 
                                 <label class="mb-3">
                                     <button type="submit" class="btn btn-success" name="submit_product">Add</button>
@@ -160,7 +163,7 @@ if (isset($_POST["submit_product"])) {
                     </form>
                     <br>
 
-                    
+
                 </div>
             </main>
         </div>
