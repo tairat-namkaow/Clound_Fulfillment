@@ -5,14 +5,15 @@ $sql_admin = "SELECT * FROM `admin` WHERE Admin_user = '" . $_SESSION['Admin_use
 $query_admin = mysqli_query($Connection, $sql_admin);
 $result_admin = mysqli_fetch_array($query_admin);
 $Admin_id = $result_admin['Admin_id'];
-if (isset($_POST["add_category"])) {
-    $sql_insert_category = "INSERT INTO product_category (`Category_id`, `Category_name`) VALUES (NULL, '" . $_POST["Category_name"] . "');";
-    $query_insert_category = mysqli_query($Connection, $sql_insert_category);
+
+if (isset($_POST["add_product"])) {
+    $sql_insert_product = "INSERT INTO product (`Product_id`, `Product_name`, Category_id) VALUES (NULL, '" . $_POST["Product_name"] . "', '" . $_POST["Category_id"] . "');";
+    $query_insert_product = mysqli_query($Connection, $sql_insert_product);
 }
 
-if (isset($_POST["del_category"])) {
-    $sql_del_category = "DELETE FROM product_category WHERE Category_id = '" . $_POST["del_category"] . "'";
-    $query_del_category = mysqli_query($Connection, $sql_del_category);
+if (isset($_POST["del_product"])) {
+    $sql_del_product = "DELETE FROM product WHERE Product_id = '" . $_POST["del_product"] . "'";
+    $query_del_product = mysqli_query($Connection, $sql_del_product);
 }
 
 ?>
@@ -77,6 +78,7 @@ if (isset($_POST["del_category"])) {
                         <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
                                 <a class="nav-link" href="admin_dashboard.php">Dashboard</a>
+                                <a class="nav-link" href="admin_product.php">Product</a>
                                 <a class="nav-link" href="admin_category.php">Category</a>
                                 <a class="nav-link" href="admin_In_bound.php">In-bound</a>
                                 <a class="nav-link" href="admin_inventory.php">Inventory</a>
@@ -95,19 +97,31 @@ if (isset($_POST["del_category"])) {
         <div id="layoutSidenav_content">
             <main>
                 <div class="container-fluid px-4">
-                    <h1 class="mt-4">Admin Category</h1>         
+                    <h1 class="mt-4">Admin Product</h1>         
                     <br>           
                     <form method="post">
                         <div class="card">
-                            <h5 class="card-header">Add Category</h5>
+                            <h5 class="card-header">Add Product</h5>
                             <div class="card-body">                                
                                 <div class="input-group mb-3">
-                                    <span class="input-group-text" id="inputGroup-sizing-default">Category name</span>
-                                    <input type="text" class="form-control" name="Category_name" placeholder="Enter Category" required />
+                                    <span class="input-group-text" id="inputGroup-sizing-default">Product name</span>
+                                    <input type="text" class="form-control" name="Product_name" placeholder="Enter Product" required />
                                 </div>
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="inputGroup-sizing-default">Category name</span>
+                                    <select name="Category_id" type="text" required class="form-control">
+                                        <?php
+                                        $sql_category = "SELECT * FROM product_category";
+                                        $query_category = mysqli_query($Connection, $sql_category);
+                                        while ($result_category = mysqli_fetch_array($query_category)) {
+                                        ?>
+                                            <option value="<?= $result_category['Category_id'] ?>"><?= $result_category['Category_name'] ?></option>
+                                        <?php } ?>
+                                    </select>
+                                </div>                               
 
                                 <label class="mb-3">
-                                <button type="submit" name="add_category" class="btn btn-primary">Add</button>
+                                <button type="submit" name="add_product" class="btn btn-primary">Add</button>
                                 </label>
                             </div>
                         </div>
@@ -132,17 +146,17 @@ if (isset($_POST["del_category"])) {
                                 </thead>
                                 <tbody>
                                     <?php
-                                    $sql_category = "SELECT * FROM Product_category";
-                                    $query_category = mysqli_query($Connection, $sql_category);
+                                    $sql_product = "SELECT * FROM Product";
+                                    $query_product = mysqli_query($Connection, $sql_product);
 
-                                    while ($row = mysqli_fetch_array($query_category)) :
+                                    while ($row = mysqli_fetch_array($query_product)) :
                                     ?>
                                         <tr>
-                                            <td><?php echo $row['Category_id']; ?></td>
-                                            <td><?php echo $row['Category_name']; ?></td>
+                                            <td><?php echo $row['Product_id']; ?></td>
+                                            <td><?php echo $row['Product_name']; ?></td>
                                             <td>
                                                 <!-- Delete Button -->
-                                                <button type="submit" name="del_category" value=<?php echo $row['Category_id']; ?> class="btn btn-danger btn-sm">Delete</button>
+                                                <button type="submit" name="del_product" value=<?php echo $row['Product_id']; ?> class="btn btn-danger btn-sm">Delete</button>
                                             </td>
                                         </tr>
                                     <?php endwhile ?>
