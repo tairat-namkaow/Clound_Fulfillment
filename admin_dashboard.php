@@ -1,13 +1,16 @@
 <?php
 require_once('connections/mysqli.php');
 
-$sql_admin = "SELECT * FROM `admin` WHERE Admin_user = '" . $_SESSION['Admin_user'] . "'";
-$query_admin = mysqli_query($Connection, $sql_admin);
-$result_admin = mysqli_fetch_array($query_admin);
 
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
+<?php
+$sql_admin = "SELECT * FROM `admin` WHERE Admin_user = '" . $_SESSION['Admin_user'] . "'";
+$query_admin = mysqli_query($Connection, $sql_admin);
+$result_admin = mysqli_fetch_array($query_admin);
+?>
 
 <!-- Tab บน -->
 
@@ -21,6 +24,45 @@ $result_admin = mysqli_fetch_array($query_admin);
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
     <link href="css/styles.css" rel="stylesheet" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #filterContainer {
+            position: fixed;
+            top: 0;
+            right: 0;
+            padding: 10px;
+            background-color: #f0f0f0;
+        }
+
+        #filterInput {
+            margin-left: 10px;
+        }
+
+        #chartContainer {
+            flex: 1;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        #chart1,
+        #chart2 {
+            width: 45%;
+            /* Adjust as needed */
+        }
+    </style>
+    <title>Chart Filtering Example</title>
+
 </head>
 
 <body class="sb-nav-fixed">
@@ -61,23 +103,23 @@ $result_admin = mysqli_fetch_array($query_admin);
                 <div class="sb-sidenav-menu">
                     <div class="nav">
                         <div class="sb-sidenav-menu-heading">MENU</div>
-                        
+
                         <div>
                             <nav class="sb-sidenav-menu-nested nav">
                                 <a class="nav-link" href="admin_dashboard.php">Dashboard</a>
                                 <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
-                            <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
-                            Product
-                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                        </a>
-                        <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
-                            <nav class="sb-sidenav-menu-nested nav">
-                            <a class="nav-link" href="admin_in_bound.php">Inbound</a>
-                                <a class="nav-link" href="admin_product.php">Product Category</a>
-                                <a class="nav-link" href="admin_category.php">Category Management</a>
-                            </nav>   
-                            </div>
-                                
+                                    <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                                    Product
+                                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                                </a>
+                                <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                                    <nav class="sb-sidenav-menu-nested nav">
+                                        <a class="nav-link" href="admin_in_bound.php">Inbound</a>
+                                        <a class="nav-link" href="admin_product.php">Product Category</a>
+                                        <a class="nav-link" href="admin_category.php">Category Management</a>
+                                    </nav>
+                                </div>
+
                                 <a class="nav-link" href="admin_inventory.php">Inventory</a>
                                 <a class="nav-link" href="admin_order.php">Order</a>
                                 <a class="nav-link" href="admin_export_data.php">Download</a>
@@ -195,9 +237,8 @@ $result_admin = mysqli_fetch_array($query_admin);
 
                     $sql_out = "SELECT
                     product_category.Category_name,
-                    month(order_main.Order_date) AS order_date,
-                    SUM(product_detail.Product_quantity) as total_quantity,
-                    COUNT(product_detail.Product_detail_id) as sku_count
+                    GROUP_CONCAT(DISTINCT MONTH(product_detail.Product_time_add)) AS added_months,
+                    SUM(distinct product_detail.Product_quantity) as total_quantity
                 FROM
                     detail
                     INNER JOIN order_main ON detail.Order_id = order_main.Order_id
@@ -205,33 +246,46 @@ $result_admin = mysqli_fetch_array($query_admin);
                     INNER JOIN product ON product_detail.Product_id = product.Product_id
                     INNER JOIN product_category ON product.Category_id = product_category.Category_id
                 GROUP BY
-                    product_category.Category_name";
+                    product_category.Category_name
+                    ORDER BY product_detail.Product_time_add";
 
                     $query_out = mysqli_query($Connection, $sql_out);
                     $out = array();
-                    while ($k = mysqli_fetch_assoc($query_out)) {
 
-                        $out[] = "['" . $k['Category_name'] . "', " . $k['total_quantity'] . "]";
+                    while ($k = mysqli_fetch_assoc($query_out)) {
+                        $months = explode(',', $k['added_months']);
+                        foreach ($months as $month) {
+                            $formattedMonth = date("M", mktime(0, 0, 0, $month, 1, 2000));
+                            $out[] = "['" . $formattedMonth . " - " . $k['Category_name'] . "', " . $k['total_quantity'] . "]";
+                        }
                     }
+
                     $out = implode(",", $out);
 
-                    $sql_year = "SELECT product_category.Category_name, 
-                    SUM(detail.Detail_quantity) AS Detail_quantity, 
-                    month(order_main.Order_date)
-                    FROM detail
+
+                    $sql_year = "SELECT
+                    product_category.Category_name,
+                    MONTH(detail.Detail_date) AS order_month,
+                    SUM(detail.Detail_quantity) as detail_quantity
+                FROM
+                    detail
                     INNER JOIN order_main ON detail.Order_id = order_main.Order_id
                     INNER JOIN product_detail ON detail.Product_detail_id = product_detail.Product_detail_id
                     INNER JOIN product ON product_detail.Product_id = product.Product_id
                     INNER JOIN product_category ON product.Category_id = product_category.Category_id
-                    WHERE order_main.Order_status = 'confirm' 
-                    and month(order_main.Order_date) = MONTH(CURDATE())
-                    GROUP BY product_category.Category_id";
+                GROUP BY
+                    product_category.Category_name, order_month
+                ORDER BY
+                    order_month";
 
                     $query_year = mysqli_query($Connection, $sql_year);
                     $year = array();
-                    while ($l = mysqli_fetch_assoc($query_year)) {
-
-                        $year[] = "['" . $l['Category_name'] . "', " . $l['Detail_quantity'] . "]";
+                    while ($k = mysqli_fetch_assoc($query_year)) {
+                        $months = explode(',', $k['order_month']);
+                        foreach ($months as $month) {
+                            $formattedMonth = date("M", mktime(0, 0, 0, $month, 1, 2000));
+                            $year[] = "['" . $formattedMonth . " - " . $k['Category_name'] . "', " . $k['detail_quantity'] . "]";
+                        }
                     }
                     $year = implode(",", $year);
 
@@ -292,18 +346,22 @@ $result_admin = mysqli_fetch_array($query_admin);
 
                             function OutChart() {
                                 var data3 = google.visualization.arrayToDataTable([
-                                    ['Task', 'จำนวนสินค้า'],
+                                    ['Month-Category', 'จำนวนสินค้า'],
                                     <?php echo $out; ?>
                                 ]);
 
                                 var options3 = {
-                                    title: 'จำนวนสินค้าแต่ละประเภทที่ถูกนำเข้าคลังสินค้า (รายเดือน)'
-
+                                    title: 'จำนวนสินค้าแต่ละประเภทที่ถูกนำเข้าคลังสินค้า (รายเดือน)',
+                                    hAxis: {
+                                        format: 'MMM', // Format month as a three-letter abbreviation (e.g., Jan, Feb)
+                                    }
                                 };
 
                                 var chart3 = new google.visualization.ColumnChart(document.getElementById('OutChart'));
                                 chart3.draw(data3, options3);
                             }
+
+
 
                             function OutChartyear() {
                                 var data4 = google.visualization.arrayToDataTable([
@@ -320,17 +378,42 @@ $result_admin = mysqli_fetch_array($query_admin);
                                 chart4.draw(data4, options4);
                             }
                         </script>
+                        <style>
+                            .chart-container {
+                                width: 65%;
+                                height: 280px;
+                                border: 1px solid #ccc;
+                                border-radius: 5px;
+                                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                            }
+
+                            .pie-chart-container {
+                                width: 45%;
+                                height: 280px;
+                                border: 1px solid #ccc;
+                                border-radius: 5px;
+                                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                            }
+
+                            .double-chart-container {
+                                width: 50%;
+                                height: 280px;
+                                border: 1px solid #ccc;
+                                border-radius: 5px;
+                                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                            }
+                        </style>
                     </head>
 
                     <body>
-                        <div style="display: flex; justify-content: space-between;">
-                            <div id="ColumnChart" style="width: 65%; height: 280px;"></div>
-                            <div id="PieChart" style="width: 35%; height: 280px;"></div>
-
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+                            <div id="ColumnChart" class="chart-container"></div>
+                            <div id="PieChart" class="pie-chart-container"></div>
                         </div>
+
                         <div style="display: flex; justify-content: space-between;">
-                            <div id="OutChart" style="width: 50%; height: 280px;"></div>
-                            <div id="OutChartyear" style="width: 50%; height: 280px;"></div>
+                            <div id="OutChart" class="double-chart-container"></div>
+                            <div id="OutChartyear" class="double-chart-container"></div>
                         </div>
                     </body>
 
@@ -354,11 +437,14 @@ $result_admin = mysqli_fetch_array($query_admin);
                             </thead>
                             <tbody>
                                 <?php
-                                $sql_detail = "SELECT sum(Product_quantity) as Product_quantity,Product_name,Category_name,Shop_name 
+                                $sql_detail = "SELECT sum(product_detail.Product_quantity) - sum(detail.Detail_quantity) as Product_quantity,Product_name,Category_name,Shop_name 
                                 FROM Product_detail
                                 inner join product on product_detail.Product_id = product.Product_id
                                 inner join product_category on product.Category_id = product_category.Category_id
                                 INNER JOIN shop on product_detail.shop_id = shop.Shop_id
+                                inner join detail on detail.Product_detail_id = product_detail.Product_detail_id
+                                INNER join order_main on detail.Order_id = order_main.Order_id
+                                where order_main.Order_status = 'confirm'
                                 group by Product_name";
 
                                 $query_detail = mysqli_query($Connection, $sql_detail);
@@ -390,6 +476,3 @@ $result_admin = mysqli_fetch_array($query_admin);
     <script src="assets/demo/chart-bar-demo.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
     <script src="js/datatables-simple-demo.js"></script>
-</body>
-
-</html>
