@@ -8,10 +8,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $endDate = mysqli_real_escape_string($Connection, $_POST['end_date']);
 
     // Set the SQL query using prepared statements
-    $sql_exp = "SELECT DISTINCT  
+    $sql_exp = "SELECT DISTINCT order_main.Order_id, order_main.Order_date,
                         product.Product_id, product.Product_name, 
-                        shop.Shop_name, warehouse.Warehouse_zone, 
-                        product_category.Category_name, product_detail.Product_quantity, product_detail.Product_time_add
+                        shop.Shop_name, warehouse.Warehouse_zone, product_category.Category_name, detail.Detail_quantity
             FROM detail
                 INNER JOIN order_main ON detail.Order_id = order_main.Order_id
                 INNER JOIN product_detail ON detail.Product_detail_id = product_detail.Product_detail_id
@@ -41,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $file = fopen('php://output', 'w');
 
         // Write headers to the CSV file
-        $header = array('Product_id', 'Product_name', 'Shop_name', 'Warehouse_zone', 'Product_category', 'In-Quantity', 'Added Date');
+        $header = array('Order_id', 'Order_date', 'Product_id', 'Product_name', 'Shop_name', 'Warehouse_zone', 'Product_category', 'Quantity');
         fputcsv($file, $header);
 
         // Fetch and write data to the CSV file
@@ -68,15 +67,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <!DOCTYPE html>
 <html lang="en">
 
-<?php
-// Assuming $_SESSION['Admin_user'] is safe from SQL injection
-$sql_admin = "SELECT * FROM `admin` WHERE Admin_user = '" . $_SESSION['Admin_user'] . "'";
-$query_admin = mysqli_query($Connection, $sql_admin);
-$result_admin = mysqli_fetch_array($query_admin);
-?>
-
-<!-- Tab บน -->
-
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -92,7 +82,7 @@ $result_admin = mysqli_fetch_array($query_admin);
 <body class="sb-nav-fixed">
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
         <!-- Navbar Brand-->
-        <a class="navbar-brand ps-3" href="admin_dashboard.php">Admin Dashboard</a>
+        <a class="navbar-brand ps-3" href="index.php">Cloud Fulfillment</a>
         <!-- Sidebar Toggle-->
         <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
         <!-- Navbar Search-->
@@ -108,11 +98,11 @@ $result_admin = mysqli_fetch_array($query_admin);
                 <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
 
-                    <li><a class="dropdown-item" href="#!"><?php echo $result_admin[3]; ?></a></li>
+                    <li><a class="dropdown-item" href="#!"><?php echo $result_shop[3]; ?></a></li>
                     <li>
                         <hr class="dropdown-divider" />
                     </li>
-                    <li><a class="dropdown-item" href="admin_information.php">แก้ไขข้อมูล</a></li>
+                    <li><a class="dropdown-item" href="shop_information.php">แก้ไขข้อมูล</a></li>
                     <li>
                         <hr class="dropdown-divider" />
                     </li>
@@ -127,37 +117,27 @@ $result_admin = mysqli_fetch_array($query_admin);
                 <div class="sb-sidenav-menu">
                     <div class="nav">
                         <div class="sb-sidenav-menu-heading">MENU</div>
-                        
-                        <div>
-                            <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="admin_dashboard.php">Dashboard</a>
-                                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
+                        <a class="nav-link" href="index.php">Dashboard</a>
+                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
                             <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
-                            Product
+                            Order
                             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
                         <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
-                            <a class="nav-link" href="admin_in_bound.php">Inbound</a>
-                                <a class="nav-link" href="admin_product.php">Product Category</a>
-                                <a class="nav-link" href="admin_category.php">Category Management</a>
-                            </nav>   
-                            </div>
-                                
-                                <a class="nav-link" href="admin_inventory.php">Inventory</a>
-                                <a class="nav-link" href="admin_order.php">Order</a>
-                                <a class="nav-link" href="admin_export_data.php">Download</a>
+                                <a class="nav-link" href="shop_create_order.php">Create Order</a>
+                                <a class="nav-link" href="shop_order_history.php">Order History</a>
                             </nav>
                         </div>
+
                     </div>
                 </div>
                 <div class="sb-sidenav-footer">
                     <div class="small">Logged in as:</div>
-                    <?php echo $result_admin[3]; ?>
+                    <?php echo $result_shop[3]; ?>
                 </div>
             </nav>
         </div>
-
 
         <!-- หน้าต่าง Export Data Summary -->
         <div id="layoutSidenav_content">
