@@ -429,23 +429,28 @@ $result_admin = mysqli_fetch_array($query_admin);
                             </colgroup>
                             <thead class="table-light">
                                 <tr>
-                                    <th>Product</th>
-                                    <th>Category</th>
-                                    <th>Quantity</th>
-                                    <th>Shop</th>
+                                    <th>Product_name</th>
+                                    <th>Category_name</th>
+                                    <th>Product_quantity</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php
-                                $sql_detail = "SELECT sum(product_detail.Product_quantity) - sum(detail.Detail_quantity) as Product_quantity,Product_name,Category_name,Shop_name 
-                                FROM Product_detail
-                                inner join product on product_detail.Product_id = product.Product_id
-                                inner join product_category on product.Category_id = product_category.Category_id
-                                INNER JOIN shop on product_detail.shop_id = shop.Shop_id
-                                inner join detail on detail.Product_detail_id = product_detail.Product_detail_id
-                                INNER join order_main on detail.Order_id = order_main.Order_id
-                                where order_main.Order_status = 'confirm'
-                                group by Product_name";
+                                $sql_detail = "SELECT 
+                                    COALESCE(SUM(DISTINCT product_detail.Product_quantity), 0) - COALESCE(SUM(Detail_quantity), 0) as Product_quantity,
+                                    Product_name,
+                                    Category_name,
+                                    MAX(Order_status) AS Order_status                                    
+                                FROM 
+                                    Product_detail
+                                    INNER JOIN product ON product_detail.Product_id = product.Product_id
+                                    INNER JOIN product_category ON product.Category_id = product_category.Category_id                                    
+                                    LEFT JOIN detail ON detail.Product_detail_id = product_detail.Product_detail_id
+                                    LEFT JOIN order_main ON detail.Order_id = order_main.Order_id
+                                WHERE 
+                                    (order_main.Order_status = 'confirm' AND Product_name IS NOT NULL) OR order_main.Order_status IS NULL OR order_main.Order_status = 'pending'
+                                GROUP BY 
+                                    Product_name, Category_name;";
 
                                 $query_detail = mysqli_query($Connection, $sql_detail);
 
@@ -454,13 +459,12 @@ $result_admin = mysqli_fetch_array($query_admin);
                                     <tr>
                                         <td><?php echo $row['Product_name']; ?></td>
                                         <td><?php echo $row['Category_name']; ?></td>
-                                        <td><?php echo $row['Product_quantity']; ?></td>
-                                        <td><?php echo $row['Shop_name']; ?></td>
-
+                                        <td><?php echo $row['Product_quantity'] ?></td>
                                     </tr>
                                 <?php endwhile ?>
                             </tbody>
-                            <br>
+                        </table>
+                        <br>
                         </table>
 
                     </div>
