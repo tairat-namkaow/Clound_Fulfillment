@@ -108,7 +108,7 @@ $result_shop = mysqli_fetch_array($query_shop);
                                 <tbody>
                                     <?php
                                     $sql_detail = "SELECT 
-                                    COALESCE(SUM(product_detail.Product_quantity), 0) - COALESCE(SUM(detail.Detail_quantity), 0) as Product_quantity,
+                                    COALESCE(SUM(DISTINCT product_detail.Product_quantity), 0) - COALESCE(SUM(detail.Detail_quantity), 0) as Product_quantity,
                                     product.Product_name,
                                     Shop_name,
                                     Category_name,
