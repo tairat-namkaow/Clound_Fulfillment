@@ -37,6 +37,25 @@ if (isset($_POST["submit"])) {
 <!DOCTYPE html>
 <html lang="en">
 
+<style>
+      .custom-header {
+        background-color: #000;
+        color: #fff;
+        border: none;
+      }
+
+      body {
+        background-color: #f8f9fa;
+      }
+
+      .center-container {
+        display: flex;
+        justify-content: center;
+        min-height: 100vh;
+      }
+    </style>
+
+
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -48,7 +67,7 @@ if (isset($_POST["submit"])) {
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
 </head>
 
-<body class="bg-primary">
+<body class="bg-info">
     <div id="layoutAuthentication">
         <div id="layoutAuthentication_content">
             <main>
@@ -56,9 +75,9 @@ if (isset($_POST["submit"])) {
                     <div class="row justify-content-center">
                         <div class="col-lg-7">
                             <div class="card shadow-lg border-0 rounded-lg mt-5">
-                                <div class="card-header">
-                                    <h3 class="text-center font-weight-light my-4">Create Account</h3>
-                                </div>
+                                
+                                    <h3 align="center"class="card-header custom-header">Create Account</h3>
+                        
                                 <div class="card-body">
 
                                     <form method="post">
@@ -74,14 +93,12 @@ if (isset($_POST["submit"])) {
                                             <label class="form-label">รหัสผ่าน</label>
                                             <input type="password" class="form-control" name="Shop_password" placeholder="Enter Password" required />
                                         </div>
-                                        <div class="mb-3">
+                                        <div class="d-grid gap-2">
                                             <button type="submit" class="btn btn-success" name="submit">สมัครสมาชิก</button>
                                     </form>
 
                                 </div>
-                                <div class="card-footer text-center py-3">
-                                    <div class="small"><a href="login.php">Have an account? Go to login</a></div>
-                                </div>
+                                <div class="text-center mt-3" class="small"><a href="login.php">Have an account? Go to login</a></div>
                             </div>
                         </div>
                     </div>

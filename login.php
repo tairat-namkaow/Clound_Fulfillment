@@ -52,22 +52,39 @@ if (isset($_POST["submit"])) {
   <link rel="stylesheet" href="assets/icons/bootstrap-icons.css">
 </head>
 
-<body class="default">
-  <?php include 'includes/navbar.php'; ?>
+<body class="bg-info">
   <div class="container-fluid">
     <div class="col-md-12 mt-4">
       <div class="row justify-content-md-center">
         <div class="col-md-auto"><?php echo $check_submit; ?></div>
       </div>
     </div>
-    <div class="row justify-content-md-center">
+    <style>
+      .custom-header {
+        background-color: #000;
+        color: #fff;
+        border: none;
+      }
+
+      body {
+        background-color: #f8f9fa;
+      }
+
+      .center-container {
+        display: flex;
+        justify-content: center;
+        min-height: 100vh;
+      }
+    </style>
+
+    <div class="center-container">
       <div class="col-md-5 mb-4">
         <div class="card border-dark mt-2">
-          <h5 class="card-header">Login System</h5>
+          <div align="center">
+            <h5 class="card-header custom-header">Login System</h5>
+          </div>
           <div class="card-body">
-            <div class="row justify-content-md-center mb-2">
-
-            </div>
+            <div class="row justify-content-md-center mb-2"></div>
             <form method="post">
               <div class="mb-3">
                 <label class="form-label">ชื่อผู้ใช้</label>
@@ -77,13 +94,18 @@ if (isset($_POST["submit"])) {
                 <label class="form-label">รหัสผ่าน</label>
                 <input type="password" class="form-control" name="Shop_password" placeholder="Enter Password" required />
               </div>
-              <button type="submit" class="btn btn-success" name="submit">เข้าสู่ระบบ</button>
-              <a class="btn btn-warning" href="register.php" role="button">สมัครสมาชิก</a>
+              <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-primary" name="submit">เข้าสู่ระบบ</button>
+              </div>
             </form>
+            <div class="text-center mt-3">
+              <a class="btn btn-warning" href="register.php" role="button">สมัครสมาชิก</a>
+            </div>
           </div>
         </div>
       </div>
     </div>
+
   </div>
   <script src="assets/js/bootstrap.bundle.min.js"></script>
   <?php mysqli_close($Connection); ?>
