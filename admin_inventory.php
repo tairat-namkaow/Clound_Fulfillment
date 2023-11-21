@@ -121,10 +121,8 @@ if (isset($_POST["submit_del"])) {
                                 <thead class="table-light">
                                     <tr>                                        
                                         <th>Product_name</th>
-                                        <th>Product_quantity</th>                                          
-                                        <th>Order_status</th>                               
-                                        <th>Shop_name</th>
-                                       
+                                        <th>Category_name</th>
+                                        <th>Product_quantity</th>                                      
 
                                     </tr>
                                 </thead>
@@ -134,17 +132,15 @@ if (isset($_POST["submit_del"])) {
                                     COALESCE(SUM(DISTINCT product_detail.Product_quantity), 0) - COALESCE(SUM(Detail_quantity), 0) as Product_quantity,
                                     Product_name,
                                     Category_name,
-                                    MAX(Order_status) AS Order_status,
-                                    MAX(Shop_name) AS Shop_name 
+                                    MAX(Order_status) AS Order_status                                    
                                 FROM 
                                     Product_detail
                                     INNER JOIN product ON product_detail.Product_id = product.Product_id
-                                    INNER JOIN product_category ON product.Category_id = product_category.Category_id
-                                    INNER JOIN shop ON product_detail.shop_id = shop.Shop_id
+                                    INNER JOIN product_category ON product.Category_id = product_category.Category_id                                    
                                     LEFT JOIN detail ON detail.Product_detail_id = product_detail.Product_detail_id
                                     LEFT JOIN order_main ON detail.Order_id = order_main.Order_id
                                 WHERE 
-                                    (order_main.Order_status = 'confirm' AND Product_name IS NOT NULL) OR order_main.Order_status IS NULL
+                                    (order_main.Order_status = 'confirm' AND Product_name IS NOT NULL) OR order_main.Order_status IS NULL OR order_main.Order_status = 'pending'
                                 GROUP BY 
                                     Product_name, Category_name;
                                 
@@ -156,11 +152,8 @@ if (isset($_POST["submit_del"])) {
                                     ?>
                                         <tr>                                            
                                             <td><?php echo $row['Product_name']; ?></td>
-                                            <td><?php echo $row['Product_quantity']?></td>                                              
-                                            <td><?php echo $row['Order_status']; ?></td> 
-                                            <td><?php echo $row['Shop_name']; ?></td>
-
-                                            
+                                            <td><?php echo $row['Category_name']; ?></td>
+                                            <td><?php echo $row['Product_quantity']?></td>
                                         </tr>
                                     <?php endwhile ?>
                                 </tbody>
