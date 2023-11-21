@@ -3,9 +3,10 @@ require_once('connections/mysqli.php');
 
 $sql_OrderDetail = "SELECT * FROM `detail`
 inner join order_main on detail.Order_id = order_main.Order_id
-inner join product on detail.Product_id = product.Product_id
-inner join shop on product.Shop_id = shop.Shop_id
+inner join product_detail on product_detail.product_detail_id = detail.product_detail_id
+inner join shop on product_detail.Shop_id = shop.Shop_id
 where order_main.Order_id = " . $_GET['orderId'] . "";
+
 
 $query_OrderDetail = mysqli_query($Connection, $sql_OrderDetail);
 $result_OrderDetail = mysqli_fetch_array($query_OrderDetail);
@@ -79,13 +80,8 @@ if (isset($_POST["Search"]) && $StartDate != '' && $EndDate != '') {
 
 </html>
 
-
-
 <!DOCTYPE html>
 <html lang="en">
-
-
-
 
 <!-- หน้าต่าง Order Details -->
 <div id="layoutSidenav_content">
@@ -105,6 +101,7 @@ if (isset($_POST["Search"]) && $StartDate != '' && $EndDate != '') {
 
                 padding: 0.5rem 1rem;
             }
+
         </style>
     </head>
 
@@ -116,13 +113,8 @@ if (isset($_POST["Search"]) && $StartDate != '' && $EndDate != '') {
                         <h1 class="mt-4">Order Details</h1>
                     </div>
                     <div class="card-body">
-                        <ol class="breadcrumb mb-4">
-
-                        </ol>
-
+                        <ol class="breadcrumb mb-4"></ol>
                     </div>
-
-
                     <!-- หน้าต่าง ข้างใน Order Details -->
 
                     <div class="row">
@@ -186,41 +178,42 @@ if (isset($_POST["Search"]) && $StartDate != '' && $EndDate != '') {
                                             }
                                         </style>
                                     </head>
-
                                     <body>
-
-
-
-
-                                        <table class="table mx-auto" style="margin-top: 50px; width: 50px;">                                           
+                                        <table>
+                                            <table class="table mx-auto" style="margin-top: 20px; width: auto;">
                                                 <tr>
+                                                    <td class="border-right">Product-ID</td>
                                                     <td class="border-right">Product-Name</td>
                                                     <td>Quantity</td>
                                                 </tr>
                                                 <?php
-
-                                                $sql_ProductID = "SELECT product_category.Category_name, SUM(detail.Detail_quantity) AS Detail_quantity
+                                                $sql_ProductID = "SELECT product.Product_id, product.Product_name, SUM(detail.Detail_quantity) AS Detail_quantity
                                                 FROM detail
-                                                INNER JOIN order_main ON detail.Order_id = order_main.Order_id
-                                                INNER JOIN product ON detail.Product_id = product.Product_id
-                                                INNER JOIN shop ON product.Shop_id = shop.Shop_id
-                                                INNER JOIN product_category ON product.category_id = product_category.category_id
-                                                WHERE order_main.Order_id = 11
-                                                GROUP BY product_category.Category_name
-                                                ORDER BY product_category.category_id ASC";
+                                                INNER JOIN order_main ON order_main.Order_id = detail.Order_id
+                                                INNER JOIN product_detail ON product_detail.Product_detail_id = detail.Product_detail_id
+                                                INNER JOIN shop ON product_detail.Shop_id = shop.Shop_id
+                                                INNER JOIN product ON product_detail.Product_id = product.Product_id 
+                                                WHERE order_main.Order_id = '" . mysqli_real_escape_string($Connection, $_GET['orderId']) . "' 
+                                                GROUP BY product.Product_id, product.Product_name
+                                                ORDER BY product.Product_id ASC";
                                                 $query_ProductID = mysqli_query($Connection, $sql_ProductID);
-
+                              
+                            
                                                 // ดึงข้อมูลทั้งหมดมาเก็บใน array
                                                 $products = [];
                                                 while ($result_ProductID = mysqli_fetch_assoc($query_ProductID)) {
                                                     $products[] = $result_ProductID;
                                                 }
                                                 ?>
-
                                                 <tr>
                                                     <td class="border-right">
                                                         <?php foreach ($products as $product) {
-                                                            echo htmlspecialchars($product['Category_name']) . "<br>";
+                                                            echo htmlspecialchars($product['Product_id']) . "<br>";
+                                                        } ?>
+                                                    </td>
+                                                    <td class="border-right">
+                                                        <?php foreach ($products as $product) {
+                                                            echo htmlspecialchars($product['Product_name']) . "<br>";
                                                         } ?>
                                                     </td>
                                                     <td>
@@ -229,18 +222,12 @@ if (isset($_POST["Search"]) && $StartDate != '' && $EndDate != '') {
                                                         } ?>
                                                     </td>
                                                 </tr>
-
                                             </table>
-
                                     </body>
-
                                     </html>
-
                                     </table>
                                 </div>
-
                             </body>
-
                             </html>
                         </div>
                         <!DOCTYPE html>
@@ -298,10 +285,6 @@ if (isset($_POST["Search"]) && $StartDate != '' && $EndDate != '') {
 
                                 .btn-link {
                                     text-decoration: none;
-                                }
-
-                                button {
-                                    /* สไตล์ปุ่มตามความต้องการ */
                                 }
                             </style>
                         </head>

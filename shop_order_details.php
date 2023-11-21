@@ -102,9 +102,6 @@ if (isset($_POST["Search"]) && $StartDate != '' && $EndDate != '') {
                 padding: 0.5rem 1rem;
             }
 
-            .card-body {}
-
-            .card-header {}
         </style>
     </head>
 
