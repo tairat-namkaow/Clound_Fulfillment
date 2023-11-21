@@ -9,13 +9,15 @@ $result_shop = mysqli_fetch_array($query_shop);
 <!DOCTYPE html>
 <html lang="en">
 
+<!-- Tab บน -->
+
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <title>Clound_Fulfillment</title>
+    <title>Cloud_Fulfillment</title>
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
     <link href="css/styles.css" rel="stylesheet" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
@@ -24,7 +26,7 @@ $result_shop = mysqli_fetch_array($query_shop);
 <body class="sb-nav-fixed">
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
         <!-- Navbar Brand-->
-        <a class="navbar-brand ps-3" href="index.php">Clound Fulfillment</a>
+        <a class="navbar-brand ps-3" href="index.php">Clound_Fulfillment</a>
         <!-- Sidebar Toggle-->
         <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
         <!-- Navbar Search-->
@@ -41,9 +43,13 @@ $result_shop = mysqli_fetch_array($query_shop);
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
 
                     <li><a class="dropdown-item" href="#!"><?php echo $result_shop[3]; ?></a></li>
-                    <li><hr class="dropdown-divider" /></li>
+                    <li>
+                        <hr class="dropdown-divider" />
+                    </li>
                     <li><a class="dropdown-item" href="shop_information.php">แก้ไขข้อมูล</a></li>
-                    <li><hr class="dropdown-divider" /></li>
+                    <li>
+                        <hr class="dropdown-divider" />
+                    </li>
                     <li><button class="dropdown-item" type="button" onclick="window.location.href='logout.php'">ออกจากระบบ</button></li>
                 </ul>
             </li>
@@ -60,7 +66,7 @@ $result_shop = mysqli_fetch_array($query_shop);
                             Order
                             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
-                        
+
                         <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">                            
                                 <a class="nav-link" href="shop_create_order.php">Create Order</a>
@@ -107,7 +113,7 @@ $result_shop = mysqli_fetch_array($query_shop);
                                 INNER JOIN shop ON product_detail.Shop_id = shop.Shop_id
                                 INNER JOIN order_main ON detail.Order_id = order_main.Order_id
                                 WHERE order_main.Order_status = 'pending' AND shop.Shop_email = '" . $_SESSION['Shop_email'] . "'";
-                                
+
                                 $query_pending = mysqli_query($Connection, $sql_pending);
                                 $result_pending = mysqli_fetch_array($query_pending);
 
@@ -141,65 +147,37 @@ $result_shop = mysqli_fetch_array($query_shop);
                                 ?>
                                 <div class="card-body">Inventory</div>
                                 <div class="card-footer d-flex align-items-center">
-                                    <a>สินค้าคงคลังในระบบ จำนวน : <?php echo $result_category['category'] ?> Category</a>
+                                    <a>สินค้าคงคลังในระบบ จำนวน : <?php echo $result_category['category'] ?> ประเภท</a>
                                 </div>
                             </div>
                         </div>
                         <div class="col-xl-3 col-md-6">
                             <div class="card bg-danger text-white mb-4">
                                 <?php
-                                $sql_shop = "SELECT count(*) as shop FROM shop";
+                                $sql_shop = "SELECT count(*) as Out_bound FROM detail 
+                                INNER JOIN order_main on detail.Order_id = order_main.Order_id
+                                inner join product_detail on detail.Product_detail_id = product_detail.Product_detail_id
+                                INNER join shop on product_detail.Shop_id = shop.Shop_id
+                                WHERE order_main.Order_status = 'confirm' and detail.Detail_date = curdate() and shop.Shop_email = 
+                                 '" . $_SESSION['Shop_email'] . "'";
 
                                 $query_shop = mysqli_query($Connection, $sql_shop);
                                 $result_shop = mysqli_fetch_array($query_shop);
                                 ?>
-                                <div class="card-body">Shop</div>
+                                <div class="card-body">Outbound</div>
                                 <div class="card-footer d-flex align-items-center">
-                                    <a>จำนวนร้านค้าในระบบ : <?php echo $result_shop['shop'] ?> ร้าน</a>
+                                    <a>สินค้าของร้านออกคลังวันนี้ จำนวน : <?php echo $result_shop['Out_bound'] ?> รายการ</a>
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <?php
-                    $sql_category = "SELECT
-                   DATE(order_main.Order_date) AS order_date,
-                   COUNT(distinct  order_main.Order_id) AS total_order
-               FROM
-                   product_detail
-                   INNER JOIN shop ON product_detail.Shop_id = shop.Shop_id
-                   INNER JOIN product ON product_detail.Product_id = product.Product_id
-                   INNER JOIN detail ON detail.Product_detail_id = product_detail.Product_detail_id
-                   INNER JOIN order_main ON detail.Order_id = order_main.Order_id
-               GROUP BY
-                   order_date";
-
-                    $query_category = mysqli_query($Connection, $sql_category);
-                    $category = array();
-
-                    while ($row = mysqli_fetch_assoc($query_category)) {
-                        $category[] = "['" . $row['order_date'] . "', " . $row['total_order'] . "]";
-                    }
-
-                    $category = implode(",", $category);
-
-
-                    $sql_zone = "SELECT sum(product_detail.Product_quantity) as Product_quantity,warehouse.Warehouse_zone FROM Product_detail
-                                INNER JOIN warehouse ON product_detail.Warehouse_id = warehouse.Warehouse_id
-                                GROUP by warehouse.Warehouse_zone";
-
-                    $query_zone = mysqli_query($Connection, $sql_zone);
-                    $zone = array();
-                    while ($j = mysqli_fetch_assoc($query_zone)) {
-                        $zone[] = "['" . $j['Warehouse_zone'] . "'" . ", " . $j['Product_quantity'] . "]";
-                    }
-                    $zone = implode(",", $zone);
-
-                    $sql_out = "SELECT
+                    $sql_combined = "SELECT
                     product_category.Category_name,
-                    month(order_main.Order_date) AS order_date,
-                    SUM(product_detail.Product_quantity) as total_quantity,
-                    COUNT(product_detail.Product_detail_id) as sku_count
+                    DATE(order_main.Order_date) AS order_month,
+                    SUM(product_detail.Product_quantity) AS in_quantity,
+                    SUM(detail.Detail_quantity) AS out_quantity
                 FROM
                     detail
                     INNER JOIN order_main ON detail.Order_id = order_main.Order_id
@@ -207,195 +185,149 @@ $result_shop = mysqli_fetch_array($query_shop);
                     INNER JOIN product ON product_detail.Product_id = product.Product_id
                     INNER JOIN product_category ON product.Category_id = product_category.Category_id
                 GROUP BY
-                    product_category.Category_name";
+                    product_category.Category_name, order_month
+                ORDER BY
+                    order_month";
 
-                    $query_out = mysqli_query($Connection, $sql_out);
-                    $out = array();
-                    while ($k = mysqli_fetch_assoc($query_out)) {
+                    // Execute the SQL query
+                    $query_combined = mysqli_query($Connection, $sql_combined);
 
-                        $out[] = "['" . $k['Category_name'] . "', " . $k['total_quantity'] . "]";
+                    // Fetch the data and format it for Chart.js
+                    $chartData = array();
+                    while ($row = mysqli_fetch_assoc($query_combined)) {
+                        $chartData[] = array(
+                            'date' => $row['order_month'], // Assuming order_month is the label for the x-axis
+                            'in_quantity' => $row['in_quantity'],
+                            'out_quantity' => $row['out_quantity']
+                        );
                     }
-                    $out = implode(",", $out);
 
-                    $sql_year = "SELECT product_category.Category_name, 
-                    SUM(detail.Detail_quantity) AS Detail_quantity, 
-                    month(order_main.Order_date)
-                    FROM detail
-                    INNER JOIN order_main ON detail.Order_id = order_main.Order_id
-                    INNER JOIN product_detail ON detail.Product_detail_id = product_detail.Product_detail_id
-                    INNER JOIN product ON product_detail.Product_id = product.Product_id
-                    INNER JOIN product_category ON product.Category_id = product_category.Category_id
-                    WHERE order_main.Order_status = 'confirm' 
-                    and month(order_main.Order_date) = MONTH(CURDATE())
-                    GROUP BY product_category.Category_id";
-
-                    $query_year = mysqli_query($Connection, $sql_year);
-                    $year = array();
-                    while ($l = mysqli_fetch_assoc($query_year)) {
-
-                        $year[] = "['" . $l['Category_name'] . "', " . $l['Detail_quantity'] . "]";
-                    }
-                    $year = implode(",", $year);
-
+                    // Convert PHP array to JSON for JavaScript
+                    $json_data = json_encode($chartData);
                     ?>
 
-                    <html>
 
-                    <head>
-                        <!-- เรียก js มาใช้งาน -->
-                        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-                        <script type="text/javascript">
-                            google.charts.load('current', {
-                                'packages': ['corechart']
-                            });
-                            google.charts.setOnLoadCallback(drawCharts);
 
-                            function drawCharts() {
-                                ColumnChart();
-                                PieChart();
-                                OutChart();
-                                OutChartyear();
-                            }
 
-                            function ColumnChart() {
-                                var data1 = google.visualization.arrayToDataTable([
-                                    ['Task', 'จำนวนคำสั่ง'],
-                                    <?php echo $category; ?>
-                                ]);
+                    <!-- Include a JavaScript library for charts, such as Chart.js -->
+                    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-                                var options1 = {
-                                    title: 'จำนวนคำสั่ง (รายวัน)',
-                                    colors: ['green'],
-                                    vAxis: {
-                                        viewWindow: {
-                                            min: 0
-                                        },
-                                        ticks: [0, 1, 2, 3, 4, 5]
+                    <!-- Create a canvas element to render the chart -->
+                    <canvas id="myChart" width="400" height="100"></canvas>
+
+                    <script>
+                        // Parse the JSON data
+                        var chartData = <?php echo $json_data; ?>;
+
+                        // Extract labels and data for the chart
+                        var labels = chartData.map(function(item) {
+                            return item.date;
+                        });
+
+                        var inQuantityData = chartData.map(function(item) {
+                            return item.in_quantity;
+                        });
+
+                        var outQuantityData = chartData.map(function(item) {
+                            return item.out_quantity;
+                        });
+
+                        // Create a chart using Chart.js
+                        var ctx = document.getElementById('myChart').getContext('2d');
+                        var myChart = new Chart(ctx, {
+                            type: 'bar',
+                            data: {
+                                labels: labels,
+                                datasets: [{
+                                    label: 'In Quantity',
+                                    data: inQuantityData,
+                                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                    borderColor: 'rgba(75, 192, 192, 1)',
+                                    borderWidth: 1
+                                }, {
+                                    label: 'Out Quantity',
+                                    data: outQuantityData,
+                                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                                    borderColor: 'rgba(255, 99, 132, 1)',
+                                    borderWidth: 1
+                                }]
+                            },
+                            options: {
+                                scales: {
+                                    y: {
+                                        beginAtZero: true
                                     }
-                                };
-
-                                var chart1 = new google.visualization.LineChart(document.getElementById('ColumnChart'));
-                                chart1.draw(data1, options1);
+                                }
                             }
+                        });
+                    </script>
+</body>
+
+</html>
 
 
 
 
 
-                            function PieChart() {
-                                var data2 = google.visualization.arrayToDataTable([
-                                    ['Task', 'จำนวนสินค้า'],
-                                    <?php echo $zone; ?>
-                                ]);
-
-                                var options2 = {
-                                    title: 'จำนวนสินค้าในแต่ละ Zone'
-                                };
-
-                                var chart2 = new google.visualization.PieChart(document.getElementById('PieChart'));
-                                chart2.draw(data2, options2);
-                            }
-
-                            function OutChart() {
-                                var data3 = google.visualization.arrayToDataTable([
-                                    ['Task', 'จำนวนสินค้า'],
-                                    <?php echo $out; ?>
-                                ]);
-
-                                var options3 = {
-                                    title: 'จำนวนสินค้าแต่ละประเภทที่ถูกนำเข้าคลังสินค้า (รายเดือน)'
-
-                                };
-
-                                var chart3 = new google.visualization.ColumnChart(document.getElementById('OutChart'));
-                                chart3.draw(data3, options3);
-                            }
-
-                            function OutChartyear() {
-                                var data4 = google.visualization.arrayToDataTable([
-                                    ['Task', 'จำนวนสินค้า'],
-                                    <?php echo $year; ?>
-                                ]);
-
-                                var options4 = {
-                                    title: 'จำนวนสินค้าแต่ละประเภทที่ถูกนำออกจากคลังสินค้า (รายเดือน)',
-                                    colors: ['orange']
-                                };
-
-                                var chart4 = new google.visualization.ColumnChart(document.getElementById('OutChartyear'));
-                                chart4.draw(data4, options4);
-                            }
-                        </script>
-                    </head>
-
-                    <body>
-                        <div style="display: flex; justify-content: space-between;">
-                            <div id="ColumnChart" style="width: 65%; height: 280px;"></div>
-                            <div id="PieChart" style="width: 35%; height: 280px;"></div>
-
-                        </div>
-                        <div style="display: flex; justify-content: space-between;">
-                            <div id="OutChart" style="width: 50%; height: 280px;"></div>
-                            <div id="OutChartyear" style="width: 50%; height: 280px;"></div>
-                        </div>
-                    </body>
-
-                    </html>
-
-
-                    <div class="card-body" style="height: 300px;">
-                        <table class="table" table id="datatablesSimple" style="table-layout: fixed;">
-                            <colgroup>
-                                <col style="width: 5%;">
-                                <col style="width: 25%;">
-                                <col style="width: 25%;">
-                            </colgroup>
-                            <thead class="table-light">
-                                <tr>
-                                    <th>Product_name</th>
-                                    <th>Category_name</th>
-                                    <th>Product_quantity</th>
-                                    <th>Shop_name</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php
-                                $sql_detail = "SELECT sum(Product_quantity) as Product_quantity,Product_name,Category_name,Shop_name 
-                                FROM Product_detail
-                                inner join product on product_detail.Product_id = product.Product_id
-                                inner join product_category on product.Category_id = product_category.Category_id
-                                INNER JOIN shop on product_detail.shop_id = shop.Shop_id
-                                group by Product_name";
-
-                                $query_detail = mysqli_query($Connection, $sql_detail);
-
-                                while ($row = mysqli_fetch_array($query_detail)) :
-                                ?>
+<div class="card-body" style="height: 300px;">
+<table class="table" table id="datatablesSimple" style="table-layout: fixed;">
+                                <colgroup>
+                                    <col style="width: 5%;">
+                                    <col style="width: 25%;">
+                                    <col style="width: 25%;">
+                                </colgroup>
+                                <thead class="table-light">
                                     <tr>
-                                        <td><?php echo $row['Product_name']; ?></td>
-                                        <td><?php echo $row['Category_name']; ?></td>
-                                        <td><?php echo $row['Product_quantity']; ?></td>
-                                        <td><?php echo $row['Shop_name']; ?></td>
+                                        <th>Product_name</th>
+                                        <th>Category_name</th>
+                                        <th>Product_quantity</th>
 
                                     </tr>
-                                <?php endwhile ?>
-                            </tbody>
-                            <br>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    $sql_detail = "SELECT 
+                                    COALESCE(SUM(DISTINCT product_detail.Product_quantity), 0) - COALESCE(SUM(Detail_quantity), 0) as Product_quantity,
+                                    Product_name,
+                                    Category_name,
+                                    MAX(Order_status) AS Order_status                                    
+                                FROM 
+                                    Product_detail
+                                    INNER JOIN product ON product_detail.Product_id = product.Product_id
+                                    INNER JOIN product_category ON product.Category_id = product_category.Category_id                                    
+                                    LEFT JOIN detail ON detail.Product_detail_id = product_detail.Product_detail_id
+                                    LEFT JOIN order_main ON detail.Order_id = order_main.Order_id
+                                WHERE 
+                                    (order_main.Order_status = 'confirm' AND Product_name IS NOT NULL) OR order_main.Order_status IS NULL OR order_main.Order_status = 'pending'
+                                GROUP BY 
+                                    Product_name, Category_name;";
 
-                    </div>
+                                    $query_detail = mysqli_query($Connection, $sql_detail);
 
-                </div>
-            </main>
-        </div>
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-    <script src="js/scripts.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
-    <script src="assets/demo/chart-area-demo.js"></script>
-    <script src="assets/demo/chart-bar-demo.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
-    <script src="js/datatables-simple-demo.js"></script>
+                                    while ($row = mysqli_fetch_array($query_detail)) :
+                                    ?>
+                                        <tr>
+                                            <td><?php echo $row['Product_name']; ?></td>
+                                            <td><?php echo $row['Category_name']; ?></td>
+                                            <td><?php echo $row['Product_quantity'] ?></td>
+                                        </tr>
+                                    <?php endwhile ?>
+                                </tbody>
+                            </table>
+
+</div>
+
+</div>
+</main>
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+<script src="js/scripts.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+<script src="assets/demo/chart-area-demo.js"></script>
+<script src="assets/demo/chart-bar-demo.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
+<script src="js/datatables-simple-demo.js"></script>
 </body>
 
 </html>

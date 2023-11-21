@@ -380,7 +380,7 @@ $result_admin = mysqli_fetch_array($query_admin);
                         </script>
                         <style>
                             .chart-container {
-                                width: 65%;
+                                width: 50%;
                                 height: 280px;
                                 border: 1px solid #ccc;
                                 border-radius: 5px;
@@ -388,7 +388,7 @@ $result_admin = mysqli_fetch_array($query_admin);
                             }
 
                             .pie-chart-container {
-                                width: 45%;
+                                width: 50%;
                                 height: 280px;
                                 border: 1px solid #ccc;
                                 border-radius: 5px;
