@@ -142,9 +142,7 @@ if (isset($_POST["submit_del"])) {
                                 WHERE 
                                     (order_main.Order_status = 'confirm' AND Product_name IS NOT NULL) OR order_main.Order_status IS NULL OR order_main.Order_status = 'pending'
                                 GROUP BY 
-                                    Product_name, Category_name;
-                                
-                                ";                                      
+                                    Product_name, Category_name;";                                      
                                                     
                                     $query_detail = mysqli_query($Connection, $sql_detail);
 
