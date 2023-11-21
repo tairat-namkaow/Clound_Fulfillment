@@ -2,6 +2,10 @@
 // Database connection parameters
 require_once('connections/mysqli.php');
 
+$sql_shop = "SELECT * FROM shop WHERE Shop_email = '" . $_SESSION['Shop_email'] . "'";
+$query_shop = mysqli_query($Connection, $sql_shop);
+$result_shop = mysqli_fetch_array($query_shop);
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Get start date and end date from the form (validate and sanitize input)
     $startDate = mysqli_real_escape_string($Connection, $_POST['start_date']);
@@ -117,7 +121,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="sb-sidenav-menu">
                     <div class="nav">
                         <div class="sb-sidenav-menu-heading">MENU</div>
-                        <a class="nav-link" href="index.php">Dashboard</a>
                         <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
                             <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
                             Order
@@ -129,12 +132,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <a class="nav-link" href="shop_order_history.php">Order History</a>
                             </nav>
                         </div>
+                        <a class="nav-link" href="shop_inventory.php">Shop inventory</a>
                         <a class="nav-link" href="shop_export_data.php">Download</a>
                     </div>
                 </div>
                 <div class="sb-sidenav-footer">
                     <div class="small">Logged in as:</div>
-                    <?php echo $result_shop[3]; ?>
+                    <?php echo $result_shop['Shop_name']; ?>
                 </div>
             </nav>
         </div>
@@ -162,42 +166,46 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <body>
                 <main>
                     <div class="container-fluid px-4">
+                        <br>
                         <div class="card">
-                            <div class="card-header">
-
+                            <div>
                                 <h1 class="mt-4">Export Data Summary</h1>
-
                             </div>
                             <div class="card-body">
                                 <ol class="breadcrumb mb-4">
-
                                 </ol>
-
                             </div>
 
                             <section class="section">
                                 <div class="row">
                                     <div class="col-lg-12">
-
-
-                                        <div class="card">
+                                        <div class="card" style="max-width: 400px; margin: auto; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
                                             <div class="card-body">
-                                                <h5 class="card-title"><b>Data Period</b></h5>
+                                                <h5 class="card-title text-center"><b>Data Period</b></h5>
                                             </div>
                                             <div class="card-body">
                                                 <form method="post">
-                                                    <label for="start_date">Start Date:</label>
-                                                    <input type="date" name="start_date" required>
+                                                    <div class="mb-3">
+                                                        <label for="start_date" class="form-label">Start Date:</label>
+                                                        <input type="date" name="start_date" class="form-control" required>
+                                                    </div>
 
-                                                    <label for="end_date">End Date:</label>
-                                                    <input type="date" name="end_date" required style="margin-bottom: 20px;"> <!-- Added margin-bottom -->
+                                                    <div class="mb-3">
+                                                        <label for="end_date" class="form-label">End Date:</label>
+                                                        <input type="date" name="end_date" class="form-control" required>
+                                                    </div>
 
-                                                    <button type="submit" style="background-color: #3498db; color: #fff; padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer; width: 100%; display: block;">Export Data</button>
+                                                    <button type="submit" class="btn btn-primary" style="border-radius: 5px; width: 100%;">Export Data</button>
                                                 </form>
                                             </div>
                                         </div>
+                                    </div>
+                                </div>
+                            </section>
+                            <br>
 
-
+                        </div>
+                    </div>
                 </main>
         </div>
     </div>

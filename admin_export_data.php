@@ -127,23 +127,23 @@ $result_admin = mysqli_fetch_array($query_admin);
                 <div class="sb-sidenav-menu">
                     <div class="nav">
                         <div class="sb-sidenav-menu-heading">MENU</div>
-                        
+
                         <div>
                             <nav class="sb-sidenav-menu-nested nav">
                                 <a class="nav-link" href="admin_dashboard.php">Dashboard</a>
                                 <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
-                            <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
-                            Product
-                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                        </a>
-                        <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
-                            <nav class="sb-sidenav-menu-nested nav">
-                            <a class="nav-link" href="admin_in_bound.php">Inbound</a>
-                                <a class="nav-link" href="admin_product.php">Product Category</a>
-                                <a class="nav-link" href="admin_category.php">Category Management</a>
-                            </nav>   
-                            </div>
-                                
+                                    <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                                    Product
+                                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                                </a>
+                                <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                                    <nav class="sb-sidenav-menu-nested nav">
+                                        <a class="nav-link" href="admin_in_bound.php">Inbound</a>
+                                        <a class="nav-link" href="admin_product.php">Product Category</a>
+                                        <a class="nav-link" href="admin_category.php">Category Management</a>
+                                    </nav>
+                                </div>
+
                                 <a class="nav-link" href="admin_inventory.php">Inventory</a>
                                 <a class="nav-link" href="admin_order.php">Order</a>
                                 <a class="nav-link" href="admin_export_data.php">Download</a>
@@ -180,44 +180,40 @@ $result_admin = mysqli_fetch_array($query_admin);
             </head>
 
             <body>
+
                 <main>
+                    <br>
                     <div class="container-fluid px-4">
                         <div class="card">
-                            <div class="card-header">
-
+                            <div>
                                 <h1 class="mt-4">Export Data Summary</h1>
-
                             </div>
-                            <div class="card-body">
-                                <ol class="breadcrumb mb-4">
-
-                                </ol>
-
-                            </div>
+                            <div class="card-body"></div>
 
                             <section class="section">
                                 <div class="row">
                                     <div class="col-lg-12">
-
-
                                         <div class="card">
                                             <div class="card-body">
-                                                <h5 class="card-title"><b>Data Period</b></h5>
+                                                <h5 align="center" class="card-title"><b>Data Period</b></h5>
                                             </div>
                                             <div class="card-body">
-                                                <form method="post">
-                                                    <label for="start_date">Start Date:</label>
-                                                    <input type="date" name="start_date" required>
+                                                <form method="post" style="max-width: 300px; margin: auto;">
+                                                    <div style="margin-bottom: 15px;">
+                                                        <label for="start_date" style="display: block; margin-bottom: 5px;">Start Date:</label>
+                                                        <input type="date" name="start_date" required style="width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px;">
+                                                    </div>
 
-                                                    <label for="end_date">End Date:</label>
-                                                    <input type="date" name="end_date" required style="margin-bottom: 20px;"> <!-- Added margin-bottom -->
+                                                    <div style="margin-bottom: 20px;">
+                                                        <label for="end_date" style="display: block; margin-bottom: 5px;">End Date:</label>
+                                                        <input type="date" name="end_date" required style="width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px;">
+                                                    </div>
 
                                                     <button type="submit" style="background-color: #3498db; color: #fff; padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer; width: 100%; display: block;">Export Data</button>
                                                 </form>
                                             </div>
+
                                         </div>
-
-
                 </main>
         </div>
     </div>

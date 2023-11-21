@@ -73,7 +73,7 @@ $result_shop = mysqli_fetch_array($query_shop);
       <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
         <div class="sb-sidenav-menu">
           <div class="nav">
-            <div class="sb-sidenav-menu-heading">MENU</div>            
+            <div class="sb-sidenav-menu-heading">MENU</div>
             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
               <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
               Order
@@ -86,6 +86,7 @@ $result_shop = mysqli_fetch_array($query_shop);
               </nav>
             </div>
             <a class="nav-link" href="shop_inventory.php">Shop inventory</a>
+            <a class="nav-link" href="shop_export_data.php">Download</a>
           </div>
         </div>
         <div class="sb-sidenav-footer">

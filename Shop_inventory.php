@@ -67,14 +67,13 @@ $result_shop = mysqli_fetch_array($query_shop);
                         </a>
 
                         <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
-                            <nav class="sb-sidenav-menu-nested nav">
+                            <nav class="sb-sidenav-menu-nested nav">                            
                                 <a class="nav-link" href="shop_create_order.php">Create Order</a>
                                 <a class="nav-link" href="shop_order_history.php">Order History</a>
-                            </nav>
-                        </div>
-
+                            </nav>                            
+                        </div>                        
                         <a class="nav-link" href="shop_inventory.php">Shop inventory</a>
-
+                        <a class="nav-link" href="shop_export_data.php">Download</a>
                     </div>
                 </div>
                 <div class="sb-sidenav-footer">

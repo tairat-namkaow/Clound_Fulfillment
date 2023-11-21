@@ -196,7 +196,7 @@ if (isset($_POST["Search"]) && $StartDate != '' && $EndDate != '') {
                                                 WHERE order_main.Order_id = '" . mysqli_real_escape_string($Connection, $_GET['orderId']) . "' 
                                                 GROUP BY product.Product_id, product.Product_name
                                                 ORDER BY product.Product_id ASC";
-                              $query_ProductID = mysqli_query($Connection, $sql_ProductID);
+                                                $query_ProductID = mysqli_query($Connection, $sql_ProductID);
                               
                               
 

@@ -68,7 +68,7 @@ $result_shop = mysqli_fetch_array($query_shop);
                             </nav>                            
                         </div>                        
                         <a class="nav-link" href="shop_inventory.php">Shop inventory</a>
-
+                        <a class="nav-link" href="shop_export_data.php">Download</a>
                     </div>
                 </div>
                 <div class="sb-sidenav-footer">
