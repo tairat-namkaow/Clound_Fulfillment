@@ -129,7 +129,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <a class="nav-link" href="shop_order_history.php">Order History</a>
                             </nav>
                         </div>
-
+                        <a class="nav-link" href="shop_export_data.php">Download</a>
                     </div>
                 </div>
                 <div class="sb-sidenav-footer">
