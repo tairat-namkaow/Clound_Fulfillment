@@ -139,8 +139,8 @@ $result_admin = mysqli_fetch_array($query_admin);
                                 <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                     <nav class="sb-sidenav-menu-nested nav">
                                         <a class="nav-link" href="admin_in_bound.php">Inbound</a>
-                                        <a class="nav-link" href="admin_product.php">Product Category</a>
-                                        <a class="nav-link" href="admin_category.php">Category Management</a>
+                                        <a class="nav-link" href="admin_product.php">Add Product</a>
+                                        <a class="nav-link" href="admin_category.php">Add Category</a>
                                     </nav>
                                 </div>
 

@@ -12,8 +12,22 @@ if (isset($_POST["add_product"])) {
 }
 
 if (isset($_POST["del_product"])) {
-    $sql_del_product = "DELETE FROM product WHERE Product_id = '" . $_POST["del_product"] . "'";
-    $query_del_product = mysqli_query($Connection, $sql_del_product);
+    $delProductId = $_POST["del_product"];
+
+    // Check if there are any products with the specified category
+    $sql_product = "SELECT COUNT(*) as productCount FROM product_detail WHERE Product_id = '$delProductId'";
+    $query_product = mysqli_query($Connection, $sql_product);
+    $result_product = mysqli_fetch_array($query_product);
+
+    $productCount = $result_product['productCount'];
+
+    if ($productCount > 0) {
+        $message = "ไม่สามารถลบได้ เนื่องจากมีรายละเอียดสินค้าที่ใช้งานอยู่";
+        echo "<script type='text/javascript'>alert('$message');</script>";
+    } else {
+        $sql_del_product = "DELETE FROM product WHERE Product_id = '$delProductId'";
+        $query_del_product = mysqli_query($Connection, $sql_del_product);
+    }
 }
 
 ?>
@@ -72,23 +86,23 @@ if (isset($_POST["del_product"])) {
                 <div class="sb-sidenav-menu">
                     <div class="nav">
                         <div class="sb-sidenav-menu-heading">MENU</div>
-                        
+
                         <div>
                             <nav class="sb-sidenav-menu-nested nav">
                                 <a class="nav-link" href="admin_dashboard.php">Dashboard</a>
                                 <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
-                            <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
-                            Product
-                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                        </a>
-                        <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
-                            <nav class="sb-sidenav-menu-nested nav">
-                            <a class="nav-link" href="admin_in_bound.php">Inbound</a>
-                                <a class="nav-link" href="admin_product.php">Product Category</a>
-                                <a class="nav-link" href="admin_category.php">Category Management</a>
-                            </nav>   
-                            </div>
-                                
+                                    <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                                    Product
+                                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                                </a>
+                                <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                                    <nav class="sb-sidenav-menu-nested nav">
+                                        <a class="nav-link" href="admin_in_bound.php">Inbound</a>
+                                        <a class="nav-link" href="admin_product.php">Add Product</a>
+                                        <a class="nav-link" href="admin_category.php">Add Category</a>
+                                    </nav>
+                                </div>
+
                                 <a class="nav-link" href="admin_inventory.php">Inventory</a>
                                 <a class="nav-link" href="admin_order.php">Order</a>
                                 <a class="nav-link" href="admin_export_data.php">Download</a>
@@ -105,12 +119,12 @@ if (isset($_POST["del_product"])) {
         <div id="layoutSidenav_content">
             <main>
                 <div class="container-fluid px-4">
-                    <h1 class="mt-4">Product Category</h1>         
-                    <br>           
+                    <h1 class="mt-4">Add Product</h1>
+                    <br>
                     <form method="post">
                         <div class="card">
-                            <h5 class="card-header">Add Product Category</h5>
-                            <div class="card-body">                                
+                            <h5 class="card-header">Add Product</h5>
+                            <div class="card-body">
                                 <div class="input-group mb-3">
                                     <span class="input-group-text" id="inputGroup-sizing-default">Product name</span>
                                     <input type="text" class="form-control" name="Product_name" placeholder="Enter Product" required />
@@ -126,16 +140,16 @@ if (isset($_POST["del_product"])) {
                                             <option value="<?= $result_category['Category_id'] ?>"><?= $result_category['Category_name'] ?></option>
                                         <?php } ?>
                                     </select>
-                                </div>                               
+                                </div>
 
                                 <label class="mb-3">
-                                <button type="submit" name="add_product" class="btn btn-primary">Add</button>
+                                    <button type="submit" name="add_product" class="btn btn-primary">Add</button>
                                 </label>
                             </div>
                         </div>
                     </form>
                     <br>
-                    <form method="post">                        
+                    <form method="post">
 
                         <div class="card-body" style="height: 300px;">
                             <table class="table" table id="datatablesSimple" style="table-layout: fixed;">

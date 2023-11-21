@@ -5,19 +5,6 @@ $sql_admin = "SELECT * FROM `admin` WHERE Admin_user = '" . $_SESSION['Admin_use
 $query_admin = mysqli_query($Connection, $sql_admin);
 $result_admin = mysqli_fetch_array($query_admin);
 
-if (isset($_POST["submit_del"])) {
-    $sql_detail = "SELECT * FROM detail";
-    $query_detail = mysqli_query($Connection, $sql_detail);
-    $result_detail = mysqli_fetch_array($query_detail);
-
-    if ($_POST["submit_del"] == $result_detail['Product_detail_id']) {
-        $message = "ไม่สามารถลบได้ สินค้านี้ร้านค้าได้ส่งคำสั่งจัดส่งแล้ว";
-        echo "<script type='text/javascript'>alert('$message');</script>";
-    } else {
-        $sql_product_detail = "DELETE FROM product_detail WHERE Product_detail_id = '" . $_POST["submit_del"] . "'";
-        $query = mysqli_query($Connection, $sql_product_detail);
-    }
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -74,23 +61,23 @@ if (isset($_POST["submit_del"])) {
                 <div class="sb-sidenav-menu">
                     <div class="nav">
                         <div class="sb-sidenav-menu-heading">MENU</div>
-                        
+
                         <div>
                             <nav class="sb-sidenav-menu-nested nav">
                                 <a class="nav-link" href="admin_dashboard.php">Dashboard</a>
                                 <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
-                            <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
-                            Product
-                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                        </a>
-                        <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
-                            <nav class="sb-sidenav-menu-nested nav">
-                            <a class="nav-link" href="admin_in_bound.php">Inbound</a>
-                                <a class="nav-link" href="admin_product.php">Product Category</a>
-                                <a class="nav-link" href="admin_category.php">Category Management</a>
-                            </nav>   
-                            </div>
-                                
+                                    <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                                    Product
+                                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                                </a>
+                                <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                                    <nav class="sb-sidenav-menu-nested nav">
+                                        <a class="nav-link" href="admin_in_bound.php">Inbound</a>
+                                        <a class="nav-link" href="admin_product.php">Add Product</a>
+                                        <a class="nav-link" href="admin_category.php">Add Category</a>
+                                    </nav>
+                                </div>
+
                                 <a class="nav-link" href="admin_inventory.php">Inventory</a>
                                 <a class="nav-link" href="admin_order.php">Order</a>
                                 <a class="nav-link" href="admin_export_data.php">Download</a>
@@ -119,10 +106,10 @@ if (isset($_POST["submit_del"])) {
                                     <col style="width: 25%;">
                                 </colgroup>
                                 <thead class="table-light">
-                                    <tr>                                        
+                                    <tr>
                                         <th>Product_name</th>
                                         <th>Category_name</th>
-                                        <th>Product_quantity</th>                                      
+                                        <th>Product_quantity</th>
 
                                     </tr>
                                 </thead>
@@ -142,16 +129,16 @@ if (isset($_POST["submit_del"])) {
                                 WHERE 
                                     (order_main.Order_status = 'confirm' AND Product_name IS NOT NULL) OR order_main.Order_status IS NULL OR order_main.Order_status = 'pending'
                                 GROUP BY 
-                                    Product_name, Category_name;";                                      
-                                                    
+                                    Product_name, Category_name;";
+
                                     $query_detail = mysqli_query($Connection, $sql_detail);
 
                                     while ($row = mysqli_fetch_array($query_detail)) :
                                     ?>
-                                        <tr>                                            
+                                        <tr>
                                             <td><?php echo $row['Product_name']; ?></td>
                                             <td><?php echo $row['Category_name']; ?></td>
-                                            <td><?php echo $row['Product_quantity']?></td>
+                                            <td><?php echo $row['Product_quantity'] ?></td>
                                         </tr>
                                     <?php endwhile ?>
                                 </tbody>
