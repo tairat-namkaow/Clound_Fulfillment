@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     shop.Shop_name,
     warehouse.Warehouse_zone,
     warehouse.Location,
-    product_detail.Product_time_add
+    detail.Detail_date
 FROM product_detail
 INNER JOIN product ON product.Product_id = product_detail.Product_id
 INNER JOIN shop ON product_detail.Shop_id = shop.Shop_id
