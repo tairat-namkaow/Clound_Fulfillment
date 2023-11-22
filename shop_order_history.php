@@ -174,7 +174,7 @@ $result_shop = mysqli_fetch_array($query_shop);
 
                             if (isset($_POST["Search"]) && $StartDate != '' && $EndDate != '') {
                               // ใช้ prepared statements สำหรับความปลอดภัย
-                              $stmt = $Connection->prepare("SELECT * FROM `order_main`  WHERE Order_date >= ? AND Order_date <= ?");
+                              $stmt = $Connection->prepare("SELECT * FROM `order_main` WHERE Order_date >= ? AND Order_date <= ? and order_main.Order_status != 'waiting'");
                               $stmt->bind_param("ss", $StartDate, $EndDate);
                               $stmt->execute();
                               $result = $stmt->get_result();
