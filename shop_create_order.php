@@ -90,16 +90,27 @@ if (isset($_POST["submit_cancel"])) {
                             Order
                             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
+
                         <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
-                            <nav class="sb-sidenav-menu-nested nav">                            
+                            <nav class="sb-sidenav-menu-nested nav">
                                 <a class="nav-link" href="shop_create_order.php">Create Order</a>
                                 <a class="nav-link" href="shop_order_history.php">Order History</a>
-                            </nav>                            
-                        </div>                        
+                            </nav>
+                        </div>
                         <a class="nav-link" href="shop_inventory.php">Shop inventory</a>
                         <a class="nav-link" href="shop_export_data.php">Download</a>
                         <a class="nav-link" href="index.php">Dashboard</a>
-
+                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseDownload" aria-expanded="false" aria-controls="collapseDownload">
+                            <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                            Download
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                        </a>
+                        <div class="collapse" id="collapseDownload" aria-labelledby="headingDownload" data-bs-parent="#sidenavAccordion">
+                            <nav class="sb-sidenav-menu-nested nav">
+                                <a class="nav-link" href="shop_export_indata.php">Inbound Data</a>
+                                <a class="nav-link" href="shop_export_outdata.php">Outbound Data</a>
+                            </nav>
+                        </div>
                     </div>
                 </div>
                 <div class="sb-sidenav-footer">
@@ -134,7 +145,7 @@ if (isset($_POST["submit_cancel"])) {
                                 <div class="input-group mb-3">
                                     <span class="input-group-text" id="inputGroup-sizing-default">Product Name</span>
                                     <select name="Product_detail_id" type="text" required class="form-control">
-                                        <?php                                        
+                                        <?php
                                         $sql_detail = "SELECT * FROM product_detail
                                         INNER JOIN product ON product_detail.Product_id = Product.Product_id
                                         INNER JOIN shop ON product_detail.Shop_id = shop.Shop_id                                                    
@@ -142,7 +153,7 @@ if (isset($_POST["submit_cancel"])) {
                                         GROUP by product_detail.Product_id";
 
                                         $query_detail = mysqli_query($Connection, $sql_detail);
-                                        while ($result_detail = mysqli_fetch_array($query_detail)) {                                        
+                                        while ($result_detail = mysqli_fetch_array($query_detail)) {
                                         ?>
                                             <option value="<?= $result_detail['Product_detail_id']; ?>"><?= $result_detail['Product_name'] ?></option>
                                         <?php } ?>

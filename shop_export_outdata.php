@@ -2,7 +2,7 @@
 // Database connection parameters
 require_once('connections/mysqli.php');
 
-$sql_shop = "SELECT * FROM shop WHERE Shop_email = '" . $_SESSION['Shop_email'] . "'";
+$sql_shop = "SELECT * FROM Shop WHERE Shop_email = '" . $_SESSION['Shop_email'] . "'";
 $query_shop = mysqli_query($Connection, $sql_shop);
 $result_shop = mysqli_fetch_array($query_shop);
 
@@ -12,18 +12,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $endDate = mysqli_real_escape_string($Connection, $_POST['end_date']);
 
     // Set the SQL query using prepared statements
-    $sql_exp = "SELECT DISTINCT order_main.Order_id, order_main.Order_date,
-                        product.Product_id, product.Product_name, 
-                        shop.Shop_name, warehouse.Warehouse_zone, product_category.Category_name, detail.Detail_quantity
-            FROM detail
-                INNER JOIN order_main ON detail.Order_id = order_main.Order_id
-                INNER JOIN product_detail ON detail.Product_detail_id = product_detail.Product_detail_id
-                INNER JOIN shop ON product_detail.Shop_id = shop.Shop_id
-                INNER JOIN product ON product.Product_id = product_detail.Product_id
-                INNER JOIN product_category ON product_category.Category_id = product.Category_id
-                INNER JOIN warehouse ON product_detail.Warehouse_id = warehouse.Warehouse_id
-            WHERE shop.Shop_email = '" . $_SESSION['Shop_email'] . "' and order_main.Order_date BETWEEN ? AND ?
-            ORDER BY order_main.Order_id";
+    $sql_exp = "SELECT DISTINCT
+    product.Product_id,
+    product.Product_name,
+    product_category.Category_name,
+    detail.Detail_quantity,
+    shop.Shop_name,
+    warehouse.Warehouse_zone,
+    warehouse.Location,
+    product_detail.Product_time_add
+FROM product_detail
+INNER JOIN product ON product.Product_id = product_detail.Product_id
+INNER JOIN shop ON product_detail.Shop_id = shop.Shop_id
+INNER JOIN product_category ON product_category.Category_id = product.Category_id
+INNER JOIN warehouse ON product_detail.Warehouse_id = warehouse.Warehouse_id
+INNER JOIN detail ON detail.Product_detail_id = product_detail.Product_detail_id
+WHERE shop.Shop_email = '" . $_SESSION['Shop_email'] . "' and product_detail.Product_time_add BETWEEN ? AND ?
+ORDER BY product.Product_id";
 
     // Prepare and bind the statement
     $stmt = mysqli_prepare($Connection, $sql_exp);
@@ -33,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $query_exp = mysqli_stmt_execute($stmt);
 
     // Set the CSV filename
-    $csv_filename = 'exported_data.csv';
+    $csv_filename = 'exported_outbound_data.csv';
 
     // Check if the query was successful
     if ($query_exp) {
@@ -44,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $file = fopen('php://output', 'w');
 
         // Write headers to the CSV file
-        $header = array('Order_id', 'Order_date', 'Product_id', 'Product_name', 'Shop_name', 'Warehouse_zone', 'Product_category', 'Quantity');
+        $header = array('Product_id', 'Product_name', 'Product_category', 'Out-Quantity', 'Shop_name', 'Warehouse_zone', 'Location', 'Withdraw Date');
         fputcsv($file, $header);
 
         // Fetch and write data to the CSV file
@@ -177,7 +182,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <br>
                         <div class="card">
                             <div>
-                                <h1 class="mt-4">Export Data Summary</h1>
+                                <h1 class="mt-4">Export Outbound Data Summary</h1>
                             </div>
                             <div class="card-body">
                             </div>

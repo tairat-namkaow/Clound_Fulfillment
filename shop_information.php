@@ -52,9 +52,13 @@ if (isset($_POST["Update_shop"])) {
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
 
                     <li><a class="dropdown-item" href="#!"><?php echo $result_shop[3]; ?></a></li>
-                    <li><hr class="dropdown-divider" /></li>
+                    <li>
+                        <hr class="dropdown-divider" />
+                    </li>
                     <li><a class="dropdown-item" href="shop_information.php">แก้ไขข้อมูล</a></li>
-                    <li><hr class="dropdown-divider" /></li>
+                    <li>
+                        <hr class="dropdown-divider" />
+                    </li>
                     <li><button class="dropdown-item" type="button" onclick="window.location.href='logout.php'">ออกจากระบบ</button></li>
                 </ul>
             </li>
@@ -67,21 +71,33 @@ if (isset($_POST["Update_shop"])) {
             <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
                 <div class="sb-sidenav-menu">
                     <div class="nav">
-                        <div class="sb-sidenav-menu-heading">MENU</div>                        
+                        <div class="sb-sidenav-menu-heading">MENU</div>
                         <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
                             <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
                             Order
                             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
+
                         <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
-                            <nav class="sb-sidenav-menu-nested nav">                            
+                            <nav class="sb-sidenav-menu-nested nav">
                                 <a class="nav-link" href="shop_create_order.php">Create Order</a>
                                 <a class="nav-link" href="shop_order_history.php">Order History</a>
-                            </nav>                            
-                        </div>                        
+                            </nav>
+                        </div>
                         <a class="nav-link" href="shop_inventory.php">Shop inventory</a>
                         <a class="nav-link" href="shop_export_data.php">Download</a>
                         <a class="nav-link" href="index.php">Dashboard</a>
+                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseDownload" aria-expanded="false" aria-controls="collapseDownload">
+                            <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                            Download
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                        </a>
+                        <div class="collapse" id="collapseDownload" aria-labelledby="headingDownload" data-bs-parent="#sidenavAccordion">
+                            <nav class="sb-sidenav-menu-nested nav">
+                                <a class="nav-link" href="shop_export_indata.php">Inbound Data</a>
+                                <a class="nav-link" href="shop_export_outdata.php">Outbound Data</a>
+                            </nav>
+                        </div>
                     </div>
                 </div>
                 <div class="sb-sidenav-footer">
