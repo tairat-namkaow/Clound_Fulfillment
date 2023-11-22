@@ -405,11 +405,105 @@ $result_admin = mysqli_fetch_array($query_admin);
                             <div id="ColumnChart" class="chart-container"></div>
                             <div id="PieChart" class="pie-chart-container"></div>
                         </div>
+                        
+                        <?php
+                    $sql_combined = "SELECT 
+                    product_category.Category_name AS Category_name, 
+                    MONTH(order_main.Order_date) AS group_Month, 
+                    SUM(DISTINCT product_detail.Product_quantity) AS in_quantity, 
+                    COALESCE(SUM(detail.Detail_quantity), 0) AS out_quantity, 
+                    shop.Shop_email 
+                FROM 
+                    product_category
+                    LEFT JOIN product ON product.Category_id = product_category.Category_id 
+                    LEFT JOIN product_detail ON product_detail.Product_id = product.Product_id 
+                    LEFT JOIN detail ON detail.Product_detail_id = product_detail.Product_detail_id 
+                    LEFT JOIN order_main ON detail.Order_id = order_main.Order_id 
+                    LEFT JOIN shop ON product_detail.Shop_id = shop.Shop_id 
+                WHERE 
+                    (order_main.Order_status = 'confirm' AND Product_name IS NOT NULL) OR order_main.Order_status IS NULL OR order_main.Order_status = 'pending'
+                GROUP BY 
+                    Product_name, Category_name;";
+                    
 
-                        <div style="display: flex; justify-content: space-between;">
-                            <div id="OutChart" class="double-chart-container"></div>
-                            <div id="OutChartyear" class="double-chart-container"></div>
-                        </div>
+                    // Execute the SQL query
+                    $query_combined = mysqli_query($Connection, $sql_combined);
+
+                    // Fetch the data and format it for Chart.js
+                    $chartData = array();
+                    while ($row = mysqli_fetch_assoc($query_combined)) {
+                        $chartData[] = array(
+                            'date' => $row['Category_name'], // Assuming order_month is the label for the x-axis
+                            'in_quantity' => $row['in_quantity'],
+                            'out_quantity' => $row['out_quantity']
+                        );
+                    }
+
+                    // Convert PHP array to JSON for JavaScript
+                    $json_data = json_encode($chartData);
+                    ?>
+
+                    <!-- Include a JavaScript library for charts, such as Chart.js -->
+                    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+                    <!-- Create a canvas element to render the chart -->
+                    <canvas id="myChart" width="400" height="100"></canvas>
+
+                    <script>
+                        // Parse the JSON data
+                        var chartData = <?php echo $json_data; ?>;
+
+                        // Extract labels and data for the chart
+                        var labels = chartData.map(function(item) {
+                            return item.date;
+                        });
+
+                        var inQuantityData = chartData.map(function(item) {
+                            return item.in_quantity;
+                        });
+
+                        var outQuantityData = chartData.map(function(item) {
+                            return item.out_quantity;
+                        });
+
+                        // Create a chart using Chart.js
+                        var ctx = document.getElementById('myChart').getContext('2d');
+                        var myChart = new Chart(ctx, {
+                            type: 'bar',
+                            data: {
+                                labels: labels,
+                                datasets: [{
+                                    label: 'In Quantity',
+                                    data: inQuantityData,
+                                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                    borderColor: 'rgba(75, 192, 192, 1)',
+                                    borderWidth: 1
+                                }, {
+                                    label: 'Out Quantity',
+                                    data: outQuantityData,
+                                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                                    borderColor: 'rgba(255, 99, 132, 1)',
+                                    borderWidth: 1
+                                }]
+                            },
+                            options: {
+                                plugins: {
+                                    title: {
+                                        display: true,
+                                        text: 'กราฟแสดงผลรวมสินค้า เข้า - ออก แต่ละประเภท', 
+                                        font: {
+                                            size: 16
+                                        }
+                                    }
+                                },
+                                scales: {
+                                    y: {
+                                        beginAtZero: true
+                                    }
+                                }
+                            }
+                        });
+                    </script>
                     </body>
 
                     </html>
