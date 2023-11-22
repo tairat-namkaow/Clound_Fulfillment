@@ -423,7 +423,7 @@ $result_admin = mysqli_fetch_array($query_admin);
                 WHERE 
                     (order_main.Order_status = 'confirm' AND Product_name IS NOT NULL) OR order_main.Order_status IS NULL OR order_main.Order_status = 'pending'
                 GROUP BY 
-                    Product_name, Category_name;";
+                    Category_name;";
                     
 
                     // Execute the SQL query
