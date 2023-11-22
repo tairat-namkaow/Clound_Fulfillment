@@ -8,19 +8,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $endDate = mysqli_real_escape_string($Connection, $_POST['end_date']);
 
     // Set the SQL query using prepared statements
-    $sql_exp = "SELECT DISTINCT  
-                        product.Product_id, product.Product_name, 
-                        shop.Shop_name, warehouse.Warehouse_zone, 
-                        product_category.Category_name, product_detail.Product_quantity, product_detail.Product_time_add
-            FROM detail
-                INNER JOIN order_main ON detail.Order_id = order_main.Order_id
-                INNER JOIN product_detail ON detail.Product_detail_id = product_detail.Product_detail_id
-                INNER JOIN shop ON product_detail.Shop_id = shop.Shop_id
-                INNER JOIN product ON product.Product_id = product_detail.Product_id
-                INNER JOIN product_category ON product_category.Category_id = product.Category_id
-                INNER JOIN warehouse ON product_detail.Warehouse_id = warehouse.Warehouse_id
-            WHERE order_main.Order_date BETWEEN ? AND ?
-            ORDER BY order_main.Order_id";
+    $sql_exp = "SELECT DISTINCT product.Product_id, product.Product_name, shop.Shop_name, warehouse.Warehouse_zone, 
+    product_category.Category_name, product_detail.Product_quantity, product_detail.Product_time_add 
+    FROM Product_detail 
+    INNER JOIN product ON product.Product_id = product_detail.Product_id 
+    INNER JOIN shop ON product_detail.Shop_id = shop.Shop_id 
+    INNER JOIN product_category ON product_category.Category_id = product.Category_id 
+    INNER JOIN warehouse ON product_detail.Warehouse_id = warehouse.Warehouse_id
+    WHERE product_detail.Product_time_add BETWEEN ? AND ?
+    ORDER BY product_detail.Product_id";
 
     // Prepare and bind the statement
     $stmt = mysqli_prepare($Connection, $sql_exp);
