@@ -132,7 +132,7 @@ $result_shop = mysqli_fetch_array($query_shop);
                         <div class="col-xl-3 col-md-6">
                             <div class="card bg-success text-white mb-4">
                                 <?php
-                                $sql_sku = "SELECT COUNT(DISTINCT product.Product_name) AS distinct_count
+                                $sql_sku = "SELECT COUNT(DISTINCT product.Product_name) AS sku
                                 FROM product_detail
                                 INNER JOIN shop ON product_detail.Shop_id = shop.Shop_id
                                 INNER JOIN product ON product_detail.Product_id = product.Product_id                                
