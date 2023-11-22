@@ -116,7 +116,7 @@ $result_shop = mysqli_fetch_array($query_shop);
                                     LEFT JOIN detail ON detail.Product_detail_id = product_detail.Product_detail_id
                                     LEFT JOIN order_main ON detail.Order_id = order_main.Order_id
                                 WHERE 
-                                    shop.Shop_email = 'ton@ton.com' and ((order_main.Order_status = 'confirm' AND Product_name IS NOT NULL) 
+                                    shop.Shop_email = '" . $_SESSION['Shop_email'] . "' and ((order_main.Order_status = 'confirm' AND Product_name IS NOT NULL) 
                                     OR order_main.Order_status IS NULL OR order_main.Order_status = 'pending')
                                 GROUP BY 
                                     Product_name, Category_name;
