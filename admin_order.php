@@ -151,7 +151,9 @@ if (isset($_POST["submit_cc"])) {
                                     INNER JOIN detail ON order_main.Order_id = detail.Order_id
                                     INNER JOIN product_detail ON detail.product_detail_id = product_detail.Product_detail_id
                                     INNER JOIN shop ON product_detail.Shop_id = shop.Shop_id
-                                    GROUP BY order_main.Order_id";
+                                    GROUP BY order_main.Order_id
+                                    ORDER BY order_main.Order_status DESC"
+                                    ;
 
                                     $query_adorder = mysqli_query($Connection, $sql_adorder);
 

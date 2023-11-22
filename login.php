@@ -15,13 +15,22 @@ if (isset($_POST["submit"])) {
   $query = mysqli_query($Connection, $sql);
   $result = mysqli_fetch_array($query, MYSQLI_ASSOC);
 
-  if ($_POST['Shop_email'] == 'Admin1' || $_POST['Shop_email'] == 'Admin2') {
+  if ($_POST['Shop_email'] == 'Admin1' || $_POST['Shop_email'] == 'Admin2' || $_POST['Shop_email'] == 'Admin3' || $_POST['Shop_email'] == 'Admin4' || $_POST['Shop_email'] == 'Admin5') {
     session_start();
     if ($_POST['Shop_email'] == 'Admin1') {
       $_SESSION['Admin_user'] = 'Admin1';
     }
     if ($_POST['Shop_email'] == 'Admin2') {
       $_SESSION['Admin_user'] = 'Admin2';
+    }
+    if ($_POST['Shop_email'] == 'Admin3') {
+      $_SESSION['Admin_user'] = 'Admin3';
+    }
+    if ($_POST['Shop_email'] == 'Admin4') {
+      $_SESSION['Admin_user'] = 'Admin4';
+    }
+    if ($_POST['Shop_email'] == 'Admin5') {
+      $_SESSION['Admin_user'] = 'Admin5';
     }
     header("location:admin_dashboard.php");
     exit();
