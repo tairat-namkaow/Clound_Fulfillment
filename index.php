@@ -63,11 +63,11 @@ $result_shop = mysqli_fetch_array($query_shop);
                         </a>
 
                         <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
-                            <nav class="sb-sidenav-menu-nested nav">                            
+                            <nav class="sb-sidenav-menu-nested nav">
                                 <a class="nav-link" href="shop_create_order.php">Create Order</a>
                                 <a class="nav-link" href="shop_order_history.php">Order History</a>
-                            </nav>                            
-                        </div>                        
+                            </nav>
+                        </div>
                         <a class="nav-link" href="shop_inventory.php">Shop inventory</a>
                         <a class="nav-link" href="shop_export_data.php">Download</a>
                         <a class="nav-link" href="index.php">Dashboard</a>
@@ -170,9 +170,9 @@ $result_shop = mysqli_fetch_array($query_shop);
 
                     <?php
                     $sql_combined = "SELECT
-                    product_category.Category_name,
-                    DATE(order_main.Order_date) AS order_month,
-                    SUM(product_detail.Product_quantity) AS in_quantity,
+                    product_category.Category_name as Category_name,
+                    Month(order_main.Order_date) AS group_Month,
+                    SUM(DISTINCT product_detail.Product_quantity) AS in_quantity,
                     SUM(detail.Detail_quantity) AS out_quantity
                 FROM
                     detail
@@ -181,9 +181,7 @@ $result_shop = mysqli_fetch_array($query_shop);
                     INNER JOIN product ON product_detail.Product_id = product.Product_id
                     INNER JOIN product_category ON product.Category_id = product_category.Category_id
                 GROUP BY
-                    product_category.Category_name, order_month
-                ORDER BY
-                    order_month";
+                    product_category.Category_name";
 
                     // Execute the SQL query
                     $query_combined = mysqli_query($Connection, $sql_combined);
@@ -192,7 +190,7 @@ $result_shop = mysqli_fetch_array($query_shop);
                     $chartData = array();
                     while ($row = mysqli_fetch_assoc($query_combined)) {
                         $chartData[] = array(
-                            'date' => $row['order_month'], // Assuming order_month is the label for the x-axis
+                            'date' => $row['Category_name'], // Assuming order_month is the label for the x-axis
                             'in_quantity' => $row['in_quantity'],
                             'out_quantity' => $row['out_quantity']
                         );
@@ -257,6 +255,7 @@ $result_shop = mysqli_fetch_array($query_shop);
                             }
                         });
                     </script>
+
 </body>
 
 </html>
@@ -266,23 +265,23 @@ $result_shop = mysqli_fetch_array($query_shop);
 
 
 <div class="card-body" style="height: 300px;">
-<table class="table" table id="datatablesSimple" style="table-layout: fixed;">
-                                <colgroup>
-                                    <col style="width: 5%;">
-                                    <col style="width: 25%;">
-                                    <col style="width: 25%;">
-                                </colgroup>
-                                <thead class="table-light">
-                                    <tr>
-                                        <th>Product_name</th>
-                                        <th>Category_name</th>
-                                        <th>Product_quantity</th>
+    <table class="table" table id="datatablesSimple" style="table-layout: fixed;">
+        <colgroup>
+            <col style="width: 5%;">
+            <col style="width: 25%;">
+            <col style="width: 25%;">
+        </colgroup>
+        <thead class="table-light">
+            <tr>
+                <th>Product_name</th>
+                <th>Category_name</th>
+                <th>Product_quantity</th>
 
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php
-                                    $sql_detail = "SELECT 
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            $sql_detail = "SELECT 
                                     COALESCE(SUM(DISTINCT product_detail.Product_quantity), 0) - COALESCE(SUM(Detail_quantity), 0) as Product_quantity,
                                     Product_name,
                                     Category_name,
@@ -298,18 +297,18 @@ $result_shop = mysqli_fetch_array($query_shop);
                                 GROUP BY 
                                     Product_name, Category_name;";
 
-                                    $query_detail = mysqli_query($Connection, $sql_detail);
+            $query_detail = mysqli_query($Connection, $sql_detail);
 
-                                    while ($row = mysqli_fetch_array($query_detail)) :
-                                    ?>
-                                        <tr>
-                                            <td><?php echo $row['Product_name']; ?></td>
-                                            <td><?php echo $row['Category_name']; ?></td>
-                                            <td><?php echo $row['Product_quantity'] ?></td>
-                                        </tr>
-                                    <?php endwhile ?>
-                                </tbody>
-                            </table>
+            while ($row = mysqli_fetch_array($query_detail)) :
+            ?>
+                <tr>
+                    <td><?php echo $row['Product_name']; ?></td>
+                    <td><?php echo $row['Category_name']; ?></td>
+                    <td><?php echo $row['Product_quantity'] ?></td>
+                </tr>
+            <?php endwhile ?>
+        </tbody>
+    </table>
 
 </div>
 
