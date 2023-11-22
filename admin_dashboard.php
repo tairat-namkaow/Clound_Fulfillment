@@ -170,13 +170,13 @@ $result_admin = mysqli_fetch_array($query_admin);
                         <div class="col-xl-3 col-md-6">
                             <div class="card bg-success text-white mb-4">
                                 <?php
-                                $sql_time = "SELECT count(*) as date FROM product_category";
-                                $query_time = mysqli_query($Connection, $sql_time);
-                                $result_time = mysqli_fetch_array($query_time);
+                                $sql_sku = "SELECT count(*) as sku FROM product";
+                                $query_sku = mysqli_query($Connection, $sql_sku);
+                                $result_sku = mysqli_fetch_array($query_sku);
                                 ?>
                                 <div class="card-body">Inventory</div>
                                 <div class="card-footer d-flex align-items-center">
-                                    <a>สินค้าคงคลังในระบบ จำนวน : <?php echo $result_time['date'] ?> รายการ</a>
+                                    <a>สินค้าคงคลังในระบบ จำนวน : <?php echo $result_sku['sku'] ?> SKU</a>
                                 </div>
                             </div>
                         </div>
