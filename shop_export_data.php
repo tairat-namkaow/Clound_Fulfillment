@@ -172,39 +172,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <h1 class="mt-4">Export Data Summary</h1>
                             </div>
                             <div class="card-body">
-                                <ol class="breadcrumb mb-4">
-                                </ol>
                             </div>
 
                             <section class="section">
                                 <div class="row">
                                     <div class="col-lg-12">
-                                        <div class="card" style="max-width: 400px; margin: auto; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+                                        <div class="card">
                                             <div class="card-body">
-                                                <h5 class="card-title text-center"><b>Data Period</b></h5>
+                                                <h5 align="center" class="card-title"><b>Data Period</b></h5>
                                             </div>
                                             <div class="card-body">
-                                                <form method="post">
-                                                    <div class="mb-3">
-                                                        <label for="start_date" class="form-label">Start Date:</label>
-                                                        <input type="date" name="start_date" class="form-control" required>
+                                                <form method="post" style="max-width: 300px; margin: auto;">
+                                                    <div style="margin-bottom: 15px;">
+                                                        <label for="start_date" style="display: block; margin-bottom: 5px;">Start Date:</label>
+                                                        <input type="date" name="start_date" required style="width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px;">
                                                     </div>
 
-                                                    <div class="mb-3">
-                                                        <label for="end_date" class="form-label">End Date:</label>
-                                                        <input type="date" name="end_date" class="form-control" required>
+                                                    <div style="margin-bottom: 20px;">
+                                                        <label for="end_date" style="display: block; margin-bottom: 5px;">End Date:</label>
+                                                        <input type="date" name="end_date" required style="width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px;">
                                                     </div>
 
-                                                    <button type="submit" class="btn btn-primary" style="border-radius: 5px; width: 100%;">Export Data</button>
+                                                    <button type="submit" style="background-color: #3498db; color: #fff; padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer; width: 100%; display: block;">Export Data</button>
                                                 </form>
                                             </div>
+
                                         </div>
                                     </div>
                                 </div>
                             </section>
-                            <br>
-
-                        </div>
+                         </div>
                     </div>
                 </main>
         </div>
