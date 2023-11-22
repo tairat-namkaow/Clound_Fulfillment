@@ -8,15 +8,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $endDate = mysqli_real_escape_string($Connection, $_POST['end_date']);
 
     // Set the SQL query using prepared statements
-    $sql_exp = "SELECT DISTINCT product.Product_id, product.Product_name, shop.Shop_name, warehouse.Warehouse_zone, 
-    product_category.Category_name, product_detail.Product_quantity, product_detail.Product_time_add 
-    FROM Product_detail 
-    INNER JOIN product ON product.Product_id = product_detail.Product_id 
-    INNER JOIN shop ON product_detail.Shop_id = shop.Shop_id 
-    INNER JOIN product_category ON product_category.Category_id = product.Category_id 
-    INNER JOIN warehouse ON product_detail.Warehouse_id = warehouse.Warehouse_id
-    WHERE product_detail.Product_time_add BETWEEN ? AND ?
-    ORDER BY product_detail.Product_id";
+    $sql_exp = "SELECT DISTINCT
+    product.Product_id,
+    product.Product_name,
+    product_category.Category_name,
+    product_detail.Product_quantity,
+    shop.Shop_name,
+    warehouse.Warehouse_zone,
+    warehouse.Location,
+    product_detail.Product_time_add
+FROM Product_detail
+INNER JOIN product ON product.Product_id = product_detail.Product_id
+INNER JOIN shop ON product_detail.Shop_id = shop.Shop_id
+INNER JOIN product_category ON product_category.Category_id = product.Category_id
+INNER JOIN warehouse ON product_detail.Warehouse_id = warehouse.Warehouse_id
+            WHERE product_detail.Product_time_add BETWEEN ? AND ?
+            ORDER BY product.Product_id";
 
     // Prepare and bind the statement
     $stmt = mysqli_prepare($Connection, $sql_exp);
@@ -37,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $file = fopen('php://output', 'w');
 
         // Write headers to the CSV file
-        $header = array('Product_id', 'Product_name', 'Shop_name', 'Warehouse_zone', 'Product_category', 'In-Quantity', 'Added Date');
+        $header = array('Product_id', 'Product_name', 'Product_category', 'In-Quantity', 'Shop_name', 'Warehouse_zone', 'Location', 'Added Date');
         fputcsv($file, $header);
 
         // Fetch and write data to the CSV file
@@ -92,7 +99,12 @@ $result_admin = mysqli_fetch_array($query_admin);
         <!-- Sidebar Toggle-->
         <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
         <!-- Navbar Search-->
-        <div class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0"></div>
+        <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
+            <div class="input-group">
+                <input class="form-control" type="text" placeholder="Search for..." aria-label="Search for..." aria-describedby="btnNavbarSearch" />
+                <button class="btn btn-primary" id="btnNavbarSearch" type="button"><i class="fas fa-search"></i></button>
+            </div>
+        </form>
         <!-- Navbar-->
         <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
             <li class="nav-item dropdown">
@@ -205,13 +217,6 @@ $result_admin = mysqli_fetch_array($query_admin);
                                             </div>
 
                                         </div>
-                                    </div>
-                                </div>
-                            </section>
-
-                        </div>
-                    </div>
-
                 </main>
         </div>
     </div>
