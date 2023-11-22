@@ -101,7 +101,6 @@ if (isset($_POST["Search"]) && $StartDate != '' && $EndDate != '') {
 
                 padding: 0.5rem 1rem;
             }
-
         </style>
     </head>
 
@@ -178,6 +177,7 @@ if (isset($_POST["Search"]) && $StartDate != '' && $EndDate != '') {
                                             }
                                         </style>
                                     </head>
+
                                     <body>
                                         <table>
                                             <table class="table mx-auto" style="margin-top: 20px; width: auto;">
@@ -197,8 +197,8 @@ if (isset($_POST["Search"]) && $StartDate != '' && $EndDate != '') {
                                                 GROUP BY product.Product_id, product.Product_name
                                                 ORDER BY product.Product_id ASC";
                                                 $query_ProductID = mysqli_query($Connection, $sql_ProductID);
-                              
-                              
+
+
 
                                                 // ดึงข้อมูลทั้งหมดมาเก็บใน array
                                                 $products = [];
@@ -282,7 +282,6 @@ if (isset($_POST["Search"]) && $StartDate != '' && $EndDate != '') {
                                     justify-content: center;
                                     align-items: center;
                                     background-color: #f0f0f0;
-                                    /* สีพื้นหลัง, ปรับตามต้องการ */
                                 }
 
                                 .center {
@@ -293,10 +292,6 @@ if (isset($_POST["Search"]) && $StartDate != '' && $EndDate != '') {
 
                                 .btn-link {
                                     text-decoration: none;
-                                }
-
-                                button {
-                                    /* สไตล์ปุ่มตามความต้องการ */
                                 }
                             </style>
                         </head>
@@ -311,9 +306,11 @@ if (isset($_POST["Search"]) && $StartDate != '' && $EndDate != '') {
 
                         </html>
 
-
-
-
+                        </html>
+                    </div>
+                </div>
+            </div>
+        </main>
     </body>
 
     </html>

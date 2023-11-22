@@ -98,6 +98,7 @@ if (isset($_POST["submit_cancel"])) {
                         </div>                        
                         <a class="nav-link" href="shop_inventory.php">Shop inventory</a>
                         <a class="nav-link" href="shop_export_data.php">Download</a>
+                        <a class="nav-link" href="index.php">Dashboard</a>
 
                     </div>
                 </div>

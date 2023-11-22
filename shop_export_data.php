@@ -129,6 +129,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </div>
                         <a class="nav-link" href="shop_inventory.php">Shop inventory</a>
                         <a class="nav-link" href="shop_export_data.php">Download</a>
+                        <a class="nav-link" href="index.php">Dashboard</a>
                     </div>
                 </div>
                 <div class="sb-sidenav-footer">
