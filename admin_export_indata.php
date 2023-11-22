@@ -21,7 +21,7 @@ FROM product_detail
 INNER JOIN product ON product.Product_id = product_detail.Product_id
 INNER JOIN shop ON product_detail.Shop_id = shop.Shop_id
 INNER JOIN product_category ON product_category.Category_id = product.Category_id
-INNER JOIN warehouse ON product_detail.Warehouse_id = warehouse.Warehouse_id;
+INNER JOIN warehouse ON product_detail.Warehouse_id = warehouse.Warehouse_id
             WHERE product_detail.Product_time_add BETWEEN ? AND ?
             ORDER BY product.Product_id";
 
@@ -201,7 +201,7 @@ $result_admin = mysqli_fetch_array($query_admin);
                     <div class="container-fluid px-4">
                         <div class="card">
                             <div>
-                                <h1 class="mt-4">Export Data Summary</h1>
+                                <h1 class="mt-4">Export Inbound Data Summary</h1>
                             </div>
                             <div class="card-body"></div>
 

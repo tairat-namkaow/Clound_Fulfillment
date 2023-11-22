@@ -23,8 +23,8 @@ INNER JOIN shop ON product_detail.Shop_id = shop.Shop_id
 INNER JOIN product_category ON product_category.Category_id = product.Category_id
 INNER JOIN warehouse ON product_detail.Warehouse_id = warehouse.Warehouse_id
 INNER JOIN detail ON detail.Product_detail_id = product_detail.Product_detail_id
-            WHERE product_detail.Product_time_add BETWEEN ? AND ?
-            ORDER BY product.Product_id";
+WHERE product_detail.Product_time_add BETWEEN ? AND ?
+ORDER BY product.Product_id";
 
     // Prepare and bind the statement
     $stmt = mysqli_prepare($Connection, $sql_exp);
