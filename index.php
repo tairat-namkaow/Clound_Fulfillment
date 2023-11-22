@@ -132,18 +132,14 @@ $result_shop = mysqli_fetch_array($query_shop);
                         <div class="col-xl-3 col-md-6">
                             <div class="card bg-success text-white mb-4">
                                 <?php
-                                $sql_category = "SELECT COUNT(DISTINCT product_category.Category_name) AS category
-                                FROM `product_detail`
-                                INNER JOIN product ON product_detail.Product_id = product.Product_id
-                                INNER JOIN product_category ON product.Category_id = product_category.Category_id
-                                INNER JOIN shop ON product_detail.Shop_id = shop.Shop_id
+                                $sql_sku = "SELECT count(*) as sku FROM product
                                 WHERE shop.Shop_email = '" . $_SESSION['Shop_email'] . "'";
-                                $query_category = mysqli_query($Connection, $sql_category);
-                                $result_category = mysqli_fetch_array($query_category);
+                                $query_sku = mysqli_query($Connection, $sql_sku);
+                                $result_sku = mysqli_fetch_array($query_sku);
                                 ?>
                                 <div class="card-body">Inventory</div>
                                 <div class="card-footer d-flex align-items-center">
-                                    <a>สินค้าคงคลังในระบบ จำนวน : <?php echo $result_category['category'] ?> ประเภท</a>
+                                    <a>สินค้าคงคลังในระบบ จำนวน : <?php echo $result_sku['sku'] ?> SKU</a>
                                 </div>
                             </div>
                         </div>
