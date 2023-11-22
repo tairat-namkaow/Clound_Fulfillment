@@ -14,7 +14,7 @@ if (isset($_POST["submit_cf"])) {
     if ($result_order['Order_status'] == 'pending') {
 
         $orderId = $_POST["submit_cf"];
-        $sql_update = "UPDATE order_main SET Order_status = 'confirm' WHERE Order_id = '$orderId'";
+        $sql_update = "UPDATE order_main SET Order_status = 'confirmed' WHERE Order_id = '$orderId'";
         $query_update = mysqli_query($Connection, $sql_update);
     } else {
         $message = "Failed to confirm the order";
@@ -30,7 +30,7 @@ if (isset($_POST["submit_cc"])) {
     if ($result_order['Order_status'] == 'pending') {
 
         $orderId = $_POST["submit_cc"];
-        $sql_update = "UPDATE order_main SET Order_status = 'Cancel' WHERE Order_id = '$orderId'";
+        $sql_update = "UPDATE order_main SET Order_status = 'cancelled' WHERE Order_id = '$orderId'";
         $query_update = mysqli_query($Connection, $sql_update);
     } else {
         $message = "Failed to cancel the order";
