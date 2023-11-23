@@ -79,7 +79,6 @@ $result_shop = mysqli_fetch_array($query_shop);
                             <nav class="sb-sidenav-menu-nested nav">
                                 <a class="nav-link" href="shop_export_indata.php">Inbound Data</a>
                                 <a class="nav-link" href="shop_export_outdata.php">Outbound Data</a>
-                                <a class="nav-link" href="shop_export_data.php">Summary Data</a>
                             </nav>
                         </div>
                     </div>
@@ -195,7 +194,7 @@ $result_shop = mysqli_fetch_array($query_shop);
                 WHERE 
                     shop.Shop_email = '" . $_SESSION['Shop_email'] . "' and
                     ((order_main.Order_status = 'confirm' AND Product_name IS NOT NULL) 
-                    OR order_main.Order_status IS NULL OR order_main.Order_status = 'pending')
+                    OR order_main.Order_status IS NULL OR order_main.Order_status = 'pending' OR order_main.Order_status = 'confirmed')
                 GROUP BY 
                     product_category.Category_name, 
                     group_Month;                                
@@ -300,7 +299,7 @@ $result_shop = mysqli_fetch_array($query_shop);
                 WHERE 
                     shop.Shop_email = '" . $_SESSION['Shop_email'] . "' and
                     ((order_main.Order_status = 'confirm' AND Product_name IS NOT NULL) 
-                    OR order_main.Order_status IS NULL OR order_main.Order_status = 'pending')
+                    OR order_main.Order_status IS NULL OR order_main.Order_status = 'pending' OR order_main.Order_status = 'confirmed')
                 GROUP BY 
                     product_name, 
                     group_Month                                
@@ -421,7 +420,7 @@ $result_shop = mysqli_fetch_array($query_shop);
                                     LEFT JOIN order_main ON detail.Order_id = order_main.Order_id
                                 WHERE 
                                     shop.Shop_email = '" . $_SESSION['Shop_email'] . "' and ((order_main.Order_status = 'confirm' AND Product_name IS NOT NULL) 
-                                    OR order_main.Order_status IS NULL OR order_main.Order_status = 'pending')
+                                    OR order_main.Order_status IS NULL OR order_main.Order_status = 'pending' OR order_main.Order_status = 'confirmed')
                                 GROUP BY 
                                     Product_name, Category_name;";
 

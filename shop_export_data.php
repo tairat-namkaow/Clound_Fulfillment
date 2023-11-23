@@ -139,7 +139,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <nav class="sb-sidenav-menu-nested nav">
                                 <a class="nav-link" href="shop_export_indata.php">Inbound Data</a>
                                 <a class="nav-link" href="shop_export_outdata.php">Outbound Data</a>
-                                <a class="nav-link" href="shop_export_data.php">Summary Data</a>
                             </nav>
                         </div>
                     </div>

@@ -399,7 +399,9 @@ $result_admin = mysqli_fetch_array($query_admin);
                     LEFT JOIN order_main ON detail.Order_id = order_main.Order_id 
                     LEFT JOIN shop ON product_detail.Shop_id = shop.Shop_id 
                 WHERE 
-                    (order_main.Order_status = 'confirm' AND Product_name IS NOT NULL) OR order_main.Order_status IS NULL OR order_main.Order_status = 'pending'
+                    (order_main.Order_status = 'confirm' AND Product_name IS NOT NULL) 
+                    OR order_main.Order_status IS NULL OR order_main.Order_status = 'pending'
+                    OR order_main.Order_status = 'confirmed'
                 GROUP BY 
                     Category_name;";
 
@@ -517,7 +519,9 @@ $result_admin = mysqli_fetch_array($query_admin);
                                     LEFT JOIN detail ON detail.Product_detail_id = product_detail.Product_detail_id
                                     LEFT JOIN order_main ON detail.Order_id = order_main.Order_id
                                 WHERE 
-                                    (order_main.Order_status = 'confirm' AND Product_name IS NOT NULL) OR order_main.Order_status IS NULL OR order_main.Order_status = 'pending'
+                                    (order_main.Order_status = 'confirm' AND Product_name IS NOT NULL) 
+                                    OR order_main.Order_status IS NULL OR order_main.Order_status = 'pending'
+                                    OR order_main.Order_status = 'confirmed'
                                 GROUP BY 
                                     Product_name, Category_name;";
 
