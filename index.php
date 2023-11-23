@@ -179,25 +179,39 @@ $result_shop = mysqli_fetch_array($query_shop);
 
                     <?php
                     $sql_combined = "SELECT 
-                    product_category.Category_name AS Category_name, 
-                    MONTH(order_main.Order_date) AS group_Month, 
-                    SUM(DISTINCT product_detail.Product_quantity) AS in_quantity, 
-                    COALESCE(SUM(detail.Detail_quantity), 0) AS out_quantity, 
-                    shop.Shop_email 
-                FROM 
-                    product_category
-                    LEFT JOIN product ON product.Category_id = product_category.Category_id 
-                    LEFT JOIN product_detail ON product_detail.Product_id = product.Product_id 
-                    LEFT JOIN detail ON detail.Product_detail_id = product_detail.Product_detail_id 
-                    LEFT JOIN order_main ON detail.Order_id = order_main.Order_id 
-                    LEFT JOIN shop ON product_detail.Shop_id = shop.Shop_id 
-                WHERE 
-                    shop.Shop_email = '" . $_SESSION['Shop_email'] . "' and
-                    ((order_main.Order_status = 'confirm' AND Product_name IS NOT NULL) 
-                    OR order_main.Order_status IS NULL OR order_main.Order_status = 'pending' OR order_main.Order_status = 'confirmed')
+                    sub.Category_name,
+                    SUM(sub.in_quantity) AS in_quantity,
+                    SUM(sub.out_quantity) AS out_quantity 
+                FROM
+                    (	
+                        SELECT 
+                            SUM(product_detail.Product_quantity) AS in_quantity, 
+                            SUM(detail.Detail_quantity) AS out_quantity,
+                            Product.Product_name,
+                            Product.Product_id,
+                            product_category.Category_name,
+                            shop.Shop_email,
+                            MAX(order_main.Order_status) AS Order_status                                    
+                        FROM 
+                            Product_detail
+                            INNER JOIN product ON product_detail.Product_id = product.Product_id
+                            INNER JOIN product_category ON product.Category_id = product_category.Category_id                                    
+                            LEFT JOIN detail ON detail.Product_detail_id = product_detail.Product_detail_id
+                            LEFT JOIN order_main ON detail.Order_id = order_main.Order_id
+                            INNER JOIN shop ON product_detail.Shop_id = shop.Shop_id
+                        WHERE 
+                            (order_main.Order_status = 'confirm' AND Product.Product_name IS NOT NULL) 
+                            OR order_main.Order_status IS NULL 
+                            OR order_main.Order_status IN ('pending', 'confirmed')
+                            AND shop.Shop_email = '" . $_SESSION['Shop_email'] . "'
+                        GROUP BY 
+                            Product.Product_name, 
+                            Product.Product_id,
+                            product_category.Category_name,
+                            shop.Shop_email
+                    ) AS sub
                 GROUP BY 
-                    product_category.Category_name, 
-                    group_Month;                                
+                    sub.Category_name;                                
                 ";
 
 

@@ -385,26 +385,25 @@ $result_admin = mysqli_fetch_array($query_admin);
                         </div>
 
                         <?php
-                        $sql_combined = "SELECT sub.Category_name,sum(sub.in_quantity) as in_quantity, sum(sub.out_quantity) as out_quantity from(	
+                        $sql_combined = "SELECT sub.Category_name,sum(sub.Product_quantity) from(	
                             SELECT 
-                        SUM(DISTINCT product_detail.Product_quantity) as in_quantity, 
-                        SUM(Detail_quantity) as out_quantity,
-                        Product.Product_name,
-                        Product.Product_id,
-                        Category_name,                                
-                        MAX(Order_status) AS Order_status                                    
-                    FROM 
-                        Product_detail
-                        INNER JOIN product ON product_detail.Product_id = product.Product_id
-                        INNER JOIN product_category ON product.Category_id = product_category.Category_id                                    
-                        LEFT JOIN detail ON detail.Product_detail_id = product_detail.Product_detail_id
-                        LEFT JOIN order_main ON detail.Order_id = order_main.Order_id
-                    WHERE 
-                        (order_main.Order_status = 'confirm' AND Product_name IS NOT NULL) 
-                        OR order_main.Order_status IS NULL OR order_main.Order_status = 'pending'
-                        OR order_main.Order_status = 'confirmed'
-                    GROUP BY 
-                        Product_name, Category_name
+                                COALESCE(SUM(DISTINCT product_detail.Product_quantity), 0) - COALESCE(SUM(Detail_quantity), 0) 										as Product_quantity,
+                                Product.Product_name,
+                                Product.Product_id,
+                                Category_name,
+                                MAX(Order_status) AS Order_status                                    
+                            FROM 
+                                Product_detail
+                                INNER JOIN product ON product_detail.Product_id = product.Product_id
+                                INNER JOIN product_category ON product.Category_id = product_category.Category_id                                    
+                                LEFT JOIN detail ON detail.Product_detail_id = product_detail.Product_detail_id
+                                LEFT JOIN order_main ON detail.Order_id = order_main.Order_id
+                            WHERE 
+                                (order_main.Order_status = 'confirm' AND Product_name IS NOT NULL) 
+                                OR order_main.Order_status IS NULL OR order_main.Order_status = 'pending'
+                                OR order_main.Order_status = 'confirmed'
+                            GROUP BY 
+                                Product_name, Category_name
                             ) as sub
                             GROUP BY sub.Category_name";
 
