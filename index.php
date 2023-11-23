@@ -200,9 +200,9 @@ $result_shop = mysqli_fetch_array($query_shop);
                             LEFT JOIN order_main ON detail.Order_id = order_main.Order_id
                             INNER JOIN shop ON product_detail.Shop_id = shop.Shop_id
                         WHERE 
-                            (order_main.Order_status = 'confirm' AND Product.Product_name IS NOT NULL) 
+                            ((order_main.Order_status = 'confirm' AND Product.Product_name IS NOT NULL) 
                             OR order_main.Order_status IS NULL 
-                            OR order_main.Order_status IN ('pending', 'confirmed')
+                            OR order_main.Order_status IN ('pending', 'confirmed'))
                             AND shop.Shop_email = '" . $_SESSION['Shop_email'] . "'
                         GROUP BY 
                             Product.Product_name, 
