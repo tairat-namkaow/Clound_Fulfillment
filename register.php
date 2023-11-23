@@ -10,6 +10,8 @@ $check_submit = "";
 $Shop_name = "";
 $Shop_password = "";
 $Shop_email = "";
+$Shop_address = "";
+$Shop_tel = "";
 
 if (isset($_POST["submit"])) {
     $sql = "SELECT * FROM shop WHERE Shop_email = '" . trim($_POST['Shop_email']) . "'";
@@ -25,8 +27,8 @@ if (isset($_POST["submit"])) {
         $check_submit .= '<span><i class="bi bi-info-circle"></i> Email นี้ถูกใช้แล้วกรุณาใช้ Email อื่น</span>';
         $check_submit .= '</div>';
     } else {
-        $sql = "INSERT INTO shop (Shop_password,Shop_email,Shop_name) 
-                VALUES ('" . $_POST["Shop_password"] . "','" . $_POST["Shop_email"] . "','" . $_POST["Shop_name"] . "')";
+        $sql = "INSERT INTO shop (Shop_password,Shop_email,Shop_name,Shop_tel,Shop_address) 
+                VALUES ('" . $_POST["Shop_password"] . "','" . $_POST["Shop_email"] . "','" . $_POST["Shop_name"] . "','" . $_POST["Shop_tel"] . "','" . $_POST["Shop_address"] . "')";
         $query = mysqli_query($Connection, $sql);
 
         header("location:login.php?register=success");
@@ -84,6 +86,14 @@ if (isset($_POST["submit"])) {
                                         <div class="mb-3">
                                             <label class="form-label">Shop name</label>
                                             <input type="text" class="form-control" name="Shop_name" value="<?php echo $Shop_name; ?>" placeholder="Enter Shop name" required />
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Shop address</label>
+                                            <input type="text" class="form-control" name="Shop_address" value="<?php echo $Shop_address; ?>" placeholder="Enter Shop address" required />
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Shop telephone</label>
+                                            <input type="text" class="form-control" name="Shop_tel" value="<?php echo $Shop_tel; ?>" placeholder="Enter Shop telephone" required />
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label">Email</label>
