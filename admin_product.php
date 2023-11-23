@@ -173,6 +173,7 @@ if (isset($_POST["del_product"])) {
                                 <thead class="table-light">
                                     <tr>
                                         <th>Product_id</th>
+                                        <th>Category_name</th>
                                         <th>Product_name</th>
                                         <th>ลบ</th>
 
@@ -180,13 +181,16 @@ if (isset($_POST["del_product"])) {
                                 </thead>
                                 <tbody>
                                     <?php
-                                    $sql_product = "SELECT * FROM Product";
+                                    $sql_product = "SELECT * FROM product
+                                    inner join product_category on Product.category_id = product_category.category_id
+                                    order by product.Product_id desc";
                                     $query_product = mysqli_query($Connection, $sql_product);
 
                                     while ($row = mysqli_fetch_array($query_product)) :
                                     ?>
                                         <tr>
                                             <td><?php echo $row['Product_id']; ?></td>
+                                            <td><?php echo $row['Category_name']; ?></td>
                                             <td><?php echo $row['Product_name']; ?></td>
                                             <td>
                                                 <!-- Delete Button -->

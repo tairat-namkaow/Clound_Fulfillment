@@ -31,7 +31,7 @@ INNER JOIN warehouse ON product_detail.Warehouse_id = warehouse.Warehouse_id
             ORDER BY product.Product_id
 ";
 
-    
+
 
     // Prepare and bind the statement
     $stmt = mysqli_prepare($Connection, $sql_exp);
@@ -85,7 +85,7 @@ INNER JOIN warehouse ON product_detail.Warehouse_id = warehouse.Warehouse_id
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <title>Cloud_Fulfillment</title>
+    <title>Cloud Fulfillment</title>
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
     <link href="css/styles.css" rel="stylesheet" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
@@ -136,7 +136,6 @@ INNER JOIN warehouse ON product_detail.Warehouse_id = warehouse.Warehouse_id
                             </nav>
                         </div>
                         <a class="nav-link" href="shop_inventory.php">Shop inventory</a>
-                        <a class="nav-link" href="shop_export_data.php">Download</a>
                         <a class="nav-link" href="index.php">Dashboard</a>
                         <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseDownload" aria-expanded="false" aria-controls="collapseDownload">
                             <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
@@ -147,6 +146,7 @@ INNER JOIN warehouse ON product_detail.Warehouse_id = warehouse.Warehouse_id
                             <nav class="sb-sidenav-menu-nested nav">
                                 <a class="nav-link" href="shop_export_indata.php">Inbound Data</a>
                                 <a class="nav-link" href="shop_export_outdata.php">Outbound Data</a>
+                                <a class="nav-link" href="shop_export_data.php">Summary Data</a>
                             </nav>
                         </div>
                     </div>
