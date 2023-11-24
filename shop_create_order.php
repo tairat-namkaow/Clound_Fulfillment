@@ -10,9 +10,40 @@ $result_order = mysqli_fetch_array($query_order);
 $Order_id = $result_order['Order_id'];
 
 if (isset($_POST["submit_list"])) {
-    $sql_insert_detail = "INSERT INTO detail (Product_detail_id,Order_id,Detail_quantity) 
+    $sql_check = "SELECT sub.Product_detail_id,sub.Product_quantity from (
+        SELECT 
+            COALESCE(SUM(DISTINCT product_detail.Product_quantity), 0) - COALESCE(SUM(detail.Detail_quantity), 0) as Product_quantity,
+            product.Product_name,
+            Shop_name,
+            Category_name,
+            product_detail.Product_detail_id,
+            MAX(Order_status) AS Order_status                                    
+        FROM 
+            Product_detail
+            INNER JOIN product ON product_detail.Product_id = product.Product_id
+            INNER JOIN product_category ON product.Category_id = product_category.Category_id                                    
+            INNER JOIN shop ON product_detail.Shop_id = shop.Shop_id
+            LEFT JOIN detail ON detail.Product_detail_id = product_detail.Product_detail_id
+            LEFT JOIN order_main ON detail.Order_id = order_main.Order_id
+        WHERE 
+            (shop.Shop_email = 'Hornby@gmail.com' and ((order_main.Order_status = 'confirm' AND Product_name IS NOT NULL) 
+            OR order_main.Order_status IS NULL OR order_main.Order_status = 'pending' OR order_main.Order_status = 'confirmed'))
+        GROUP BY 
+            Product_name, Category_name) as sub
+            WHERE sub.product_detail_id = '" . $_POST["Product_detail_id"] . "'";
+    $query_check = mysqli_query($Connection, $sql_check);
+    $result_check = mysqli_fetch_array($query_check);
+
+    $check_product_quantity = $result_check['Product_quantity'];
+    $product = $_POST["Detail_quantity"];
+    if ($check_product_quantity >  $product) {
+        $sql_insert_detail = "INSERT INTO detail (Product_detail_id,Order_id,Detail_quantity) 
                     VALUES ('" . $_POST["Product_detail_id"] . "',$Order_id ,'" . $_POST["Detail_quantity"] . "')";
-    $query = mysqli_query($Connection, $sql_insert_detail);
+        $query = mysqli_query($Connection, $sql_insert_detail);
+    } else {
+        $message = "ไม่สามารถลบได้ เนื่องจากสินค้าที่มีอยู่น้อยกว่าสินค้าที่มีอยู่";
+        echo "<script type='text/javascript'>alert('$message');</script>";
+    }
 }
 
 if (isset($_POST["submit_pending"])) {
