@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     detail.Detail_quantity,
     shop.Shop_name,
     warehouse.Warehouse_zone,
-    order_main.Order_address,
+    warehouse.Location,
     detail.Detail_date
 FROM product_detail
 INNER JOIN product ON product.Product_id = product_detail.Product_id
@@ -23,8 +23,7 @@ INNER JOIN shop ON product_detail.Shop_id = shop.Shop_id
 INNER JOIN product_category ON product_category.Category_id = product.Category_id
 INNER JOIN warehouse ON product_detail.Warehouse_id = warehouse.Warehouse_id
 INNER JOIN detail ON detail.Product_detail_id = product_detail.Product_detail_id
-INNER JOIN order_main ON detail.Order_id = order_main.Order_id
-WHERE detail.Detail_date BETWEEN ? AND ?
+WHERE product_detail.Product_time_add BETWEEN ? AND ?
 ORDER BY product.Product_id";
 
     // Prepare and bind the statement
