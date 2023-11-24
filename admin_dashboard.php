@@ -383,13 +383,13 @@ $result_admin = mysqli_fetch_array($query_admin);
                         <?php
                         $sql_combined = "SELECT 
                         sub.Category_name,
-                        SUM(DISTINCT sub.in_quantity) AS in_quantity,
-                        SUM(DISTINCT sub.out_quantity) AS out_quantity 
+                        SUM(sub.in_quantity) AS in_quantity,
+                        SUM(sub.out_quantity) AS out_quantity 
                     FROM
                         (	
                             SELECT 
-                                SUM(DISTINCT product_detail.Product_quantity) AS in_quantity, 
-                                SUM(DISTINCT detail.Detail_quantity) AS out_quantity,
+                                SUM(Distinct product_detail.Product_quantity) AS in_quantity, 
+                                SUM(detail.Detail_quantity) AS out_quantity,
                                 Product.Product_name,
                                 Product.Product_id,
                                 product_category.Category_name,
@@ -517,7 +517,7 @@ $result_admin = mysqli_fetch_array($query_admin);
                             <tbody>
                                 <?php
                                 $sql_detail = "SELECT 
-                                    COALESCE(SUM(DISTINCT product_detail.Product_quantity), 0) - COALESCE(SUM(Detail_quantity), 0) as Product_quantity,
+                                    SUM(DISTINCT product_detail.Product_quantity) - COALESCE(SUM(Detail_quantity), 0) as Product_quantity,
                                     Product.Product_name,
                                     Product.Product_id,
                                     Category_name,

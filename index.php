@@ -180,13 +180,13 @@ $result_shop = mysqli_fetch_array($query_shop);
                     <?php
                     $sql_combined = "SELECT 
                     sub.Category_name,
-                    SUM(DISTINCT sub.in_quantity) AS in_quantity,
-                    SUM(DISTINCT sub.out_quantity) AS out_quantity 
+                    SUM(sub.in_quantity) AS in_quantity,
+                    SUM(sub.out_quantity) AS out_quantity 
                 FROM
                     (	
                         SELECT 
-                            SUM(DISTINCT product_detail.Product_quantity) AS in_quantity, 
-                            SUM(DISTINCT detail.Detail_quantity) AS out_quantity,
+                            SUM(distinct product_detail.Product_quantity) AS in_quantity, 
+                            SUM(detail.Detail_quantity) AS out_quantity,
                             Product.Product_name,
                             Product.Product_id,
                             product_category.Category_name,
@@ -300,7 +300,7 @@ $result_shop = mysqli_fetch_array($query_shop);
                     product_category.Category_name AS Category_name, 
                     product.Product_name,
                     MONTH(order_main.Order_date) AS group_Month, 
-                    SUM(DISTINCT product_detail.Product_quantity) AS in_quantity, 
+                    SUM(distinct product_detail.Product_quantity) AS in_quantity, 
                     SUM(detail.Detail_quantity) AS out_quantity, 
                     shop.Shop_email 
                 FROM 
