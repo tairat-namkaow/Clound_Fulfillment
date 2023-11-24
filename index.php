@@ -418,38 +418,23 @@ $result_shop = mysqli_fetch_array($query_shop);
         <tbody>
             <?php
             $sql_detail = "SELECT 
-            sub.Category_name,
-            SUM(sub.in_quantity) AS in_quantity,
-            SUM(sub.out_quantity) AS out_quantity 
-        FROM
-            (	
-                SELECT 
-                    SUM(DISTINCT product_detail.Product_quantity) AS in_quantity, 
-                    SUM(detail.Detail_quantity) AS out_quantity,
-                    Product.Product_name,
-                    Product.Product_id,
-                    product_category.Category_name,
-                    shop.Shop_email,
-                    MAX(order_main.Order_status) AS Order_status                                    
-                FROM 
-                    Product_detail
-                    INNER JOIN product ON product_detail.Product_id = product.Product_id
-                    INNER JOIN product_category ON product.Category_id = product_category.Category_id                                    
-                    LEFT JOIN detail ON detail.Product_detail_id = product_detail.Product_detail_id
-                    LEFT JOIN order_main ON detail.Order_id = order_main.Order_id
-                    INNER JOIN shop ON product_detail.Shop_id = shop.Shop_id
-                WHERE 
-                    (order_main.Order_status = 'confirmed' AND Product.Product_name IS NOT NULL) 
-                    OR order_main.Order_status IS NULL 
-                    OR order_main.Order_status IN ('pending', 'confirmed')                                
-                GROUP BY 
-                    Product.Product_name, 
-                    Product.Product_id,
-                    product_category.Category_name,
-                    shop.Shop_email
-            ) AS sub
+            COALESCE(SUM(DISTINCT product_detail.Product_quantity), 0) - COALESCE(SUM(detail.Detail_quantity), 0) as Product_quantity,
+            product.Product_name,
+            Shop_name,
+            Category_name,
+            MAX(Order_status) AS Order_status                                    
+        FROM 
+            Product_detail
+            INNER JOIN product ON product_detail.Product_id = product.Product_id
+            INNER JOIN product_category ON product.Category_id = product_category.Category_id                                    
+            INNER JOIN shop ON product_detail.Shop_id = shop.Shop_id
+            LEFT JOIN detail ON detail.Product_detail_id = product_detail.Product_detail_id
+            LEFT JOIN order_main ON detail.Order_id = order_main.Order_id
+        WHERE 
+            shop.Shop_email = '" . $_SESSION['Shop_email'] . "' and ((order_main.Order_status = 'confirm' AND Product_name IS NOT NULL) 
+            OR order_main.Order_status IS NULL OR order_main.Order_status = 'pending' OR order_main.Order_status = 'confirmed')
         GROUP BY 
-            sub.Category_name";
+            Product_name, Category_name";
 
             $query_detail = mysqli_query($Connection, $sql_detail);
 
