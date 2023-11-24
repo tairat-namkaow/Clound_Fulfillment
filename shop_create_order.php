@@ -52,7 +52,7 @@ if (isset($_POST["submit_list"])) {
                     VALUES ('" . $_POST["Product_detail_id"] . "',$Order_id ,'" . $_POST["Detail_quantity"] . "')";
         $query = mysqli_query($Connection, $sql_insert_detail);
     } else {
-        $message = "ไม่สามารถลบได้";
+        $message = "สินค้าในคลังไม่เพียงพอ ไม่สามารถเพิ่มรายการได้";
         echo "<script type='text/javascript'>alert('$message');</script>";
     }
 }
