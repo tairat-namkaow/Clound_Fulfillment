@@ -184,7 +184,15 @@ $result_shop = mysqli_fetch_array($query_shop);
 
                             if (isset($_POST["Search"]) && $StartDate != '' && $EndDate != '') {
                               // ใช้ prepared statements สำหรับความปลอดภัย
-                              $stmt = $Connection->prepare("SELECT * FROM `order_main` WHERE Order_date >= ? AND Order_date <= ? and order_main.Order_status != 'waiting'");
+                              $stmt = $Connection->prepare(
+                                "SELECT order_main.Order_id,order_main.Order_status,shop.Shop_email,order_main.Order_date FROM detail
+                                INNER JOIN order_main on detail.Order_id = order_main.Order_id
+                                inner join product_detail on detail.Product_detail_id = product_detail.Product_detail_id
+                                INNER join shop on product_detail.Shop_id = shop.Shop_id
+                                WHERE (Order_date >= ? AND Order_date <= ?) 
+                                and order_main.Order_status != 'waiting' 
+                                and shop.Shop_email = '" . $_SESSION['Shop_email'] . "'
+                                ");
                               $stmt->bind_param("ss", $StartDate, $EndDate);
                               $stmt->execute();
                               $result = $stmt->get_result();
